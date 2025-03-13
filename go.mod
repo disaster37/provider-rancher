@@ -1,4 +1,4 @@
-module github.com/upbound/upjet-provider-template
+module github.com/disaster37/provider-rancher
 
 go 1.21
 
@@ -8,6 +8,7 @@ require (
 	github.com/crossplane/crossplane-tools v0.0.0-20240522174801-1ad3d4c87f21
 	github.com/crossplane/upjet v1.4.1
 	github.com/pkg/errors v0.9.1
+	golang.org/x/text v0.14.0
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 	k8s.io/apimachinery v0.29.1
 	k8s.io/client-go v0.29.1
@@ -106,7 +107,6 @@ require (
 	golang.org/x/oauth2 v0.15.0 // indirect
 	golang.org/x/sys v0.18.0 // indirect
 	golang.org/x/term v0.18.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	golang.org/x/tools v0.17.0 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.4.0 // indirect

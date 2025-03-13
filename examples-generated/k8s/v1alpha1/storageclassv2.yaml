@@ -1,0 +1,18 @@
+apiVersion: k8s.contrib.crossplane.io/v1alpha1
+kind: StorageClassV2
+metadata:
+  annotations:
+    meta.upbound.io/example-id: k8s/v1alpha1/storageclassv2
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    clusterIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    name: foo
+    parameters:
+      gidAllocate: "true"
+      gidMax: "50000"
+      gidMin: "40000"

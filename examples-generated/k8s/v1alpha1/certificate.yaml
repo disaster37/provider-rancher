@@ -1,0 +1,20 @@
+apiVersion: k8s.contrib.crossplane.io/v1alpha1
+kind: Certificate
+metadata:
+  annotations:
+    meta.upbound.io/example-id: k8s/v1alpha1/certificate
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    certs: ${base64encode(<PUBLIC_CERTS>)}
+    description: Terraform certificate foo
+    keySecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    name: foo
+    projectIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example

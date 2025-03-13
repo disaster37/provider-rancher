@@ -10,15 +10,23 @@ package apis
 import (
 	"k8s.io/apimachinery/pkg/runtime"
 
-	v1alpha1 "github.com/upbound/upjet-provider-template/apis/null/v1alpha1"
-	v1alpha1apis "github.com/upbound/upjet-provider-template/apis/v1alpha1"
-	v1beta1 "github.com/upbound/upjet-provider-template/apis/v1beta1"
+	v1alpha1 "github.com/disaster37/provider-rancher/apis/app/v1alpha1"
+	v1alpha1auth "github.com/disaster37/provider-rancher/apis/auth/v1alpha1"
+	v1alpha1k8s "github.com/disaster37/provider-rancher/apis/k8s/v1alpha1"
+	v1alpha1rancher "github.com/disaster37/provider-rancher/apis/rancher/v1alpha1"
+	v1alpha1rbac "github.com/disaster37/provider-rancher/apis/rbac/v1alpha1"
+	v1alpha1apis "github.com/disaster37/provider-rancher/apis/v1alpha1"
+	v1beta1 "github.com/disaster37/provider-rancher/apis/v1beta1"
 )
 
 func init() {
 	// Register the types with the Scheme so the components can map objects to GroupVersionKinds and back
 	AddToSchemes = append(AddToSchemes,
 		v1alpha1.SchemeBuilder.AddToScheme,
+		v1alpha1auth.SchemeBuilder.AddToScheme,
+		v1alpha1k8s.SchemeBuilder.AddToScheme,
+		v1alpha1rancher.SchemeBuilder.AddToScheme,
+		v1alpha1rbac.SchemeBuilder.AddToScheme,
 		v1alpha1apis.SchemeBuilder.AddToScheme,
 		v1beta1.SchemeBuilder.AddToScheme,
 	)

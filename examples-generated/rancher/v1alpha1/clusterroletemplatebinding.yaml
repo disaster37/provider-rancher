@@ -1,0 +1,18 @@
+apiVersion: rancher.contrib.crossplane.io/v1alpha1
+kind: ClusterRoleTemplateBinding
+metadata:
+  annotations:
+    meta.upbound.io/example-id: rancher/v1alpha1/clusterroletemplatebinding
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    clusterIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    name: foo
+    roleTemplateIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    userId: <user_id>

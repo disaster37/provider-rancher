@@ -1,0 +1,26 @@
+apiVersion: rancher.contrib.crossplane.io/v1alpha1
+kind: ClusterTemplate
+metadata:
+  annotations:
+    meta.upbound.io/example-id: rancher/v1alpha1/clustertemplate
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    description: Terraform cluster template foo
+    members:
+    - accessType: owner
+      userPrincipalId: local://user-XXXXX
+    name: foo
+    templateRevisions:
+    - clusterConfig:
+      - rkeConfig:
+        - network:
+          - plugin: canal
+          services:
+          - etcd:
+            - creation: 6h
+              retention: 24h
+      default: true
+      name: V1

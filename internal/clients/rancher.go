@@ -15,7 +15,7 @@ import (
 
 	"github.com/crossplane/upjet/pkg/terraform"
 
-	"github.com/upbound/upjet-provider-template/apis/v1beta1"
+	"github.com/disaster37/provider-rancher/apis/v1beta1"
 )
 
 const (
@@ -24,7 +24,17 @@ const (
 	errGetProviderConfig    = "cannot get referenced ProviderConfig"
 	errTrackUsage           = "cannot track ProviderConfig usage"
 	errExtractCredentials   = "cannot extract credentials"
-	errUnmarshalCredentials = "cannot unmarshal template credentials as JSON"
+	errUnmarshalCredentials = "cannot unmarshal rancher credentials as JSON"
+	keyApiURL               = "api_url"
+	keyAccessKey            = "access_key"
+	keySecretKey            = "secret_key"
+	keyBootstrap            = "bootstrap"
+	keyAlias                = "alias"
+	keyTokenKey             = "token_key"
+	keyInsecure             = "insecure"
+	keyCACerts              = "ca_certs"
+	keyRetries              = "retries"
+	keyTimeout              = "timeout"
 )
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
@@ -62,11 +72,39 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 			return ps, errors.Wrap(err, errUnmarshalCredentials)
 		}
 
-		// Set credentials in Terraform provider configuration.
-		/*ps.Configuration = map[string]any{
-			"username": creds["username"],
-			"password": creds["password"],
-		}*/
+		// set provider configuration
+		ps.Configuration = map[string]any{}
+		if v, ok := creds[keyApiURL]; ok {
+			ps.Configuration[keyApiURL] = v
+		}
+		if v, ok := creds[keyAccessKey]; ok {
+			ps.Configuration[keyAccessKey] = v
+		}
+		if v, ok := creds[keySecretKey]; ok {
+			ps.Configuration[keySecretKey] = v
+		}
+		if v, ok := creds[keyAlias]; ok {
+			ps.Configuration[keyAlias] = v
+		}
+		if v, ok := creds[keyBootstrap]; ok {
+			ps.Configuration[keyBootstrap] = v
+		}
+		if v, ok := creds[keyCACerts]; ok {
+			ps.Configuration[keyCACerts] = v
+		}
+		if v, ok := creds[keyInsecure]; ok {
+			ps.Configuration[keyInsecure] = v
+		}
+		if v, ok := creds[keyRetries]; ok {
+			ps.Configuration[keyRetries] = v
+		}
+		if v, ok := creds[keyTimeout]; ok {
+			ps.Configuration[keyTimeout] = v
+		}
+		if v, ok := creds[keyTokenKey]; ok {
+			ps.Configuration[keyTokenKey] = v
+		}
+
 		return ps, nil
 	}
 }

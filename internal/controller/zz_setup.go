@@ -9,16 +9,102 @@ import (
 
 	"github.com/crossplane/upjet/pkg/controller"
 
-	resource "github.com/upbound/upjet-provider-template/internal/controller/null/resource"
-	providerconfig "github.com/upbound/upjet-provider-template/internal/controller/providerconfig"
+	app "github.com/disaster37/provider-rancher/internal/controller/app/app"
+	appv2 "github.com/disaster37/provider-rancher/internal/controller/app/appv2"
+	catalog "github.com/disaster37/provider-rancher/internal/controller/app/catalog"
+	catalogv2 "github.com/disaster37/provider-rancher/internal/controller/app/catalogv2"
+	multiclusterapp "github.com/disaster37/provider-rancher/internal/controller/app/multiclusterapp"
+	authconfigactivedirectory "github.com/disaster37/provider-rancher/internal/controller/auth/authconfigactivedirectory"
+	authconfigadfs "github.com/disaster37/provider-rancher/internal/controller/auth/authconfigadfs"
+	authconfigazuread "github.com/disaster37/provider-rancher/internal/controller/auth/authconfigazuread"
+	authconfigfreeipa "github.com/disaster37/provider-rancher/internal/controller/auth/authconfigfreeipa"
+	authconfiggithub "github.com/disaster37/provider-rancher/internal/controller/auth/authconfiggithub"
+	authconfigkeycloak "github.com/disaster37/provider-rancher/internal/controller/auth/authconfigkeycloak"
+	authconfigokta "github.com/disaster37/provider-rancher/internal/controller/auth/authconfigokta"
+	authconfigopenldap "github.com/disaster37/provider-rancher/internal/controller/auth/authconfigopenldap"
+	authconfigping "github.com/disaster37/provider-rancher/internal/controller/auth/authconfigping"
+	certificate "github.com/disaster37/provider-rancher/internal/controller/k8s/certificate"
+	configmapv2 "github.com/disaster37/provider-rancher/internal/controller/k8s/configmapv2"
+	namespace "github.com/disaster37/provider-rancher/internal/controller/k8s/namespace"
+	project "github.com/disaster37/provider-rancher/internal/controller/k8s/project"
+	registry "github.com/disaster37/provider-rancher/internal/controller/k8s/registry"
+	secret "github.com/disaster37/provider-rancher/internal/controller/k8s/secret"
+	secretv2 "github.com/disaster37/provider-rancher/internal/controller/k8s/secretv2"
+	storageclassv2 "github.com/disaster37/provider-rancher/internal/controller/k8s/storageclassv2"
+	providerconfig "github.com/disaster37/provider-rancher/internal/controller/providerconfig"
+	bootstrap "github.com/disaster37/provider-rancher/internal/controller/rancher/bootstrap"
+	cloudcredential "github.com/disaster37/provider-rancher/internal/controller/rancher/cloudcredential"
+	cluster "github.com/disaster37/provider-rancher/internal/controller/rancher/cluster"
+	clusterdriver "github.com/disaster37/provider-rancher/internal/controller/rancher/clusterdriver"
+	clusterroletemplatebinding "github.com/disaster37/provider-rancher/internal/controller/rancher/clusterroletemplatebinding"
+	clustersync "github.com/disaster37/provider-rancher/internal/controller/rancher/clustersync"
+	clustertemplate "github.com/disaster37/provider-rancher/internal/controller/rancher/clustertemplate"
+	clusterv2 "github.com/disaster37/provider-rancher/internal/controller/rancher/clusterv2"
+	customusertoken "github.com/disaster37/provider-rancher/internal/controller/rancher/customusertoken"
+	etcdbackup "github.com/disaster37/provider-rancher/internal/controller/rancher/etcdbackup"
+	feature "github.com/disaster37/provider-rancher/internal/controller/rancher/feature"
+	globalrole "github.com/disaster37/provider-rancher/internal/controller/rancher/globalrole"
+	globalrolebinding "github.com/disaster37/provider-rancher/internal/controller/rancher/globalrolebinding"
+	machineconfigv2 "github.com/disaster37/provider-rancher/internal/controller/rancher/machineconfigv2"
+	nodedriver "github.com/disaster37/provider-rancher/internal/controller/rancher/nodedriver"
+	nodepool "github.com/disaster37/provider-rancher/internal/controller/rancher/nodepool"
+	nodetemplate "github.com/disaster37/provider-rancher/internal/controller/rancher/nodetemplate"
+	roletemplate "github.com/disaster37/provider-rancher/internal/controller/rancher/roletemplate"
+	setting "github.com/disaster37/provider-rancher/internal/controller/rancher/setting"
+	token "github.com/disaster37/provider-rancher/internal/controller/rancher/token"
+	user "github.com/disaster37/provider-rancher/internal/controller/rancher/user"
+	projectroletemplatebinding "github.com/disaster37/provider-rancher/internal/controller/rbac/projectroletemplatebinding"
 )
 
 // Setup creates all controllers with the supplied logger and adds them to
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
-		resource.Setup,
+		app.Setup,
+		appv2.Setup,
+		catalog.Setup,
+		catalogv2.Setup,
+		multiclusterapp.Setup,
+		authconfigactivedirectory.Setup,
+		authconfigadfs.Setup,
+		authconfigazuread.Setup,
+		authconfigfreeipa.Setup,
+		authconfiggithub.Setup,
+		authconfigkeycloak.Setup,
+		authconfigokta.Setup,
+		authconfigopenldap.Setup,
+		authconfigping.Setup,
+		certificate.Setup,
+		configmapv2.Setup,
+		namespace.Setup,
+		project.Setup,
+		registry.Setup,
+		secret.Setup,
+		secretv2.Setup,
+		storageclassv2.Setup,
 		providerconfig.Setup,
+		bootstrap.Setup,
+		cloudcredential.Setup,
+		cluster.Setup,
+		clusterdriver.Setup,
+		clusterroletemplatebinding.Setup,
+		clustersync.Setup,
+		clustertemplate.Setup,
+		clusterv2.Setup,
+		customusertoken.Setup,
+		etcdbackup.Setup,
+		feature.Setup,
+		globalrole.Setup,
+		globalrolebinding.Setup,
+		machineconfigv2.Setup,
+		nodedriver.Setup,
+		nodepool.Setup,
+		nodetemplate.Setup,
+		roletemplate.Setup,
+		setting.Setup,
+		token.Setup,
+		user.Setup,
+		projectroletemplatebinding.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {
 			return err

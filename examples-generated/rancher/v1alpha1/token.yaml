@@ -1,0 +1,12 @@
+apiVersion: rancher.contrib.crossplane.io/v1alpha1
+kind: Token
+metadata:
+  annotations:
+    meta.upbound.io/example-id: rancher/v1alpha1/token
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    description: foo token
+    ttl: 1200

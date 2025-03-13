@@ -1,0 +1,12 @@
+apiVersion: rancher.contrib.crossplane.io/v1alpha1
+kind: Feature
+metadata:
+  annotations:
+    meta.upbound.io/example-id: rancher/v1alpha1/feature
+  labels:
+    testing.upbound.io/example-name: fleet
+  name: fleet
+spec:
+  forProvider:
+    name: fleet
+    value: <VALUE>

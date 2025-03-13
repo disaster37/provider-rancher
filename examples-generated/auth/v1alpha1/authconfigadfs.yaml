@@ -1,0 +1,27 @@
+apiVersion: auth.contrib.crossplane.io/v1alpha1
+kind: AuthConfigAdfs
+metadata:
+  annotations:
+    meta.upbound.io/example-id: auth/v1alpha1/authconfigadfs
+  labels:
+    testing.upbound.io/example-name: adfs
+  name: adfs
+spec:
+  forProvider:
+    displayNameField: <DISPLAY_NAME_FIELD>
+    groupsField: <GROUPS_FIELD>
+    idpMetadataContentSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    rancherApiHost: https://<RANCHER_API_HOST>
+    spCertSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    spKeySecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    uidField: <UID_FIELD>
+    userNameField: <USER_NAME_FIELD>

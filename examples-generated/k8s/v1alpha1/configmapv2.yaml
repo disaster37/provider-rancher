@@ -1,0 +1,18 @@
+apiVersion: k8s.contrib.crossplane.io/v1alpha1
+kind: ConfigMapV2
+metadata:
+  annotations:
+    meta.upbound.io/example-id: k8s/v1alpha1/configmapv2
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    clusterIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    data:
+      mydata1: <data1>
+      mydata2: <data2>
+      mydata3: <data3>
+    name: foo

@@ -1,0 +1,27 @@
+apiVersion: app.contrib.crossplane.io/v1alpha1
+kind: App
+metadata:
+  annotations:
+    meta.upbound.io/example-id: app/v1alpha1/app
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    answers:
+      foo: bar
+      ingress.annotations.nginx.ingress.kubernetes.io/force-ssl-redirect: true
+      ingress_host: test.xip.io
+    catalogNameSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    description: Foo app
+    name: foo
+    projectIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    targetNamespaceSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    templateName: <template_name>
+    templateVersion: <template_version>

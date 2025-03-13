@@ -1,0 +1,15 @@
+apiVersion: rancher.contrib.crossplane.io/v1alpha1
+kind: GlobalRoleBinding
+metadata:
+  annotations:
+    meta.upbound.io/example-id: rancher/v1alpha1/globalrolebinding
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    globalRoleIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    name: foo
+    userId: user-XXXXX

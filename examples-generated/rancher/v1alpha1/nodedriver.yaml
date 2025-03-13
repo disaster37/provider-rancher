@@ -1,0 +1,20 @@
+apiVersion: rancher.contrib.crossplane.io/v1alpha1
+kind: NodeDriver
+metadata:
+  annotations:
+    meta.upbound.io/example-id: rancher/v1alpha1/nodedriver
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    active: true
+    builtin: false
+    checksum: "0x0"
+    description: Foo description
+    externalId: foo_external
+    name: foo
+    uiUrl: local://ui
+    url: local://
+    whitelistDomains:
+    - '*.foo.com'

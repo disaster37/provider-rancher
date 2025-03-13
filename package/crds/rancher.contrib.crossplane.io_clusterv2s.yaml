@@ -1,0 +1,3227 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.14.0
+  name: clusterv2s.rancher.contrib.crossplane.io
+spec:
+  group: rancher.contrib.crossplane.io
+  names:
+    categories:
+    - crossplane
+    - managed
+    - rancher
+    kind: ClusterV2
+    listKind: ClusterV2List
+    plural: clusterv2s
+    singular: clusterv2
+  scope: Cluster
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=='Synced')].status
+      name: SYNCED
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
+      type: string
+    - jsonPath: .metadata.annotations.crossplane\.io/external-name
+      name: EXTERNAL-NAME
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: ClusterV2 is the Schema for the ClusterV2s API. |Provides a Rancher
+          v2 Cluster v2 resource. This can be used to create RKE2 and K3s Clusters
+          for Rancher v2 environments and retrieve their information.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ClusterV2Spec defines the desired state of ClusterV2
+            properties:
+              deletionPolicy:
+                default: Delete
+                description: |-
+                  DeletionPolicy specifies what will happen to the underlying external
+                  when this managed resource is deleted - either "Delete" or "Orphan" the
+                  external resource.
+                  This field is planned to be deprecated in favor of the ManagementPolicies
+                  field in a future release. Currently, both could be set independently and
+                  non-default values would be honored if the feature flag is enabled.
+                  See the design doc for more information: https://github.com/crossplane/crossplane/blob/499895a25d1a1a0ba1604944ef98ac7a1a71f197/design/design-doc-observe-only-resources.md?plain=1#L223
+                enum:
+                - Orphan
+                - Delete
+                type: string
+              forProvider:
+                properties:
+                  agentEnvVars:
+                    description: |-
+                      Agent env vars is a list of additional environment variables to be appended to the cattle-cluster-agent and fleet-agent deployment, and the plan for the system upgrade controller to upgrade nodes.
+                      Cluster V2 default agent env vars
+                    items:
+                      properties:
+                        name:
+                          description: The name of the cluster.
+                          type: string
+                        value:
+                          description: Rancher agent env var value.
+                          type: string
+                      type: object
+                    type: array
+                  annotations:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      Annotations for the Cluster.
+                      Annotations of the resource
+                    type: object
+                    x-kubernetes-map-type: granular
+                  cloudCredentialSecretName:
+                    description: |-
+                      Cloud credential secret name is the secret to be used when a cloud credential secret name is not specified at the machine pool level.
+                      Cluster V2 cloud credential secret name
+                    type: string
+                  clusterAgentDeploymentCustomization:
+                    description: |-
+                      Cluster agent deployment customization specifies the additional tolerations, new affinity rules, and new resource requirements on the cattle-cluster-agent deployment. This argument is available in Rancher v2.7.5 and above.
+                      Optional customization for cluster agent
+                    items:
+                      properties:
+                        appendTolerations:
+                          description: |-
+                            A list of tolerations to be appended to the default tolerations.
+                            User defined tolerations to append to agent
+                          items:
+                            properties:
+                              effect:
+                                description: 'The toleration effect. Default: \"NoSchedule\".'
+                                type: string
+                              key:
+                                description: The toleration key.
+                                type: string
+                              operator:
+                                description: The toleration operator.
+                                type: string
+                              seconds:
+                                description: The number of seconds a pod will stay
+                                  bound to a node with a matching taint.
+                                type: number
+                              value:
+                                description: Rancher agent env var value.
+                                type: string
+                            type: object
+                          type: array
+                        overrideAffinity:
+                          description: |-
+                            Override affinity overrides the global default affinity setting.
+                            User defined affinity to override default agent affinity
+                          type: string
+                        overrideResourceRequirements:
+                          description: |-
+                            Override resource requirements overrides the default value for requests and/or limits.
+                            User defined resource requirements to set on the agent
+                          items:
+                            properties:
+                              cpuLimit:
+                                description: |-
+                                  The maximum CPU limit for agent.
+                                  The maximum CPU limit for agent
+                                type: string
+                              cpuRequest:
+                                description: |-
+                                  The minimum CPU required for agent.
+                                  The minimum CPU required for agent
+                                type: string
+                              memoryLimit:
+                                description: |-
+                                  The maximum memory limit for agent.
+                                  The maximum memory limit for agent
+                                type: string
+                              memoryRequest:
+                                description: |-
+                                  The minimum memory required for agent.
+                                  The minimum memory required for agent
+                                type: string
+                            type: object
+                          type: array
+                      type: object
+                    type: array
+                  defaultClusterRoleForProjectMembers:
+                    description: |-
+                      Default cluster role for project members.
+                      Cluster V2 default cluster role for project members
+                    type: string
+                  defaultPodSecurityAdmissionConfigurationTemplateName:
+                    description: |-
+                      The name of the pre-defined pod security admission configuration template to be applied to the cluster. Rancher admins (or those with the right permissions) can create, manage, and edit those templates. For more information, please refer to Rancher Documentation. The argument is available in Rancher v2.7.2 and above.
+                      Cluster V2 default pod security admission configuration template name
+                    type: string
+                  enableNetworkPolicy:
+                    description: |-
+                      Enable k8s network policy on the cluster.
+                      Enable k8s network policy
+                    type: boolean
+                  fleetAgentDeploymentCustomization:
+                    description: |-
+                      Fleet agent deployment customization specifies the additional tolerations, new affinity rules, and new resource requirements on the fleet-agent deployment. The argument is available in Rancher v2.7.5 and above.
+                      Optional customization for fleet agent
+                    items:
+                      properties:
+                        appendTolerations:
+                          description: |-
+                            A list of tolerations to be appended to the default tolerations.
+                            User defined tolerations to append to agent
+                          items:
+                            properties:
+                              effect:
+                                description: 'The toleration effect. Default: \"NoSchedule\".'
+                                type: string
+                              key:
+                                description: The toleration key.
+                                type: string
+                              operator:
+                                description: The toleration operator.
+                                type: string
+                              seconds:
+                                description: The number of seconds a pod will stay
+                                  bound to a node with a matching taint.
+                                type: number
+                              value:
+                                description: Rancher agent env var value.
+                                type: string
+                            type: object
+                          type: array
+                        overrideAffinity:
+                          description: |-
+                            Override affinity overrides the global default affinity setting.
+                            User defined affinity to override default agent affinity
+                          type: string
+                        overrideResourceRequirements:
+                          description: |-
+                            Override resource requirements overrides the default value for requests and/or limits.
+                            User defined resource requirements to set on the agent
+                          items:
+                            properties:
+                              cpuLimit:
+                                description: |-
+                                  The maximum CPU limit for agent.
+                                  The maximum CPU limit for agent
+                                type: string
+                              cpuRequest:
+                                description: |-
+                                  The minimum CPU required for agent.
+                                  The minimum CPU required for agent
+                                type: string
+                              memoryLimit:
+                                description: |-
+                                  The maximum memory limit for agent.
+                                  The maximum memory limit for agent
+                                type: string
+                              memoryRequest:
+                                description: |-
+                                  The minimum memory required for agent.
+                                  The minimum memory required for agent
+                                type: string
+                            type: object
+                          type: array
+                      type: object
+                    type: array
+                  fleetNamespace:
+                    description: Fleet namespace is the namespace where the cluster
+                      is to create in the local cluster. It is recommended to leave
+                      it as the default value.
+                    type: string
+                  kubernetesVersion:
+                    description: |-
+                      The RKE2 or K3s version for the cluster.
+                      Cluster V2 kubernetes version
+                    type: string
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      Labels for the Cluster.
+                      Labels of the resource
+                    type: object
+                    x-kubernetes-map-type: granular
+                  localAuthEndpoint:
+                    description: |-
+                      Local auth endpoint configures the Authorized Cluster Endpoint (ACE) which can be used to directly access the Kubernetes API server, without requiring communication through Rancher. For more information, please refer to Rancher Documentation.
+                      Cluster V2 local auth endpoint
+                    items:
+                      properties:
+                        caCerts:
+                          description: CA certs for the authorized cluster endpoint.
+                            It is only needed if there is a load balancer in front
+                            of the downstream cluster that is using an untrusted certificate.
+                            If you have a valid certificate, then nothing needs to
+                            be added to the CA Certificates field.
+                          type: string
+                        enabled:
+                          description: Enable the authorized cluster endpoint.
+                          type: boolean
+                        fqdn:
+                          description: FQDN for the authorized cluster endpoint. If
+                            one is entered, it should point to the downstream cluster.
+                          type: string
+                      type: object
+                    type: array
+                  name:
+                    description: |-
+                      The name of the cluster.
+                      Cluster V2 name
+                    type: string
+                  rkeConfig:
+                    description: |-
+                      The RKE configuration for the cluster.
+                      Cluster V2 rke config
+                    items:
+                      properties:
+                        additionalManifest:
+                          description: |-
+                            The value of the additional manifest is delivered to the path /var/lib/rancher/rke2/server/manifests/rancher/addons.yaml or /var/lib/rancher/k3s/server/manifests/rancher/addons.yaml on the control plane nodes.
+                            Cluster V2 additional manifest
+                          type: string
+                        chartValues:
+                          description: |-
+                            The value for the system charts installed by the distribution. For more information about how RKE2 or K3s manage packaged components, please refer to RKE2 documentation or K3s documentation.
+                            Cluster V2 chart values. It should be in YAML format
+                          type: string
+                        etcd:
+                          description: |-
+                            Etcd configures the behavior of the automatic etcd snapshot feature.
+                            Cluster V2 etcd
+                          items:
+                            properties:
+                              disableSnapshots:
+                                description: |-
+                                  Disable ETCD snapshots.
+                                  Disable ETCD snapshots
+                                type: boolean
+                              s3Config:
+                                description: |-
+                                  Creation option for etcd service.
+                                  ETCD snapshot S3 config
+                                items:
+                                  properties:
+                                    bucket:
+                                      description: |-
+                                        Bucket name for S3 service.
+                                        ETCD snapshot S3 bucket
+                                      type: string
+                                    cloudCredentialName:
+                                      description: |-
+                                        ETCD snapshot S3 cloud credential name.
+                                        ETCD snapshot S3 cloud credential name
+                                      type: string
+                                    endpoint:
+                                      description: |-
+                                        ETCD snapshot S3 endpoint.
+                                        ETCD snapshot S3 endpoint
+                                      type: string
+                                    endpointCa:
+                                      description: |-
+                                        ETCD snapshot S3 endpoint CA.
+                                        ETCD snapshot S3 endpoint CA
+                                      type: string
+                                    folder:
+                                      description: |-
+                                        ETCD snapshot S3 folder.
+                                        ETCD snapshot S3 folder
+                                      type: string
+                                    region:
+                                      description: |-
+                                        ETCD snapshot S3 region.
+                                        ETCD snapshot S3 region
+                                      type: string
+                                    skipSslVerify:
+                                      description: |-
+                                        Disable ETCD skip ssl verify.
+                                        Disable ETCD skip ssl verify
+                                      type: boolean
+                                  type: object
+                                type: array
+                              snapshotRetention:
+                                description: |-
+                                  ETCD snapshot retention.
+                                  ETCD snapshot retention
+                                type: number
+                              snapshotScheduleCron:
+                                description: |-
+                                  ETCD snapshot schedule cron (e.g \"0 */5 * * *\").
+                                  ETCD snapshot schedule cron (e.g `"0 */5 * * *"`)
+                                type: string
+                            type: object
+                          type: array
+                        etcdSnapshotCreate:
+                          description: |-
+                            Cluster V2 etcd snapshot create.
+                            Cluster V2 etcd snapshot create
+                          items:
+                            properties:
+                              generation:
+                                description: |-
+                                  Desired certificate rotation generation.
+                                  ETCD generation to initiate a snapshot
+                                type: number
+                            type: object
+                          type: array
+                        etcdSnapshotRestore:
+                          description: |-
+                            Cluster V2 etcd snapshot restore.
+                            Cluster V2 etcd snapshot restore
+                          items:
+                            properties:
+                              generation:
+                                description: |-
+                                  Desired certificate rotation generation.
+                                  ETCD snapshot desired generation
+                                type: number
+                              name:
+                                description: |-
+                                  The name of the cluster.
+                                  ETCD snapshot name to restore
+                                type: string
+                              restoreRkeConfig:
+                                description: |-
+                                  ETCD restore RKE config (set to none, all, or kubernetesVersion).
+                                  ETCD restore RKE config (set to none, all, or kubernetesVersion)
+                                type: string
+                            type: object
+                          type: array
+                        localAuthEndpoint:
+                          description: |-
+                            Local auth endpoint configures the Authorized Cluster Endpoint (ACE) which can be used to directly access the Kubernetes API server, without requiring communication through Rancher. For more information, please refer to Rancher Documentation.
+                            Cluster V2 local auth endpoint
+                          items:
+                            properties:
+                              caCerts:
+                                description: CA certs for the authorized cluster endpoint.
+                                  It is only needed if there is a load balancer in
+                                  front of the downstream cluster that is using an
+                                  untrusted certificate. If you have a valid certificate,
+                                  then nothing needs to be added to the CA Certificates
+                                  field.
+                                type: string
+                              enabled:
+                                description: Enable the authorized cluster endpoint.
+                                type: boolean
+                              fqdn:
+                                description: FQDN for the authorized cluster endpoint.
+                                  If one is entered, it should point to the downstream
+                                  cluster.
+                                type: string
+                            type: object
+                          type: array
+                        machineGlobalConfig:
+                          description: |-
+                            Machine global config specifies the distribution-specified server configuration applied to all nodes. For the full list of server configurations, please refer to RKE2 server configuration or K3s server configuration.
+                            Cluster V2 machine global config
+                          type: string
+                        machinePoolDefaults:
+                          description: Default values for machine pool configurations
+                            if unset
+                          items:
+                            properties:
+                              hostnameLengthLimit:
+                                description: maximum length for autogenerated hostname
+                                type: number
+                            type: object
+                          type: array
+                        machinePools:
+                          description: |-
+                            Cluster V2 machine pools.
+                            Cluster V2 machine pools
+                          items:
+                            properties:
+                              annotations:
+                                additionalProperties:
+                                  type: string
+                                description: |-
+                                  Annotations for the Cluster.
+                                  Annotations of the resource
+                                type: object
+                                x-kubernetes-map-type: granular
+                              cloudCredentialSecretName:
+                                description: |-
+                                  Cloud credential secret name is the secret to be used when a cloud credential secret name is not specified at the machine pool level.
+                                  Machine pool cloud credential secret name
+                                type: string
+                              controlPlaneRole:
+                                description: |-
+                                  Machine pool control plane role?
+                                  Machine pool control plane role
+                                type: boolean
+                              drainBeforeDelete:
+                                description: |-
+                                  Machine Pool Drain Before Delete?
+                                  Machine pool drain before delete
+                                type: boolean
+                              etcdRole:
+                                description: |-
+                                  Machine pool etcd role?
+                                  Machine pool etcd role
+                                type: boolean
+                              hostnameLengthLimit:
+                                description: maximum length for autogenerated hostname
+                                type: number
+                              labels:
+                                additionalProperties:
+                                  type: string
+                                description: |-
+                                  Labels for the Cluster.
+                                  Labels of the resource
+                                type: object
+                                x-kubernetes-map-type: granular
+                              machineConfig:
+                                description: |-
+                                  Machine pool node config.
+                                  Machine config data
+                                items:
+                                  properties:
+                                    apiVersion:
+                                      description: |-
+                                        Api version of the machine_config.
+                                        Machine config API version
+                                      type: string
+                                    kind:
+                                      description: |-
+                                        Machine config kind.
+                                        Machine config kind
+                                      type: string
+                                    name:
+                                      description: |-
+                                        The name of the cluster.
+                                        Machine config name
+                                      type: string
+                                  type: object
+                                type: array
+                              machineLabels:
+                                additionalProperties:
+                                  type: string
+                                description: |-
+                                  Labels for Machine pool nodes.
+                                  Labels of the machine
+                                type: object
+                                x-kubernetes-map-type: granular
+                              maxUnhealthy:
+                                description: |-
+                                  Max unhealthy nodes for automated replacement to be allowed.
+                                  max unhealthy nodes for automated replacement to be allowed
+                                type: string
+                              name:
+                                description: |-
+                                  The name of the cluster.
+                                  Machine pool name
+                                type: string
+                              nodeDrainTimeout:
+                                description: |-
+                                  Seconds a machine has to drain before deletion.
+                                  seconds to wait for machine pool drain to complete before machine deletion
+                                type: number
+                              nodeStartupTimeoutSeconds:
+                                description: |-
+                                  Seconds a new node has to become active before it is replaced.
+                                  seconds a new node has to become active before it is replaced
+                                type: number
+                              paused:
+                                description: |-
+                                  Machine pool paused?
+                                  Machine pool paused
+                                type: boolean
+                              quantity:
+                                description: |-
+                                  Machine pool quantity.
+                                  Machine pool quantity
+                                type: number
+                              rollingUpdate:
+                                description: |-
+                                  Machine pool rolling update.
+                                  Machine pool rolling update
+                                items:
+                                  properties:
+                                    maxSurge:
+                                      description: |-
+                                        Rolling update max surge.
+                                        Rolling update max surge
+                                      type: string
+                                    maxUnavailable:
+                                      description: |-
+                                        Rolling update max unavailable.
+                                        Rolling update max unavailable
+                                      type: string
+                                  type: object
+                                type: array
+                              taints:
+                                description: |-
+                                  Machine pool taints.
+                                  Machine pool taints
+                                items:
+                                  properties:
+                                    effect:
+                                      description: 'The toleration effect. Default:
+                                        \"NoSchedule\".'
+                                      type: string
+                                    key:
+                                      description: The toleration key.
+                                      type: string
+                                    value:
+                                      description: Rancher agent env var value.
+                                      type: string
+                                  type: object
+                                type: array
+                              unhealthyNodeTimeoutSeconds:
+                                description: |-
+                                  Seconds an unhealthy node has to become active before it is replaced.
+                                  seconds an unhealthy node has to become active before it is replaced
+                                type: number
+                              unhealthyRange:
+                                description: |-
+                                  Range of unhealthy nodes for automated replacement to be allowed.
+                                  range of unhealthy nodes for automated replacement to be allowed
+                                type: string
+                              workerRole:
+                                description: |-
+                                  Machine pool worker role?
+                                  Machine pool worker role
+                                type: boolean
+                            type: object
+                          type: array
+                        machineSelectorConfig:
+                          description: |-
+                            Machine selector config is the same as machine_global_config except that a label selector can be specified with the configuration. The configuration will only be applied to nodes that match the provided label selector. The configuration from machine_selector_config takes precedence over the one from machine_global_config. This argument is available in Rancher v2.7.2 and later.
+                            Cluster V2 machine selector config
+                          items:
+                            properties:
+                              config:
+                                description: |-
+                                  Config is the distribution-specify configuration to be applied to nodes that match the provided label selector. For more information, please refer to Rancher's documentation for RKE2 Cluster Configuration or K3s Cluster Configuration
+                                  Machine selector config
+                                type: string
+                              machineLabelSelector:
+                                description: |-
+                                  Machine selector label is a label query over a set of resources. The result of match_labels and match_expressions are ANDed. An empty label selector matches all objects. A null label selector matches no objects.
+                                  Machine label selector
+                                items:
+                                  properties:
+                                    matchExpressions:
+                                      description: |-
+                                        Match expressions is a list of label selector requirements. The requirements are ANDed.
+                                        Label selector match expressions
+                                      items:
+                                        properties:
+                                          key:
+                                            description: |-
+                                              The toleration key.
+                                              Label selector requirement key
+                                            type: string
+                                          operator:
+                                            description: |-
+                                              The toleration operator.
+                                              Label selector operator
+                                            type: string
+                                          values:
+                                            description: |-
+                                              Values is a list of string values.
+                                              Label selector requirement values
+                                            items:
+                                              type: string
+                                            type: array
+                                        type: object
+                                      type: array
+                                    matchLabels:
+                                      additionalProperties:
+                                        type: string
+                                      description: |-
+                                        Machine selector label is a map of {key,value} pairs, the requirements are ANDed.
+                                        Label selector match labels
+                                      type: object
+                                      x-kubernetes-map-type: granular
+                                  type: object
+                                type: array
+                            type: object
+                          type: array
+                        machineSelectorFiles:
+                          description: |-
+                            Machine selector files provide a means to deliver files to nodes so that the files can be in place before initiating RKE2/K3s server or agent processes. Please refer to Rancher documentation for RKE2 Cluster Configuration Reference and K3s Cluster Configuration Reference. This argument is available in Rancher v2.7.2 and later.
+                            Cluster V2 machine selector files
+                          items:
+                            properties:
+                              fileSources:
+                                description: |-
+                                  File sources represents the source of the files. Multiple files can be delivered to nodes that match the provided label selector.
+                                  File sources
+                                items:
+                                  properties:
+                                    configmap:
+                                      description: |-
+                                        Configmap represents a K8s configmap which is the source of files. It is mutually exclusive with secret.
+                                        The configmap which is the source of files
+                                      items:
+                                        properties:
+                                          defaultPermissions:
+                                            description: |-
+                                              The numeric representation of the default file permissions for all files defined under the items.
+                                              The default permissions to be applied when they are not set at the item level
+                                            type: string
+                                          items:
+                                            description: |-
+                                              Items is a list of configurations for files, such as where to retrieve the content from the source, where to put the file on nodes, and etc.
+                                              Items(files) to retrieve from the K8s object
+                                            items:
+                                              properties:
+                                                dynamic:
+                                                  description: |-
+                                                    If true, the file is ignored when determining whether the node should be drained before updating the node plan.
+                                                    If ture, the file is ignored when determining whether the node should be drained before updating the node plan (default: true).
+                                                  type: boolean
+                                                hash:
+                                                  description: |-
+                                                    Hash is the base64 encoded value of the SHA256 checksum of the file's content. If specified, it is used to validate the integrity of the file content.
+                                                    The base64 encoded value of the SHA256 checksum of the file's content
+                                                  type: string
+                                                key:
+                                                  description: |-
+                                                    The toleration key.
+                                                    The key of the item(file) to retrieve
+                                                  type: string
+                                                path:
+                                                  description: |-
+                                                    Path is the absolute path to put the file in the target node.
+                                                    The path to put the file in the target node
+                                                  type: string
+                                                permissions:
+                                                  description: |-
+                                                    Permissions is the numeric representation of the file permission. It takes precedence over the default permissions at the outer level.
+                                                    The numeric representation of the file permissions
+                                                  type: string
+                                              type: object
+                                            type: array
+                                          name:
+                                            description: |-
+                                              The name of the cluster.
+                                              The name of the K8s object
+                                            type: string
+                                        type: object
+                                      type: array
+                                    secret:
+                                      description: |-
+                                        Secret represents a K8s secret which is the source of files. It is mutually exclusive with configmap.
+                                        The secret which is the source of files
+                                      items:
+                                        properties:
+                                          defaultPermissions:
+                                            description: |-
+                                              The numeric representation of the default file permissions for all files defined under the items.
+                                              The default permissions to be applied when they are not set at the item level
+                                            type: string
+                                          items:
+                                            description: |-
+                                              Items is a list of configurations for files, such as where to retrieve the content from the source, where to put the file on nodes, and etc.
+                                              Items(files) to retrieve from the K8s object
+                                            items:
+                                              properties:
+                                                dynamic:
+                                                  description: |-
+                                                    If true, the file is ignored when determining whether the node should be drained before updating the node plan.
+                                                    If ture, the file is ignored when determining whether the node should be drained before updating the node plan (default: true).
+                                                  type: boolean
+                                                hash:
+                                                  description: |-
+                                                    Hash is the base64 encoded value of the SHA256 checksum of the file's content. If specified, it is used to validate the integrity of the file content.
+                                                    The base64 encoded value of the SHA256 checksum of the file's content
+                                                  type: string
+                                                key:
+                                                  description: |-
+                                                    The toleration key.
+                                                    The key of the item(file) to retrieve
+                                                  type: string
+                                                path:
+                                                  description: |-
+                                                    Path is the absolute path to put the file in the target node.
+                                                    The path to put the file in the target node
+                                                  type: string
+                                                permissions:
+                                                  description: |-
+                                                    Permissions is the numeric representation of the file permission. It takes precedence over the default permissions at the outer level.
+                                                    The numeric representation of the file permissions
+                                                  type: string
+                                              type: object
+                                            type: array
+                                          name:
+                                            description: |-
+                                              The name of the cluster.
+                                              The name of the K8s object
+                                            type: string
+                                        type: object
+                                      type: array
+                                  type: object
+                                type: array
+                              machineLabelSelector:
+                                description: |-
+                                  Machine selector label is a label query over a set of resources. The result of match_labels and match_expressions are ANDed. An empty label selector matches all objects. A null label selector matches no objects.
+                                  Machine label selector
+                                items:
+                                  properties:
+                                    matchExpressions:
+                                      description: |-
+                                        Match expressions is a list of label selector requirements. The requirements are ANDed.
+                                        Label selector match expressions
+                                      items:
+                                        properties:
+                                          key:
+                                            description: |-
+                                              The toleration key.
+                                              Label selector requirement key
+                                            type: string
+                                          operator:
+                                            description: |-
+                                              The toleration operator.
+                                              Label selector operator
+                                            type: string
+                                          values:
+                                            description: |-
+                                              Values is a list of string values.
+                                              Label selector requirement values
+                                            items:
+                                              type: string
+                                            type: array
+                                        type: object
+                                      type: array
+                                    matchLabels:
+                                      additionalProperties:
+                                        type: string
+                                      description: |-
+                                        Machine selector label is a map of {key,value} pairs, the requirements are ANDed.
+                                        Label selector match labels
+                                      type: object
+                                      x-kubernetes-map-type: granular
+                                  type: object
+                                type: array
+                            type: object
+                          type: array
+                        registries:
+                          description: |-
+                            Docker registries from which the cluster pulls images.
+                            Cluster V2 registries
+                          items:
+                            properties:
+                              configs:
+                                description: |-
+                                  Cluster V2 docker registries config.
+                                  Registry config
+                                items:
+                                  properties:
+                                    authConfigSecretName:
+                                      description: |-
+                                        Name of the secret that contains two keys with base64 encoded values: the username and password for the specified custom registry. No secret is required if the system-default-registry is not authenticated.
+                                        Registry auth config secret name
+                                      type: string
+                                    caBundle:
+                                      description: |-
+                                        Registry CA bundle.
+                                        Registry CA bundle
+                                      type: string
+                                    hostname:
+                                      description: |-
+                                        Registry hostname.
+                                        Registry hostname
+                                      type: string
+                                    insecure:
+                                      description: |-
+                                        Registry insecure connectivity.
+                                        Registry insecure connectivity
+                                      type: boolean
+                                    tlsSecretName:
+                                      description: |-
+                                        Registry TLS secret name. TLS is a pair of Cert/Key.
+                                        Registry TLS secret name. TLS is a pair of Cert/Key
+                                      type: string
+                                  type: object
+                                type: array
+                              mirrors:
+                                description: |-
+                                  Cluster V2 docker registries mirror.
+                                  Registry mirrors
+                                items:
+                                  properties:
+                                    endpoints:
+                                      description: |-
+                                        Registry mirror endpoints.
+                                        Registry mirror endpoints
+                                      items:
+                                        type: string
+                                      type: array
+                                    hostname:
+                                      description: |-
+                                        Registry hostname.
+                                        Registry hostname
+                                      type: string
+                                    rewrites:
+                                      additionalProperties:
+                                        type: string
+                                      description: |-
+                                        Registry mirror rewrites.
+                                        Registry mirror rewrites
+                                      type: object
+                                      x-kubernetes-map-type: granular
+                                  type: object
+                                type: array
+                            type: object
+                          type: array
+                        rotateCertificates:
+                          description: |-
+                            Cluster V2 certificate rotation.
+                            Cluster V2 certificate rotation
+                          items:
+                            properties:
+                              generation:
+                                description: |-
+                                  Desired certificate rotation generation.
+                                  Desired certificate rotation generation.
+                                type: number
+                              services:
+                                description: |-
+                                  Service certificates to rotate with this generation.
+                                  Service certificates to rotate with this generation.
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                          type: array
+                        upgradeStrategy:
+                          description: |-
+                            Cluster upgrade strategy.
+                            Cluster V2 upgrade strategy
+                          items:
+                            properties:
+                              controlPlaneConcurrency:
+                                description: |-
+                                  How many control plane nodes should be upgraded at a time, 0 is infinite. Percentages are also accepted.
+                                  How many controlplane nodes should be upgrade at time, 0 is infinite. Percentages are also accepted
+                                type: string
+                              controlPlaneDrainOptions:
+                                description: |-
+                                  Controlplane nodes drain options.
+                                  Controlplane nodes drain options
+                                items:
+                                  properties:
+                                    deleteEmptyDirData:
+                                      description: |-
+                                        if delete_empty_dir_data is set to true, continue draining even if there are pods using emptyDir (local storage).
+                                        Drain options delete empty dir data
+                                      type: boolean
+                                    disableEviction:
+                                      description: |-
+                                        If disable_eviction is set to true, force drain to use delete rather than evict.
+                                        Drain options disable eviction
+                                      type: boolean
+                                    enabled:
+                                      description: |-
+                                        Enable the authorized cluster endpoint.
+                                        Drain options enabled?
+                                      type: boolean
+                                    force:
+                                      description: |-
+                                        If force is set to true, drain nodes even if there are standalone pods that are not managed by a ReplicationController, Job, or DaemonSet. Drain will not proceed without force set to true if there are such pods.
+                                        Drain options force
+                                      type: boolean
+                                    gracePeriod:
+                                      description: |-
+                                        Time in seconds given to each pod to terminate gracefully. If negative, the default value specified in the pod will be used.
+                                        Drain options grace period
+                                      type: number
+                                    ignoreDaemonSets:
+                                      description: |-
+                                        If ignore_daemon_sets is set to false, drain will not proceed if there are DaemonSet-managed pods.
+                                        Drain options ignore daemon sets
+                                      type: boolean
+                                    ignoreErrors:
+                                      description: |-
+                                        If ignore_errors is set to true,  errors that occurred between drain nodes in group are ignored.
+                                        Drain options ignore errors
+                                      type: boolean
+                                    skipWaitForDeleteTimeoutSeconds:
+                                      description: |-
+                                        Skip waiting for the pods that have a DeletionTimeStamp > N seconds to be deleted. Seconds must be greater than 0 to skip. Such pods will be force deleted.
+                                        Drain options skip wait for delete timeout seconds
+                                      type: number
+                                    timeout:
+                                      description: |-
+                                        Time to wait (in seconds) before giving up for one try.
+                                        Drain options timeout
+                                      type: number
+                                  type: object
+                                type: array
+                              workerConcurrency:
+                                description: |-
+                                  How many worker nodes should be upgraded at a time. Percentages are also accepted.
+                                  How many worker nodes should be upgrade at time
+                                type: string
+                              workerDrainOptions:
+                                description: |-
+                                  Worker nodes drain options.
+                                  Worker nodes drain options
+                                items:
+                                  properties:
+                                    deleteEmptyDirData:
+                                      description: |-
+                                        if delete_empty_dir_data is set to true, continue draining even if there are pods using emptyDir (local storage).
+                                        Drain options delete empty dir data
+                                      type: boolean
+                                    disableEviction:
+                                      description: |-
+                                        If disable_eviction is set to true, force drain to use delete rather than evict.
+                                        Drain options disable eviction
+                                      type: boolean
+                                    enabled:
+                                      description: |-
+                                        Enable the authorized cluster endpoint.
+                                        Drain options enabled?
+                                      type: boolean
+                                    force:
+                                      description: |-
+                                        If force is set to true, drain nodes even if there are standalone pods that are not managed by a ReplicationController, Job, or DaemonSet. Drain will not proceed without force set to true if there are such pods.
+                                        Drain options force
+                                      type: boolean
+                                    gracePeriod:
+                                      description: |-
+                                        Time in seconds given to each pod to terminate gracefully. If negative, the default value specified in the pod will be used.
+                                        Drain options grace period
+                                      type: number
+                                    ignoreDaemonSets:
+                                      description: |-
+                                        If ignore_daemon_sets is set to false, drain will not proceed if there are DaemonSet-managed pods.
+                                        Drain options ignore daemon sets
+                                      type: boolean
+                                    ignoreErrors:
+                                      description: |-
+                                        If ignore_errors is set to true,  errors that occurred between drain nodes in group are ignored.
+                                        Drain options ignore errors
+                                      type: boolean
+                                    skipWaitForDeleteTimeoutSeconds:
+                                      description: |-
+                                        Skip waiting for the pods that have a DeletionTimeStamp > N seconds to be deleted. Seconds must be greater than 0 to skip. Such pods will be force deleted.
+                                        Drain options skip wait for delete timeout seconds
+                                      type: number
+                                    timeout:
+                                      description: |-
+                                        Time to wait (in seconds) before giving up for one try.
+                                        Drain options timeout
+                                      type: number
+                                  type: object
+                                type: array
+                            type: object
+                          type: array
+                      type: object
+                    type: array
+                type: object
+              initProvider:
+                description: |-
+                  THIS IS A BETA FIELD. It will be honored
+                  unless the Management Policies feature flag is disabled.
+                  InitProvider holds the same fields as ForProvider, with the exception
+                  of Identifier and other resource reference fields. The fields that are
+                  in InitProvider are merged into ForProvider when the resource is created.
+                  The same fields are also added to the terraform ignore_changes hook, to
+                  avoid updating them after creation. This is useful for fields that are
+                  required on creation, but we do not desire to update them after creation,
+                  for example because of an external controller is managing them, like an
+                  autoscaler.
+                properties:
+                  agentEnvVars:
+                    description: |-
+                      Agent env vars is a list of additional environment variables to be appended to the cattle-cluster-agent and fleet-agent deployment, and the plan for the system upgrade controller to upgrade nodes.
+                      Cluster V2 default agent env vars
+                    items:
+                      properties:
+                        name:
+                          description: The name of the cluster.
+                          type: string
+                        value:
+                          description: Rancher agent env var value.
+                          type: string
+                      type: object
+                    type: array
+                  annotations:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      Annotations for the Cluster.
+                      Annotations of the resource
+                    type: object
+                    x-kubernetes-map-type: granular
+                  cloudCredentialSecretName:
+                    description: |-
+                      Cloud credential secret name is the secret to be used when a cloud credential secret name is not specified at the machine pool level.
+                      Cluster V2 cloud credential secret name
+                    type: string
+                  clusterAgentDeploymentCustomization:
+                    description: |-
+                      Cluster agent deployment customization specifies the additional tolerations, new affinity rules, and new resource requirements on the cattle-cluster-agent deployment. This argument is available in Rancher v2.7.5 and above.
+                      Optional customization for cluster agent
+                    items:
+                      properties:
+                        appendTolerations:
+                          description: |-
+                            A list of tolerations to be appended to the default tolerations.
+                            User defined tolerations to append to agent
+                          items:
+                            properties:
+                              effect:
+                                description: 'The toleration effect. Default: \"NoSchedule\".'
+                                type: string
+                              key:
+                                description: The toleration key.
+                                type: string
+                              operator:
+                                description: The toleration operator.
+                                type: string
+                              seconds:
+                                description: The number of seconds a pod will stay
+                                  bound to a node with a matching taint.
+                                type: number
+                              value:
+                                description: Rancher agent env var value.
+                                type: string
+                            type: object
+                          type: array
+                        overrideAffinity:
+                          description: |-
+                            Override affinity overrides the global default affinity setting.
+                            User defined affinity to override default agent affinity
+                          type: string
+                        overrideResourceRequirements:
+                          description: |-
+                            Override resource requirements overrides the default value for requests and/or limits.
+                            User defined resource requirements to set on the agent
+                          items:
+                            properties:
+                              cpuLimit:
+                                description: |-
+                                  The maximum CPU limit for agent.
+                                  The maximum CPU limit for agent
+                                type: string
+                              cpuRequest:
+                                description: |-
+                                  The minimum CPU required for agent.
+                                  The minimum CPU required for agent
+                                type: string
+                              memoryLimit:
+                                description: |-
+                                  The maximum memory limit for agent.
+                                  The maximum memory limit for agent
+                                type: string
+                              memoryRequest:
+                                description: |-
+                                  The minimum memory required for agent.
+                                  The minimum memory required for agent
+                                type: string
+                            type: object
+                          type: array
+                      type: object
+                    type: array
+                  defaultClusterRoleForProjectMembers:
+                    description: |-
+                      Default cluster role for project members.
+                      Cluster V2 default cluster role for project members
+                    type: string
+                  defaultPodSecurityAdmissionConfigurationTemplateName:
+                    description: |-
+                      The name of the pre-defined pod security admission configuration template to be applied to the cluster. Rancher admins (or those with the right permissions) can create, manage, and edit those templates. For more information, please refer to Rancher Documentation. The argument is available in Rancher v2.7.2 and above.
+                      Cluster V2 default pod security admission configuration template name
+                    type: string
+                  enableNetworkPolicy:
+                    description: |-
+                      Enable k8s network policy on the cluster.
+                      Enable k8s network policy
+                    type: boolean
+                  fleetAgentDeploymentCustomization:
+                    description: |-
+                      Fleet agent deployment customization specifies the additional tolerations, new affinity rules, and new resource requirements on the fleet-agent deployment. The argument is available in Rancher v2.7.5 and above.
+                      Optional customization for fleet agent
+                    items:
+                      properties:
+                        appendTolerations:
+                          description: |-
+                            A list of tolerations to be appended to the default tolerations.
+                            User defined tolerations to append to agent
+                          items:
+                            properties:
+                              effect:
+                                description: 'The toleration effect. Default: \"NoSchedule\".'
+                                type: string
+                              key:
+                                description: The toleration key.
+                                type: string
+                              operator:
+                                description: The toleration operator.
+                                type: string
+                              seconds:
+                                description: The number of seconds a pod will stay
+                                  bound to a node with a matching taint.
+                                type: number
+                              value:
+                                description: Rancher agent env var value.
+                                type: string
+                            type: object
+                          type: array
+                        overrideAffinity:
+                          description: |-
+                            Override affinity overrides the global default affinity setting.
+                            User defined affinity to override default agent affinity
+                          type: string
+                        overrideResourceRequirements:
+                          description: |-
+                            Override resource requirements overrides the default value for requests and/or limits.
+                            User defined resource requirements to set on the agent
+                          items:
+                            properties:
+                              cpuLimit:
+                                description: |-
+                                  The maximum CPU limit for agent.
+                                  The maximum CPU limit for agent
+                                type: string
+                              cpuRequest:
+                                description: |-
+                                  The minimum CPU required for agent.
+                                  The minimum CPU required for agent
+                                type: string
+                              memoryLimit:
+                                description: |-
+                                  The maximum memory limit for agent.
+                                  The maximum memory limit for agent
+                                type: string
+                              memoryRequest:
+                                description: |-
+                                  The minimum memory required for agent.
+                                  The minimum memory required for agent
+                                type: string
+                            type: object
+                          type: array
+                      type: object
+                    type: array
+                  fleetNamespace:
+                    description: Fleet namespace is the namespace where the cluster
+                      is to create in the local cluster. It is recommended to leave
+                      it as the default value.
+                    type: string
+                  kubernetesVersion:
+                    description: |-
+                      The RKE2 or K3s version for the cluster.
+                      Cluster V2 kubernetes version
+                    type: string
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      Labels for the Cluster.
+                      Labels of the resource
+                    type: object
+                    x-kubernetes-map-type: granular
+                  localAuthEndpoint:
+                    description: |-
+                      Local auth endpoint configures the Authorized Cluster Endpoint (ACE) which can be used to directly access the Kubernetes API server, without requiring communication through Rancher. For more information, please refer to Rancher Documentation.
+                      Cluster V2 local auth endpoint
+                    items:
+                      properties:
+                        caCerts:
+                          description: CA certs for the authorized cluster endpoint.
+                            It is only needed if there is a load balancer in front
+                            of the downstream cluster that is using an untrusted certificate.
+                            If you have a valid certificate, then nothing needs to
+                            be added to the CA Certificates field.
+                          type: string
+                        enabled:
+                          description: Enable the authorized cluster endpoint.
+                          type: boolean
+                        fqdn:
+                          description: FQDN for the authorized cluster endpoint. If
+                            one is entered, it should point to the downstream cluster.
+                          type: string
+                      type: object
+                    type: array
+                  name:
+                    description: |-
+                      The name of the cluster.
+                      Cluster V2 name
+                    type: string
+                  rkeConfig:
+                    description: |-
+                      The RKE configuration for the cluster.
+                      Cluster V2 rke config
+                    items:
+                      properties:
+                        additionalManifest:
+                          description: |-
+                            The value of the additional manifest is delivered to the path /var/lib/rancher/rke2/server/manifests/rancher/addons.yaml or /var/lib/rancher/k3s/server/manifests/rancher/addons.yaml on the control plane nodes.
+                            Cluster V2 additional manifest
+                          type: string
+                        chartValues:
+                          description: |-
+                            The value for the system charts installed by the distribution. For more information about how RKE2 or K3s manage packaged components, please refer to RKE2 documentation or K3s documentation.
+                            Cluster V2 chart values. It should be in YAML format
+                          type: string
+                        etcd:
+                          description: |-
+                            Etcd configures the behavior of the automatic etcd snapshot feature.
+                            Cluster V2 etcd
+                          items:
+                            properties:
+                              disableSnapshots:
+                                description: |-
+                                  Disable ETCD snapshots.
+                                  Disable ETCD snapshots
+                                type: boolean
+                              s3Config:
+                                description: |-
+                                  Creation option for etcd service.
+                                  ETCD snapshot S3 config
+                                items:
+                                  properties:
+                                    bucket:
+                                      description: |-
+                                        Bucket name for S3 service.
+                                        ETCD snapshot S3 bucket
+                                      type: string
+                                    cloudCredentialName:
+                                      description: |-
+                                        ETCD snapshot S3 cloud credential name.
+                                        ETCD snapshot S3 cloud credential name
+                                      type: string
+                                    endpoint:
+                                      description: |-
+                                        ETCD snapshot S3 endpoint.
+                                        ETCD snapshot S3 endpoint
+                                      type: string
+                                    endpointCa:
+                                      description: |-
+                                        ETCD snapshot S3 endpoint CA.
+                                        ETCD snapshot S3 endpoint CA
+                                      type: string
+                                    folder:
+                                      description: |-
+                                        ETCD snapshot S3 folder.
+                                        ETCD snapshot S3 folder
+                                      type: string
+                                    region:
+                                      description: |-
+                                        ETCD snapshot S3 region.
+                                        ETCD snapshot S3 region
+                                      type: string
+                                    skipSslVerify:
+                                      description: |-
+                                        Disable ETCD skip ssl verify.
+                                        Disable ETCD skip ssl verify
+                                      type: boolean
+                                  type: object
+                                type: array
+                              snapshotRetention:
+                                description: |-
+                                  ETCD snapshot retention.
+                                  ETCD snapshot retention
+                                type: number
+                              snapshotScheduleCron:
+                                description: |-
+                                  ETCD snapshot schedule cron (e.g \"0 */5 * * *\").
+                                  ETCD snapshot schedule cron (e.g `"0 */5 * * *"`)
+                                type: string
+                            type: object
+                          type: array
+                        etcdSnapshotCreate:
+                          description: |-
+                            Cluster V2 etcd snapshot create.
+                            Cluster V2 etcd snapshot create
+                          items:
+                            properties:
+                              generation:
+                                description: |-
+                                  Desired certificate rotation generation.
+                                  ETCD generation to initiate a snapshot
+                                type: number
+                            type: object
+                          type: array
+                        etcdSnapshotRestore:
+                          description: |-
+                            Cluster V2 etcd snapshot restore.
+                            Cluster V2 etcd snapshot restore
+                          items:
+                            properties:
+                              generation:
+                                description: |-
+                                  Desired certificate rotation generation.
+                                  ETCD snapshot desired generation
+                                type: number
+                              name:
+                                description: |-
+                                  The name of the cluster.
+                                  ETCD snapshot name to restore
+                                type: string
+                              restoreRkeConfig:
+                                description: |-
+                                  ETCD restore RKE config (set to none, all, or kubernetesVersion).
+                                  ETCD restore RKE config (set to none, all, or kubernetesVersion)
+                                type: string
+                            type: object
+                          type: array
+                        localAuthEndpoint:
+                          description: |-
+                            Local auth endpoint configures the Authorized Cluster Endpoint (ACE) which can be used to directly access the Kubernetes API server, without requiring communication through Rancher. For more information, please refer to Rancher Documentation.
+                            Cluster V2 local auth endpoint
+                          items:
+                            properties:
+                              caCerts:
+                                description: CA certs for the authorized cluster endpoint.
+                                  It is only needed if there is a load balancer in
+                                  front of the downstream cluster that is using an
+                                  untrusted certificate. If you have a valid certificate,
+                                  then nothing needs to be added to the CA Certificates
+                                  field.
+                                type: string
+                              enabled:
+                                description: Enable the authorized cluster endpoint.
+                                type: boolean
+                              fqdn:
+                                description: FQDN for the authorized cluster endpoint.
+                                  If one is entered, it should point to the downstream
+                                  cluster.
+                                type: string
+                            type: object
+                          type: array
+                        machineGlobalConfig:
+                          description: |-
+                            Machine global config specifies the distribution-specified server configuration applied to all nodes. For the full list of server configurations, please refer to RKE2 server configuration or K3s server configuration.
+                            Cluster V2 machine global config
+                          type: string
+                        machinePoolDefaults:
+                          description: Default values for machine pool configurations
+                            if unset
+                          items:
+                            properties:
+                              hostnameLengthLimit:
+                                description: maximum length for autogenerated hostname
+                                type: number
+                            type: object
+                          type: array
+                        machinePools:
+                          description: |-
+                            Cluster V2 machine pools.
+                            Cluster V2 machine pools
+                          items:
+                            properties:
+                              annotations:
+                                additionalProperties:
+                                  type: string
+                                description: |-
+                                  Annotations for the Cluster.
+                                  Annotations of the resource
+                                type: object
+                                x-kubernetes-map-type: granular
+                              cloudCredentialSecretName:
+                                description: |-
+                                  Cloud credential secret name is the secret to be used when a cloud credential secret name is not specified at the machine pool level.
+                                  Machine pool cloud credential secret name
+                                type: string
+                              controlPlaneRole:
+                                description: |-
+                                  Machine pool control plane role?
+                                  Machine pool control plane role
+                                type: boolean
+                              drainBeforeDelete:
+                                description: |-
+                                  Machine Pool Drain Before Delete?
+                                  Machine pool drain before delete
+                                type: boolean
+                              etcdRole:
+                                description: |-
+                                  Machine pool etcd role?
+                                  Machine pool etcd role
+                                type: boolean
+                              hostnameLengthLimit:
+                                description: maximum length for autogenerated hostname
+                                type: number
+                              labels:
+                                additionalProperties:
+                                  type: string
+                                description: |-
+                                  Labels for the Cluster.
+                                  Labels of the resource
+                                type: object
+                                x-kubernetes-map-type: granular
+                              machineConfig:
+                                description: |-
+                                  Machine pool node config.
+                                  Machine config data
+                                items:
+                                  properties:
+                                    apiVersion:
+                                      description: |-
+                                        Api version of the machine_config.
+                                        Machine config API version
+                                      type: string
+                                    kind:
+                                      description: |-
+                                        Machine config kind.
+                                        Machine config kind
+                                      type: string
+                                    name:
+                                      description: |-
+                                        The name of the cluster.
+                                        Machine config name
+                                      type: string
+                                  type: object
+                                type: array
+                              machineLabels:
+                                additionalProperties:
+                                  type: string
+                                description: |-
+                                  Labels for Machine pool nodes.
+                                  Labels of the machine
+                                type: object
+                                x-kubernetes-map-type: granular
+                              maxUnhealthy:
+                                description: |-
+                                  Max unhealthy nodes for automated replacement to be allowed.
+                                  max unhealthy nodes for automated replacement to be allowed
+                                type: string
+                              name:
+                                description: |-
+                                  The name of the cluster.
+                                  Machine pool name
+                                type: string
+                              nodeDrainTimeout:
+                                description: |-
+                                  Seconds a machine has to drain before deletion.
+                                  seconds to wait for machine pool drain to complete before machine deletion
+                                type: number
+                              nodeStartupTimeoutSeconds:
+                                description: |-
+                                  Seconds a new node has to become active before it is replaced.
+                                  seconds a new node has to become active before it is replaced
+                                type: number
+                              paused:
+                                description: |-
+                                  Machine pool paused?
+                                  Machine pool paused
+                                type: boolean
+                              quantity:
+                                description: |-
+                                  Machine pool quantity.
+                                  Machine pool quantity
+                                type: number
+                              rollingUpdate:
+                                description: |-
+                                  Machine pool rolling update.
+                                  Machine pool rolling update
+                                items:
+                                  properties:
+                                    maxSurge:
+                                      description: |-
+                                        Rolling update max surge.
+                                        Rolling update max surge
+                                      type: string
+                                    maxUnavailable:
+                                      description: |-
+                                        Rolling update max unavailable.
+                                        Rolling update max unavailable
+                                      type: string
+                                  type: object
+                                type: array
+                              taints:
+                                description: |-
+                                  Machine pool taints.
+                                  Machine pool taints
+                                items:
+                                  properties:
+                                    effect:
+                                      description: 'The toleration effect. Default:
+                                        \"NoSchedule\".'
+                                      type: string
+                                    key:
+                                      description: The toleration key.
+                                      type: string
+                                    value:
+                                      description: Rancher agent env var value.
+                                      type: string
+                                  type: object
+                                type: array
+                              unhealthyNodeTimeoutSeconds:
+                                description: |-
+                                  Seconds an unhealthy node has to become active before it is replaced.
+                                  seconds an unhealthy node has to become active before it is replaced
+                                type: number
+                              unhealthyRange:
+                                description: |-
+                                  Range of unhealthy nodes for automated replacement to be allowed.
+                                  range of unhealthy nodes for automated replacement to be allowed
+                                type: string
+                              workerRole:
+                                description: |-
+                                  Machine pool worker role?
+                                  Machine pool worker role
+                                type: boolean
+                            type: object
+                          type: array
+                        machineSelectorConfig:
+                          description: |-
+                            Machine selector config is the same as machine_global_config except that a label selector can be specified with the configuration. The configuration will only be applied to nodes that match the provided label selector. The configuration from machine_selector_config takes precedence over the one from machine_global_config. This argument is available in Rancher v2.7.2 and later.
+                            Cluster V2 machine selector config
+                          items:
+                            properties:
+                              config:
+                                description: |-
+                                  Config is the distribution-specify configuration to be applied to nodes that match the provided label selector. For more information, please refer to Rancher's documentation for RKE2 Cluster Configuration or K3s Cluster Configuration
+                                  Machine selector config
+                                type: string
+                              machineLabelSelector:
+                                description: |-
+                                  Machine selector label is a label query over a set of resources. The result of match_labels and match_expressions are ANDed. An empty label selector matches all objects. A null label selector matches no objects.
+                                  Machine label selector
+                                items:
+                                  properties:
+                                    matchExpressions:
+                                      description: |-
+                                        Match expressions is a list of label selector requirements. The requirements are ANDed.
+                                        Label selector match expressions
+                                      items:
+                                        properties:
+                                          key:
+                                            description: |-
+                                              The toleration key.
+                                              Label selector requirement key
+                                            type: string
+                                          operator:
+                                            description: |-
+                                              The toleration operator.
+                                              Label selector operator
+                                            type: string
+                                          values:
+                                            description: |-
+                                              Values is a list of string values.
+                                              Label selector requirement values
+                                            items:
+                                              type: string
+                                            type: array
+                                        type: object
+                                      type: array
+                                    matchLabels:
+                                      additionalProperties:
+                                        type: string
+                                      description: |-
+                                        Machine selector label is a map of {key,value} pairs, the requirements are ANDed.
+                                        Label selector match labels
+                                      type: object
+                                      x-kubernetes-map-type: granular
+                                  type: object
+                                type: array
+                            type: object
+                          type: array
+                        machineSelectorFiles:
+                          description: |-
+                            Machine selector files provide a means to deliver files to nodes so that the files can be in place before initiating RKE2/K3s server or agent processes. Please refer to Rancher documentation for RKE2 Cluster Configuration Reference and K3s Cluster Configuration Reference. This argument is available in Rancher v2.7.2 and later.
+                            Cluster V2 machine selector files
+                          items:
+                            properties:
+                              fileSources:
+                                description: |-
+                                  File sources represents the source of the files. Multiple files can be delivered to nodes that match the provided label selector.
+                                  File sources
+                                items:
+                                  properties:
+                                    configmap:
+                                      description: |-
+                                        Configmap represents a K8s configmap which is the source of files. It is mutually exclusive with secret.
+                                        The configmap which is the source of files
+                                      items:
+                                        properties:
+                                          defaultPermissions:
+                                            description: |-
+                                              The numeric representation of the default file permissions for all files defined under the items.
+                                              The default permissions to be applied when they are not set at the item level
+                                            type: string
+                                          items:
+                                            description: |-
+                                              Items is a list of configurations for files, such as where to retrieve the content from the source, where to put the file on nodes, and etc.
+                                              Items(files) to retrieve from the K8s object
+                                            items:
+                                              properties:
+                                                dynamic:
+                                                  description: |-
+                                                    If true, the file is ignored when determining whether the node should be drained before updating the node plan.
+                                                    If ture, the file is ignored when determining whether the node should be drained before updating the node plan (default: true).
+                                                  type: boolean
+                                                hash:
+                                                  description: |-
+                                                    Hash is the base64 encoded value of the SHA256 checksum of the file's content. If specified, it is used to validate the integrity of the file content.
+                                                    The base64 encoded value of the SHA256 checksum of the file's content
+                                                  type: string
+                                                key:
+                                                  description: |-
+                                                    The toleration key.
+                                                    The key of the item(file) to retrieve
+                                                  type: string
+                                                path:
+                                                  description: |-
+                                                    Path is the absolute path to put the file in the target node.
+                                                    The path to put the file in the target node
+                                                  type: string
+                                                permissions:
+                                                  description: |-
+                                                    Permissions is the numeric representation of the file permission. It takes precedence over the default permissions at the outer level.
+                                                    The numeric representation of the file permissions
+                                                  type: string
+                                              type: object
+                                            type: array
+                                          name:
+                                            description: |-
+                                              The name of the cluster.
+                                              The name of the K8s object
+                                            type: string
+                                        type: object
+                                      type: array
+                                    secret:
+                                      description: |-
+                                        Secret represents a K8s secret which is the source of files. It is mutually exclusive with configmap.
+                                        The secret which is the source of files
+                                      items:
+                                        properties:
+                                          defaultPermissions:
+                                            description: |-
+                                              The numeric representation of the default file permissions for all files defined under the items.
+                                              The default permissions to be applied when they are not set at the item level
+                                            type: string
+                                          items:
+                                            description: |-
+                                              Items is a list of configurations for files, such as where to retrieve the content from the source, where to put the file on nodes, and etc.
+                                              Items(files) to retrieve from the K8s object
+                                            items:
+                                              properties:
+                                                dynamic:
+                                                  description: |-
+                                                    If true, the file is ignored when determining whether the node should be drained before updating the node plan.
+                                                    If ture, the file is ignored when determining whether the node should be drained before updating the node plan (default: true).
+                                                  type: boolean
+                                                hash:
+                                                  description: |-
+                                                    Hash is the base64 encoded value of the SHA256 checksum of the file's content. If specified, it is used to validate the integrity of the file content.
+                                                    The base64 encoded value of the SHA256 checksum of the file's content
+                                                  type: string
+                                                key:
+                                                  description: |-
+                                                    The toleration key.
+                                                    The key of the item(file) to retrieve
+                                                  type: string
+                                                path:
+                                                  description: |-
+                                                    Path is the absolute path to put the file in the target node.
+                                                    The path to put the file in the target node
+                                                  type: string
+                                                permissions:
+                                                  description: |-
+                                                    Permissions is the numeric representation of the file permission. It takes precedence over the default permissions at the outer level.
+                                                    The numeric representation of the file permissions
+                                                  type: string
+                                              type: object
+                                            type: array
+                                          name:
+                                            description: |-
+                                              The name of the cluster.
+                                              The name of the K8s object
+                                            type: string
+                                        type: object
+                                      type: array
+                                  type: object
+                                type: array
+                              machineLabelSelector:
+                                description: |-
+                                  Machine selector label is a label query over a set of resources. The result of match_labels and match_expressions are ANDed. An empty label selector matches all objects. A null label selector matches no objects.
+                                  Machine label selector
+                                items:
+                                  properties:
+                                    matchExpressions:
+                                      description: |-
+                                        Match expressions is a list of label selector requirements. The requirements are ANDed.
+                                        Label selector match expressions
+                                      items:
+                                        properties:
+                                          key:
+                                            description: |-
+                                              The toleration key.
+                                              Label selector requirement key
+                                            type: string
+                                          operator:
+                                            description: |-
+                                              The toleration operator.
+                                              Label selector operator
+                                            type: string
+                                          values:
+                                            description: |-
+                                              Values is a list of string values.
+                                              Label selector requirement values
+                                            items:
+                                              type: string
+                                            type: array
+                                        type: object
+                                      type: array
+                                    matchLabels:
+                                      additionalProperties:
+                                        type: string
+                                      description: |-
+                                        Machine selector label is a map of {key,value} pairs, the requirements are ANDed.
+                                        Label selector match labels
+                                      type: object
+                                      x-kubernetes-map-type: granular
+                                  type: object
+                                type: array
+                            type: object
+                          type: array
+                        registries:
+                          description: |-
+                            Docker registries from which the cluster pulls images.
+                            Cluster V2 registries
+                          items:
+                            properties:
+                              configs:
+                                description: |-
+                                  Cluster V2 docker registries config.
+                                  Registry config
+                                items:
+                                  properties:
+                                    authConfigSecretName:
+                                      description: |-
+                                        Name of the secret that contains two keys with base64 encoded values: the username and password for the specified custom registry. No secret is required if the system-default-registry is not authenticated.
+                                        Registry auth config secret name
+                                      type: string
+                                    caBundle:
+                                      description: |-
+                                        Registry CA bundle.
+                                        Registry CA bundle
+                                      type: string
+                                    hostname:
+                                      description: |-
+                                        Registry hostname.
+                                        Registry hostname
+                                      type: string
+                                    insecure:
+                                      description: |-
+                                        Registry insecure connectivity.
+                                        Registry insecure connectivity
+                                      type: boolean
+                                    tlsSecretName:
+                                      description: |-
+                                        Registry TLS secret name. TLS is a pair of Cert/Key.
+                                        Registry TLS secret name. TLS is a pair of Cert/Key
+                                      type: string
+                                  type: object
+                                type: array
+                              mirrors:
+                                description: |-
+                                  Cluster V2 docker registries mirror.
+                                  Registry mirrors
+                                items:
+                                  properties:
+                                    endpoints:
+                                      description: |-
+                                        Registry mirror endpoints.
+                                        Registry mirror endpoints
+                                      items:
+                                        type: string
+                                      type: array
+                                    hostname:
+                                      description: |-
+                                        Registry hostname.
+                                        Registry hostname
+                                      type: string
+                                    rewrites:
+                                      additionalProperties:
+                                        type: string
+                                      description: |-
+                                        Registry mirror rewrites.
+                                        Registry mirror rewrites
+                                      type: object
+                                      x-kubernetes-map-type: granular
+                                  type: object
+                                type: array
+                            type: object
+                          type: array
+                        rotateCertificates:
+                          description: |-
+                            Cluster V2 certificate rotation.
+                            Cluster V2 certificate rotation
+                          items:
+                            properties:
+                              generation:
+                                description: |-
+                                  Desired certificate rotation generation.
+                                  Desired certificate rotation generation.
+                                type: number
+                              services:
+                                description: |-
+                                  Service certificates to rotate with this generation.
+                                  Service certificates to rotate with this generation.
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                          type: array
+                        upgradeStrategy:
+                          description: |-
+                            Cluster upgrade strategy.
+                            Cluster V2 upgrade strategy
+                          items:
+                            properties:
+                              controlPlaneConcurrency:
+                                description: |-
+                                  How many control plane nodes should be upgraded at a time, 0 is infinite. Percentages are also accepted.
+                                  How many controlplane nodes should be upgrade at time, 0 is infinite. Percentages are also accepted
+                                type: string
+                              controlPlaneDrainOptions:
+                                description: |-
+                                  Controlplane nodes drain options.
+                                  Controlplane nodes drain options
+                                items:
+                                  properties:
+                                    deleteEmptyDirData:
+                                      description: |-
+                                        if delete_empty_dir_data is set to true, continue draining even if there are pods using emptyDir (local storage).
+                                        Drain options delete empty dir data
+                                      type: boolean
+                                    disableEviction:
+                                      description: |-
+                                        If disable_eviction is set to true, force drain to use delete rather than evict.
+                                        Drain options disable eviction
+                                      type: boolean
+                                    enabled:
+                                      description: |-
+                                        Enable the authorized cluster endpoint.
+                                        Drain options enabled?
+                                      type: boolean
+                                    force:
+                                      description: |-
+                                        If force is set to true, drain nodes even if there are standalone pods that are not managed by a ReplicationController, Job, or DaemonSet. Drain will not proceed without force set to true if there are such pods.
+                                        Drain options force
+                                      type: boolean
+                                    gracePeriod:
+                                      description: |-
+                                        Time in seconds given to each pod to terminate gracefully. If negative, the default value specified in the pod will be used.
+                                        Drain options grace period
+                                      type: number
+                                    ignoreDaemonSets:
+                                      description: |-
+                                        If ignore_daemon_sets is set to false, drain will not proceed if there are DaemonSet-managed pods.
+                                        Drain options ignore daemon sets
+                                      type: boolean
+                                    ignoreErrors:
+                                      description: |-
+                                        If ignore_errors is set to true,  errors that occurred between drain nodes in group are ignored.
+                                        Drain options ignore errors
+                                      type: boolean
+                                    skipWaitForDeleteTimeoutSeconds:
+                                      description: |-
+                                        Skip waiting for the pods that have a DeletionTimeStamp > N seconds to be deleted. Seconds must be greater than 0 to skip. Such pods will be force deleted.
+                                        Drain options skip wait for delete timeout seconds
+                                      type: number
+                                    timeout:
+                                      description: |-
+                                        Time to wait (in seconds) before giving up for one try.
+                                        Drain options timeout
+                                      type: number
+                                  type: object
+                                type: array
+                              workerConcurrency:
+                                description: |-
+                                  How many worker nodes should be upgraded at a time. Percentages are also accepted.
+                                  How many worker nodes should be upgrade at time
+                                type: string
+                              workerDrainOptions:
+                                description: |-
+                                  Worker nodes drain options.
+                                  Worker nodes drain options
+                                items:
+                                  properties:
+                                    deleteEmptyDirData:
+                                      description: |-
+                                        if delete_empty_dir_data is set to true, continue draining even if there are pods using emptyDir (local storage).
+                                        Drain options delete empty dir data
+                                      type: boolean
+                                    disableEviction:
+                                      description: |-
+                                        If disable_eviction is set to true, force drain to use delete rather than evict.
+                                        Drain options disable eviction
+                                      type: boolean
+                                    enabled:
+                                      description: |-
+                                        Enable the authorized cluster endpoint.
+                                        Drain options enabled?
+                                      type: boolean
+                                    force:
+                                      description: |-
+                                        If force is set to true, drain nodes even if there are standalone pods that are not managed by a ReplicationController, Job, or DaemonSet. Drain will not proceed without force set to true if there are such pods.
+                                        Drain options force
+                                      type: boolean
+                                    gracePeriod:
+                                      description: |-
+                                        Time in seconds given to each pod to terminate gracefully. If negative, the default value specified in the pod will be used.
+                                        Drain options grace period
+                                      type: number
+                                    ignoreDaemonSets:
+                                      description: |-
+                                        If ignore_daemon_sets is set to false, drain will not proceed if there are DaemonSet-managed pods.
+                                        Drain options ignore daemon sets
+                                      type: boolean
+                                    ignoreErrors:
+                                      description: |-
+                                        If ignore_errors is set to true,  errors that occurred between drain nodes in group are ignored.
+                                        Drain options ignore errors
+                                      type: boolean
+                                    skipWaitForDeleteTimeoutSeconds:
+                                      description: |-
+                                        Skip waiting for the pods that have a DeletionTimeStamp > N seconds to be deleted. Seconds must be greater than 0 to skip. Such pods will be force deleted.
+                                        Drain options skip wait for delete timeout seconds
+                                      type: number
+                                    timeout:
+                                      description: |-
+                                        Time to wait (in seconds) before giving up for one try.
+                                        Drain options timeout
+                                      type: number
+                                  type: object
+                                type: array
+                            type: object
+                          type: array
+                      type: object
+                    type: array
+                type: object
+              managementPolicies:
+                default:
+                - '*'
+                description: |-
+                  THIS IS A BETA FIELD. It is on by default but can be opted out
+                  through a Crossplane feature flag.
+                  ManagementPolicies specify the array of actions Crossplane is allowed to
+                  take on the managed and external resources.
+                  This field is planned to replace the DeletionPolicy field in a future
+                  release. Currently, both could be set independently and non-default
+                  values would be honored if the feature flag is enabled. If both are
+                  custom, the DeletionPolicy field will be ignored.
+                  See the design doc for more information: https://github.com/crossplane/crossplane/blob/499895a25d1a1a0ba1604944ef98ac7a1a71f197/design/design-doc-observe-only-resources.md?plain=1#L223
+                  and this one: https://github.com/crossplane/crossplane/blob/444267e84783136daa93568b364a5f01228cacbe/design/one-pager-ignore-changes.md
+                items:
+                  description: |-
+                    A ManagementAction represents an action that the Crossplane controllers
+                    can take on an external resource.
+                  enum:
+                  - Observe
+                  - Create
+                  - Update
+                  - Delete
+                  - LateInitialize
+                  - '*'
+                  type: string
+                type: array
+              providerConfigRef:
+                default:
+                  name: default
+                description: |-
+                  ProviderConfigReference specifies how the provider that will be used to
+                  create, observe, update, and delete this managed resource should be
+                  configured.
+                properties:
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                  policy:
+                    description: Policies for referencing.
+                    properties:
+                      resolution:
+                        default: Required
+                        description: |-
+                          Resolution specifies whether resolution of this reference is required.
+                          The default is 'Required', which means the reconcile will fail if the
+                          reference cannot be resolved. 'Optional' means this reference will be
+                          a no-op if it cannot be resolved.
+                        enum:
+                        - Required
+                        - Optional
+                        type: string
+                      resolve:
+                        description: |-
+                          Resolve specifies when this reference should be resolved. The default
+                          is 'IfNotPresent', which will attempt to resolve the reference only when
+                          the corresponding field is not present. Use 'Always' to resolve the
+                          reference on every reconcile.
+                        enum:
+                        - Always
+                        - IfNotPresent
+                        type: string
+                    type: object
+                required:
+                - name
+                type: object
+              publishConnectionDetailsTo:
+                description: |-
+                  PublishConnectionDetailsTo specifies the connection secret config which
+                  contains a name, metadata and a reference to secret store config to
+                  which any connection details for this managed resource should be written.
+                  Connection details frequently include the endpoint, username,
+                  and password required to connect to the managed resource.
+                properties:
+                  configRef:
+                    default:
+                      name: default
+                    description: |-
+                      SecretStoreConfigRef specifies which secret store config should be used
+                      for this ConnectionSecret.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                      policy:
+                        description: Policies for referencing.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    required:
+                    - name
+                    type: object
+                  metadata:
+                    description: Metadata is the metadata for connection secret.
+                    properties:
+                      annotations:
+                        additionalProperties:
+                          type: string
+                        description: |-
+                          Annotations are the annotations to be added to connection secret.
+                          - For Kubernetes secrets, this will be used as "metadata.annotations".
+                          - It is up to Secret Store implementation for others store types.
+                        type: object
+                      labels:
+                        additionalProperties:
+                          type: string
+                        description: |-
+                          Labels are the labels/tags to be added to connection secret.
+                          - For Kubernetes secrets, this will be used as "metadata.labels".
+                          - It is up to Secret Store implementation for others store types.
+                        type: object
+                      type:
+                        description: |-
+                          Type is the SecretType for the connection secret.
+                          - Only valid for Kubernetes Secret Stores.
+                        type: string
+                    type: object
+                  name:
+                    description: Name is the name of the connection secret.
+                    type: string
+                required:
+                - name
+                type: object
+              writeConnectionSecretToRef:
+                description: |-
+                  WriteConnectionSecretToReference specifies the namespace and name of a
+                  Secret to which any connection details for this managed resource should
+                  be written. Connection details frequently include the endpoint, username,
+                  and password required to connect to the managed resource.
+                  This field is planned to be replaced in a future release in favor of
+                  PublishConnectionDetailsTo. Currently, both could be set independently
+                  and connection details would be published to both without affecting
+                  each other.
+                properties:
+                  name:
+                    description: Name of the secret.
+                    type: string
+                  namespace:
+                    description: Namespace of the secret.
+                    type: string
+                required:
+                - name
+                - namespace
+                type: object
+            required:
+            - forProvider
+            type: object
+            x-kubernetes-validations:
+            - message: spec.forProvider.kubernetesVersion is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.kubernetesVersion)
+                || (has(self.initProvider) && has(self.initProvider.kubernetesVersion))'
+            - message: spec.forProvider.name is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
+                || (has(self.initProvider) && has(self.initProvider.name))'
+          status:
+            description: ClusterV2Status defines the observed state of ClusterV2.
+            properties:
+              atProvider:
+                properties:
+                  agentEnvVars:
+                    description: |-
+                      Agent env vars is a list of additional environment variables to be appended to the cattle-cluster-agent and fleet-agent deployment, and the plan for the system upgrade controller to upgrade nodes.
+                      Cluster V2 default agent env vars
+                    items:
+                      properties:
+                        name:
+                          description: The name of the cluster.
+                          type: string
+                        value:
+                          description: Rancher agent env var value.
+                          type: string
+                      type: object
+                    type: array
+                  annotations:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      Annotations for the Cluster.
+                      Annotations of the resource
+                    type: object
+                    x-kubernetes-map-type: granular
+                  cloudCredentialSecretName:
+                    description: |-
+                      Cloud credential secret name is the secret to be used when a cloud credential secret name is not specified at the machine pool level.
+                      Cluster V2 cloud credential secret name
+                    type: string
+                  clusterAgentDeploymentCustomization:
+                    description: |-
+                      Cluster agent deployment customization specifies the additional tolerations, new affinity rules, and new resource requirements on the cattle-cluster-agent deployment. This argument is available in Rancher v2.7.5 and above.
+                      Optional customization for cluster agent
+                    items:
+                      properties:
+                        appendTolerations:
+                          description: |-
+                            A list of tolerations to be appended to the default tolerations.
+                            User defined tolerations to append to agent
+                          items:
+                            properties:
+                              effect:
+                                description: 'The toleration effect. Default: \"NoSchedule\".'
+                                type: string
+                              key:
+                                description: The toleration key.
+                                type: string
+                              operator:
+                                description: The toleration operator.
+                                type: string
+                              seconds:
+                                description: The number of seconds a pod will stay
+                                  bound to a node with a matching taint.
+                                type: number
+                              value:
+                                description: Rancher agent env var value.
+                                type: string
+                            type: object
+                          type: array
+                        overrideAffinity:
+                          description: |-
+                            Override affinity overrides the global default affinity setting.
+                            User defined affinity to override default agent affinity
+                          type: string
+                        overrideResourceRequirements:
+                          description: |-
+                            Override resource requirements overrides the default value for requests and/or limits.
+                            User defined resource requirements to set on the agent
+                          items:
+                            properties:
+                              cpuLimit:
+                                description: |-
+                                  The maximum CPU limit for agent.
+                                  The maximum CPU limit for agent
+                                type: string
+                              cpuRequest:
+                                description: |-
+                                  The minimum CPU required for agent.
+                                  The minimum CPU required for agent
+                                type: string
+                              memoryLimit:
+                                description: |-
+                                  The maximum memory limit for agent.
+                                  The maximum memory limit for agent
+                                type: string
+                              memoryRequest:
+                                description: |-
+                                  The minimum memory required for agent.
+                                  The minimum memory required for agent
+                                type: string
+                            type: object
+                          type: array
+                      type: object
+                    type: array
+                  clusterV1Id:
+                    description: (Computed, string) Cluster v1 id for cluster v2.
+                      (e.g. to be used with rancher2_sync).
+                    type: string
+                  defaultClusterRoleForProjectMembers:
+                    description: |-
+                      Default cluster role for project members.
+                      Cluster V2 default cluster role for project members
+                    type: string
+                  defaultPodSecurityAdmissionConfigurationTemplateName:
+                    description: |-
+                      The name of the pre-defined pod security admission configuration template to be applied to the cluster. Rancher admins (or those with the right permissions) can create, manage, and edit those templates. For more information, please refer to Rancher Documentation. The argument is available in Rancher v2.7.2 and above.
+                      Cluster V2 default pod security admission configuration template name
+                    type: string
+                  enableNetworkPolicy:
+                    description: |-
+                      Enable k8s network policy on the cluster.
+                      Enable k8s network policy
+                    type: boolean
+                  fleetAgentDeploymentCustomization:
+                    description: |-
+                      Fleet agent deployment customization specifies the additional tolerations, new affinity rules, and new resource requirements on the fleet-agent deployment. The argument is available in Rancher v2.7.5 and above.
+                      Optional customization for fleet agent
+                    items:
+                      properties:
+                        appendTolerations:
+                          description: |-
+                            A list of tolerations to be appended to the default tolerations.
+                            User defined tolerations to append to agent
+                          items:
+                            properties:
+                              effect:
+                                description: 'The toleration effect. Default: \"NoSchedule\".'
+                                type: string
+                              key:
+                                description: The toleration key.
+                                type: string
+                              operator:
+                                description: The toleration operator.
+                                type: string
+                              seconds:
+                                description: The number of seconds a pod will stay
+                                  bound to a node with a matching taint.
+                                type: number
+                              value:
+                                description: Rancher agent env var value.
+                                type: string
+                            type: object
+                          type: array
+                        overrideAffinity:
+                          description: |-
+                            Override affinity overrides the global default affinity setting.
+                            User defined affinity to override default agent affinity
+                          type: string
+                        overrideResourceRequirements:
+                          description: |-
+                            Override resource requirements overrides the default value for requests and/or limits.
+                            User defined resource requirements to set on the agent
+                          items:
+                            properties:
+                              cpuLimit:
+                                description: |-
+                                  The maximum CPU limit for agent.
+                                  The maximum CPU limit for agent
+                                type: string
+                              cpuRequest:
+                                description: |-
+                                  The minimum CPU required for agent.
+                                  The minimum CPU required for agent
+                                type: string
+                              memoryLimit:
+                                description: |-
+                                  The maximum memory limit for agent.
+                                  The maximum memory limit for agent
+                                type: string
+                              memoryRequest:
+                                description: |-
+                                  The minimum memory required for agent.
+                                  The minimum memory required for agent
+                                type: string
+                            type: object
+                          type: array
+                      type: object
+                    type: array
+                  fleetNamespace:
+                    description: Fleet namespace is the namespace where the cluster
+                      is to create in the local cluster. It is recommended to leave
+                      it as the default value.
+                    type: string
+                  id:
+                    description: (Computed, string) The ID of the resource.
+                    type: string
+                  kubernetesVersion:
+                    description: |-
+                      The RKE2 or K3s version for the cluster.
+                      Cluster V2 kubernetes version
+                    type: string
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      Labels for the Cluster.
+                      Labels of the resource
+                    type: object
+                    x-kubernetes-map-type: granular
+                  localAuthEndpoint:
+                    description: |-
+                      Local auth endpoint configures the Authorized Cluster Endpoint (ACE) which can be used to directly access the Kubernetes API server, without requiring communication through Rancher. For more information, please refer to Rancher Documentation.
+                      Cluster V2 local auth endpoint
+                    items:
+                      properties:
+                        caCerts:
+                          description: CA certs for the authorized cluster endpoint.
+                            It is only needed if there is a load balancer in front
+                            of the downstream cluster that is using an untrusted certificate.
+                            If you have a valid certificate, then nothing needs to
+                            be added to the CA Certificates field.
+                          type: string
+                        enabled:
+                          description: Enable the authorized cluster endpoint.
+                          type: boolean
+                        fqdn:
+                          description: FQDN for the authorized cluster endpoint. If
+                            one is entered, it should point to the downstream cluster.
+                          type: string
+                      type: object
+                    type: array
+                  name:
+                    description: |-
+                      The name of the cluster.
+                      Cluster V2 name
+                    type: string
+                  resourceVersion:
+                    description: (Computed, string) Cluster's k8s resource version.
+                    type: string
+                  rkeConfig:
+                    description: |-
+                      The RKE configuration for the cluster.
+                      Cluster V2 rke config
+                    items:
+                      properties:
+                        additionalManifest:
+                          description: |-
+                            The value of the additional manifest is delivered to the path /var/lib/rancher/rke2/server/manifests/rancher/addons.yaml or /var/lib/rancher/k3s/server/manifests/rancher/addons.yaml on the control plane nodes.
+                            Cluster V2 additional manifest
+                          type: string
+                        chartValues:
+                          description: |-
+                            The value for the system charts installed by the distribution. For more information about how RKE2 or K3s manage packaged components, please refer to RKE2 documentation or K3s documentation.
+                            Cluster V2 chart values. It should be in YAML format
+                          type: string
+                        etcd:
+                          description: |-
+                            Etcd configures the behavior of the automatic etcd snapshot feature.
+                            Cluster V2 etcd
+                          items:
+                            properties:
+                              disableSnapshots:
+                                description: |-
+                                  Disable ETCD snapshots.
+                                  Disable ETCD snapshots
+                                type: boolean
+                              s3Config:
+                                description: |-
+                                  Creation option for etcd service.
+                                  ETCD snapshot S3 config
+                                items:
+                                  properties:
+                                    bucket:
+                                      description: |-
+                                        Bucket name for S3 service.
+                                        ETCD snapshot S3 bucket
+                                      type: string
+                                    cloudCredentialName:
+                                      description: |-
+                                        ETCD snapshot S3 cloud credential name.
+                                        ETCD snapshot S3 cloud credential name
+                                      type: string
+                                    endpoint:
+                                      description: |-
+                                        ETCD snapshot S3 endpoint.
+                                        ETCD snapshot S3 endpoint
+                                      type: string
+                                    endpointCa:
+                                      description: |-
+                                        ETCD snapshot S3 endpoint CA.
+                                        ETCD snapshot S3 endpoint CA
+                                      type: string
+                                    folder:
+                                      description: |-
+                                        ETCD snapshot S3 folder.
+                                        ETCD snapshot S3 folder
+                                      type: string
+                                    region:
+                                      description: |-
+                                        ETCD snapshot S3 region.
+                                        ETCD snapshot S3 region
+                                      type: string
+                                    skipSslVerify:
+                                      description: |-
+                                        Disable ETCD skip ssl verify.
+                                        Disable ETCD skip ssl verify
+                                      type: boolean
+                                  type: object
+                                type: array
+                              snapshotRetention:
+                                description: |-
+                                  ETCD snapshot retention.
+                                  ETCD snapshot retention
+                                type: number
+                              snapshotScheduleCron:
+                                description: |-
+                                  ETCD snapshot schedule cron (e.g \"0 */5 * * *\").
+                                  ETCD snapshot schedule cron (e.g `"0 */5 * * *"`)
+                                type: string
+                            type: object
+                          type: array
+                        etcdSnapshotCreate:
+                          description: |-
+                            Cluster V2 etcd snapshot create.
+                            Cluster V2 etcd snapshot create
+                          items:
+                            properties:
+                              generation:
+                                description: |-
+                                  Desired certificate rotation generation.
+                                  ETCD generation to initiate a snapshot
+                                type: number
+                            type: object
+                          type: array
+                        etcdSnapshotRestore:
+                          description: |-
+                            Cluster V2 etcd snapshot restore.
+                            Cluster V2 etcd snapshot restore
+                          items:
+                            properties:
+                              generation:
+                                description: |-
+                                  Desired certificate rotation generation.
+                                  ETCD snapshot desired generation
+                                type: number
+                              name:
+                                description: |-
+                                  The name of the cluster.
+                                  ETCD snapshot name to restore
+                                type: string
+                              restoreRkeConfig:
+                                description: |-
+                                  ETCD restore RKE config (set to none, all, or kubernetesVersion).
+                                  ETCD restore RKE config (set to none, all, or kubernetesVersion)
+                                type: string
+                            type: object
+                          type: array
+                        localAuthEndpoint:
+                          description: |-
+                            Local auth endpoint configures the Authorized Cluster Endpoint (ACE) which can be used to directly access the Kubernetes API server, without requiring communication through Rancher. For more information, please refer to Rancher Documentation.
+                            Cluster V2 local auth endpoint
+                          items:
+                            properties:
+                              caCerts:
+                                description: CA certs for the authorized cluster endpoint.
+                                  It is only needed if there is a load balancer in
+                                  front of the downstream cluster that is using an
+                                  untrusted certificate. If you have a valid certificate,
+                                  then nothing needs to be added to the CA Certificates
+                                  field.
+                                type: string
+                              enabled:
+                                description: Enable the authorized cluster endpoint.
+                                type: boolean
+                              fqdn:
+                                description: FQDN for the authorized cluster endpoint.
+                                  If one is entered, it should point to the downstream
+                                  cluster.
+                                type: string
+                            type: object
+                          type: array
+                        machineGlobalConfig:
+                          description: |-
+                            Machine global config specifies the distribution-specified server configuration applied to all nodes. For the full list of server configurations, please refer to RKE2 server configuration or K3s server configuration.
+                            Cluster V2 machine global config
+                          type: string
+                        machinePoolDefaults:
+                          description: Default values for machine pool configurations
+                            if unset
+                          items:
+                            properties:
+                              hostnameLengthLimit:
+                                description: maximum length for autogenerated hostname
+                                type: number
+                            type: object
+                          type: array
+                        machinePools:
+                          description: |-
+                            Cluster V2 machine pools.
+                            Cluster V2 machine pools
+                          items:
+                            properties:
+                              annotations:
+                                additionalProperties:
+                                  type: string
+                                description: |-
+                                  Annotations for the Cluster.
+                                  Annotations of the resource
+                                type: object
+                                x-kubernetes-map-type: granular
+                              cloudCredentialSecretName:
+                                description: |-
+                                  Cloud credential secret name is the secret to be used when a cloud credential secret name is not specified at the machine pool level.
+                                  Machine pool cloud credential secret name
+                                type: string
+                              controlPlaneRole:
+                                description: |-
+                                  Machine pool control plane role?
+                                  Machine pool control plane role
+                                type: boolean
+                              drainBeforeDelete:
+                                description: |-
+                                  Machine Pool Drain Before Delete?
+                                  Machine pool drain before delete
+                                type: boolean
+                              etcdRole:
+                                description: |-
+                                  Machine pool etcd role?
+                                  Machine pool etcd role
+                                type: boolean
+                              hostnameLengthLimit:
+                                description: maximum length for autogenerated hostname
+                                type: number
+                              labels:
+                                additionalProperties:
+                                  type: string
+                                description: |-
+                                  Labels for the Cluster.
+                                  Labels of the resource
+                                type: object
+                                x-kubernetes-map-type: granular
+                              machineConfig:
+                                description: |-
+                                  Machine pool node config.
+                                  Machine config data
+                                items:
+                                  properties:
+                                    apiVersion:
+                                      description: |-
+                                        Api version of the machine_config.
+                                        Machine config API version
+                                      type: string
+                                    kind:
+                                      description: |-
+                                        Machine config kind.
+                                        Machine config kind
+                                      type: string
+                                    name:
+                                      description: |-
+                                        The name of the cluster.
+                                        Machine config name
+                                      type: string
+                                  type: object
+                                type: array
+                              machineLabels:
+                                additionalProperties:
+                                  type: string
+                                description: |-
+                                  Labels for Machine pool nodes.
+                                  Labels of the machine
+                                type: object
+                                x-kubernetes-map-type: granular
+                              maxUnhealthy:
+                                description: |-
+                                  Max unhealthy nodes for automated replacement to be allowed.
+                                  max unhealthy nodes for automated replacement to be allowed
+                                type: string
+                              name:
+                                description: |-
+                                  The name of the cluster.
+                                  Machine pool name
+                                type: string
+                              nodeDrainTimeout:
+                                description: |-
+                                  Seconds a machine has to drain before deletion.
+                                  seconds to wait for machine pool drain to complete before machine deletion
+                                type: number
+                              nodeStartupTimeoutSeconds:
+                                description: |-
+                                  Seconds a new node has to become active before it is replaced.
+                                  seconds a new node has to become active before it is replaced
+                                type: number
+                              paused:
+                                description: |-
+                                  Machine pool paused?
+                                  Machine pool paused
+                                type: boolean
+                              quantity:
+                                description: |-
+                                  Machine pool quantity.
+                                  Machine pool quantity
+                                type: number
+                              rollingUpdate:
+                                description: |-
+                                  Machine pool rolling update.
+                                  Machine pool rolling update
+                                items:
+                                  properties:
+                                    maxSurge:
+                                      description: |-
+                                        Rolling update max surge.
+                                        Rolling update max surge
+                                      type: string
+                                    maxUnavailable:
+                                      description: |-
+                                        Rolling update max unavailable.
+                                        Rolling update max unavailable
+                                      type: string
+                                  type: object
+                                type: array
+                              taints:
+                                description: |-
+                                  Machine pool taints.
+                                  Machine pool taints
+                                items:
+                                  properties:
+                                    effect:
+                                      description: 'The toleration effect. Default:
+                                        \"NoSchedule\".'
+                                      type: string
+                                    key:
+                                      description: The toleration key.
+                                      type: string
+                                    value:
+                                      description: Rancher agent env var value.
+                                      type: string
+                                  type: object
+                                type: array
+                              unhealthyNodeTimeoutSeconds:
+                                description: |-
+                                  Seconds an unhealthy node has to become active before it is replaced.
+                                  seconds an unhealthy node has to become active before it is replaced
+                                type: number
+                              unhealthyRange:
+                                description: |-
+                                  Range of unhealthy nodes for automated replacement to be allowed.
+                                  range of unhealthy nodes for automated replacement to be allowed
+                                type: string
+                              workerRole:
+                                description: |-
+                                  Machine pool worker role?
+                                  Machine pool worker role
+                                type: boolean
+                            type: object
+                          type: array
+                        machineSelectorConfig:
+                          description: |-
+                            Machine selector config is the same as machine_global_config except that a label selector can be specified with the configuration. The configuration will only be applied to nodes that match the provided label selector. The configuration from machine_selector_config takes precedence over the one from machine_global_config. This argument is available in Rancher v2.7.2 and later.
+                            Cluster V2 machine selector config
+                          items:
+                            properties:
+                              config:
+                                description: |-
+                                  Config is the distribution-specify configuration to be applied to nodes that match the provided label selector. For more information, please refer to Rancher's documentation for RKE2 Cluster Configuration or K3s Cluster Configuration
+                                  Machine selector config
+                                type: string
+                              machineLabelSelector:
+                                description: |-
+                                  Machine selector label is a label query over a set of resources. The result of match_labels and match_expressions are ANDed. An empty label selector matches all objects. A null label selector matches no objects.
+                                  Machine label selector
+                                items:
+                                  properties:
+                                    matchExpressions:
+                                      description: |-
+                                        Match expressions is a list of label selector requirements. The requirements are ANDed.
+                                        Label selector match expressions
+                                      items:
+                                        properties:
+                                          key:
+                                            description: |-
+                                              The toleration key.
+                                              Label selector requirement key
+                                            type: string
+                                          operator:
+                                            description: |-
+                                              The toleration operator.
+                                              Label selector operator
+                                            type: string
+                                          values:
+                                            description: |-
+                                              Values is a list of string values.
+                                              Label selector requirement values
+                                            items:
+                                              type: string
+                                            type: array
+                                        type: object
+                                      type: array
+                                    matchLabels:
+                                      additionalProperties:
+                                        type: string
+                                      description: |-
+                                        Machine selector label is a map of {key,value} pairs, the requirements are ANDed.
+                                        Label selector match labels
+                                      type: object
+                                      x-kubernetes-map-type: granular
+                                  type: object
+                                type: array
+                            type: object
+                          type: array
+                        machineSelectorFiles:
+                          description: |-
+                            Machine selector files provide a means to deliver files to nodes so that the files can be in place before initiating RKE2/K3s server or agent processes. Please refer to Rancher documentation for RKE2 Cluster Configuration Reference and K3s Cluster Configuration Reference. This argument is available in Rancher v2.7.2 and later.
+                            Cluster V2 machine selector files
+                          items:
+                            properties:
+                              fileSources:
+                                description: |-
+                                  File sources represents the source of the files. Multiple files can be delivered to nodes that match the provided label selector.
+                                  File sources
+                                items:
+                                  properties:
+                                    configmap:
+                                      description: |-
+                                        Configmap represents a K8s configmap which is the source of files. It is mutually exclusive with secret.
+                                        The configmap which is the source of files
+                                      items:
+                                        properties:
+                                          defaultPermissions:
+                                            description: |-
+                                              The numeric representation of the default file permissions for all files defined under the items.
+                                              The default permissions to be applied when they are not set at the item level
+                                            type: string
+                                          items:
+                                            description: |-
+                                              Items is a list of configurations for files, such as where to retrieve the content from the source, where to put the file on nodes, and etc.
+                                              Items(files) to retrieve from the K8s object
+                                            items:
+                                              properties:
+                                                dynamic:
+                                                  description: |-
+                                                    If true, the file is ignored when determining whether the node should be drained before updating the node plan.
+                                                    If ture, the file is ignored when determining whether the node should be drained before updating the node plan (default: true).
+                                                  type: boolean
+                                                hash:
+                                                  description: |-
+                                                    Hash is the base64 encoded value of the SHA256 checksum of the file's content. If specified, it is used to validate the integrity of the file content.
+                                                    The base64 encoded value of the SHA256 checksum of the file's content
+                                                  type: string
+                                                key:
+                                                  description: |-
+                                                    The toleration key.
+                                                    The key of the item(file) to retrieve
+                                                  type: string
+                                                path:
+                                                  description: |-
+                                                    Path is the absolute path to put the file in the target node.
+                                                    The path to put the file in the target node
+                                                  type: string
+                                                permissions:
+                                                  description: |-
+                                                    Permissions is the numeric representation of the file permission. It takes precedence over the default permissions at the outer level.
+                                                    The numeric representation of the file permissions
+                                                  type: string
+                                              type: object
+                                            type: array
+                                          name:
+                                            description: |-
+                                              The name of the cluster.
+                                              The name of the K8s object
+                                            type: string
+                                        type: object
+                                      type: array
+                                    secret:
+                                      description: |-
+                                        Secret represents a K8s secret which is the source of files. It is mutually exclusive with configmap.
+                                        The secret which is the source of files
+                                      items:
+                                        properties:
+                                          defaultPermissions:
+                                            description: |-
+                                              The numeric representation of the default file permissions for all files defined under the items.
+                                              The default permissions to be applied when they are not set at the item level
+                                            type: string
+                                          items:
+                                            description: |-
+                                              Items is a list of configurations for files, such as where to retrieve the content from the source, where to put the file on nodes, and etc.
+                                              Items(files) to retrieve from the K8s object
+                                            items:
+                                              properties:
+                                                dynamic:
+                                                  description: |-
+                                                    If true, the file is ignored when determining whether the node should be drained before updating the node plan.
+                                                    If ture, the file is ignored when determining whether the node should be drained before updating the node plan (default: true).
+                                                  type: boolean
+                                                hash:
+                                                  description: |-
+                                                    Hash is the base64 encoded value of the SHA256 checksum of the file's content. If specified, it is used to validate the integrity of the file content.
+                                                    The base64 encoded value of the SHA256 checksum of the file's content
+                                                  type: string
+                                                key:
+                                                  description: |-
+                                                    The toleration key.
+                                                    The key of the item(file) to retrieve
+                                                  type: string
+                                                path:
+                                                  description: |-
+                                                    Path is the absolute path to put the file in the target node.
+                                                    The path to put the file in the target node
+                                                  type: string
+                                                permissions:
+                                                  description: |-
+                                                    Permissions is the numeric representation of the file permission. It takes precedence over the default permissions at the outer level.
+                                                    The numeric representation of the file permissions
+                                                  type: string
+                                              type: object
+                                            type: array
+                                          name:
+                                            description: |-
+                                              The name of the cluster.
+                                              The name of the K8s object
+                                            type: string
+                                        type: object
+                                      type: array
+                                  type: object
+                                type: array
+                              machineLabelSelector:
+                                description: |-
+                                  Machine selector label is a label query over a set of resources. The result of match_labels and match_expressions are ANDed. An empty label selector matches all objects. A null label selector matches no objects.
+                                  Machine label selector
+                                items:
+                                  properties:
+                                    matchExpressions:
+                                      description: |-
+                                        Match expressions is a list of label selector requirements. The requirements are ANDed.
+                                        Label selector match expressions
+                                      items:
+                                        properties:
+                                          key:
+                                            description: |-
+                                              The toleration key.
+                                              Label selector requirement key
+                                            type: string
+                                          operator:
+                                            description: |-
+                                              The toleration operator.
+                                              Label selector operator
+                                            type: string
+                                          values:
+                                            description: |-
+                                              Values is a list of string values.
+                                              Label selector requirement values
+                                            items:
+                                              type: string
+                                            type: array
+                                        type: object
+                                      type: array
+                                    matchLabels:
+                                      additionalProperties:
+                                        type: string
+                                      description: |-
+                                        Machine selector label is a map of {key,value} pairs, the requirements are ANDed.
+                                        Label selector match labels
+                                      type: object
+                                      x-kubernetes-map-type: granular
+                                  type: object
+                                type: array
+                            type: object
+                          type: array
+                        registries:
+                          description: |-
+                            Docker registries from which the cluster pulls images.
+                            Cluster V2 registries
+                          items:
+                            properties:
+                              configs:
+                                description: |-
+                                  Cluster V2 docker registries config.
+                                  Registry config
+                                items:
+                                  properties:
+                                    authConfigSecretName:
+                                      description: |-
+                                        Name of the secret that contains two keys with base64 encoded values: the username and password for the specified custom registry. No secret is required if the system-default-registry is not authenticated.
+                                        Registry auth config secret name
+                                      type: string
+                                    caBundle:
+                                      description: |-
+                                        Registry CA bundle.
+                                        Registry CA bundle
+                                      type: string
+                                    hostname:
+                                      description: |-
+                                        Registry hostname.
+                                        Registry hostname
+                                      type: string
+                                    insecure:
+                                      description: |-
+                                        Registry insecure connectivity.
+                                        Registry insecure connectivity
+                                      type: boolean
+                                    tlsSecretName:
+                                      description: |-
+                                        Registry TLS secret name. TLS is a pair of Cert/Key.
+                                        Registry TLS secret name. TLS is a pair of Cert/Key
+                                      type: string
+                                  type: object
+                                type: array
+                              mirrors:
+                                description: |-
+                                  Cluster V2 docker registries mirror.
+                                  Registry mirrors
+                                items:
+                                  properties:
+                                    endpoints:
+                                      description: |-
+                                        Registry mirror endpoints.
+                                        Registry mirror endpoints
+                                      items:
+                                        type: string
+                                      type: array
+                                    hostname:
+                                      description: |-
+                                        Registry hostname.
+                                        Registry hostname
+                                      type: string
+                                    rewrites:
+                                      additionalProperties:
+                                        type: string
+                                      description: |-
+                                        Registry mirror rewrites.
+                                        Registry mirror rewrites
+                                      type: object
+                                      x-kubernetes-map-type: granular
+                                  type: object
+                                type: array
+                            type: object
+                          type: array
+                        rotateCertificates:
+                          description: |-
+                            Cluster V2 certificate rotation.
+                            Cluster V2 certificate rotation
+                          items:
+                            properties:
+                              generation:
+                                description: |-
+                                  Desired certificate rotation generation.
+                                  Desired certificate rotation generation.
+                                type: number
+                              services:
+                                description: |-
+                                  Service certificates to rotate with this generation.
+                                  Service certificates to rotate with this generation.
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                          type: array
+                        upgradeStrategy:
+                          description: |-
+                            Cluster upgrade strategy.
+                            Cluster V2 upgrade strategy
+                          items:
+                            properties:
+                              controlPlaneConcurrency:
+                                description: |-
+                                  How many control plane nodes should be upgraded at a time, 0 is infinite. Percentages are also accepted.
+                                  How many controlplane nodes should be upgrade at time, 0 is infinite. Percentages are also accepted
+                                type: string
+                              controlPlaneDrainOptions:
+                                description: |-
+                                  Controlplane nodes drain options.
+                                  Controlplane nodes drain options
+                                items:
+                                  properties:
+                                    deleteEmptyDirData:
+                                      description: |-
+                                        if delete_empty_dir_data is set to true, continue draining even if there are pods using emptyDir (local storage).
+                                        Drain options delete empty dir data
+                                      type: boolean
+                                    disableEviction:
+                                      description: |-
+                                        If disable_eviction is set to true, force drain to use delete rather than evict.
+                                        Drain options disable eviction
+                                      type: boolean
+                                    enabled:
+                                      description: |-
+                                        Enable the authorized cluster endpoint.
+                                        Drain options enabled?
+                                      type: boolean
+                                    force:
+                                      description: |-
+                                        If force is set to true, drain nodes even if there are standalone pods that are not managed by a ReplicationController, Job, or DaemonSet. Drain will not proceed without force set to true if there are such pods.
+                                        Drain options force
+                                      type: boolean
+                                    gracePeriod:
+                                      description: |-
+                                        Time in seconds given to each pod to terminate gracefully. If negative, the default value specified in the pod will be used.
+                                        Drain options grace period
+                                      type: number
+                                    ignoreDaemonSets:
+                                      description: |-
+                                        If ignore_daemon_sets is set to false, drain will not proceed if there are DaemonSet-managed pods.
+                                        Drain options ignore daemon sets
+                                      type: boolean
+                                    ignoreErrors:
+                                      description: |-
+                                        If ignore_errors is set to true,  errors that occurred between drain nodes in group are ignored.
+                                        Drain options ignore errors
+                                      type: boolean
+                                    skipWaitForDeleteTimeoutSeconds:
+                                      description: |-
+                                        Skip waiting for the pods that have a DeletionTimeStamp > N seconds to be deleted. Seconds must be greater than 0 to skip. Such pods will be force deleted.
+                                        Drain options skip wait for delete timeout seconds
+                                      type: number
+                                    timeout:
+                                      description: |-
+                                        Time to wait (in seconds) before giving up for one try.
+                                        Drain options timeout
+                                      type: number
+                                  type: object
+                                type: array
+                              workerConcurrency:
+                                description: |-
+                                  How many worker nodes should be upgraded at a time. Percentages are also accepted.
+                                  How many worker nodes should be upgrade at time
+                                type: string
+                              workerDrainOptions:
+                                description: |-
+                                  Worker nodes drain options.
+                                  Worker nodes drain options
+                                items:
+                                  properties:
+                                    deleteEmptyDirData:
+                                      description: |-
+                                        if delete_empty_dir_data is set to true, continue draining even if there are pods using emptyDir (local storage).
+                                        Drain options delete empty dir data
+                                      type: boolean
+                                    disableEviction:
+                                      description: |-
+                                        If disable_eviction is set to true, force drain to use delete rather than evict.
+                                        Drain options disable eviction
+                                      type: boolean
+                                    enabled:
+                                      description: |-
+                                        Enable the authorized cluster endpoint.
+                                        Drain options enabled?
+                                      type: boolean
+                                    force:
+                                      description: |-
+                                        If force is set to true, drain nodes even if there are standalone pods that are not managed by a ReplicationController, Job, or DaemonSet. Drain will not proceed without force set to true if there are such pods.
+                                        Drain options force
+                                      type: boolean
+                                    gracePeriod:
+                                      description: |-
+                                        Time in seconds given to each pod to terminate gracefully. If negative, the default value specified in the pod will be used.
+                                        Drain options grace period
+                                      type: number
+                                    ignoreDaemonSets:
+                                      description: |-
+                                        If ignore_daemon_sets is set to false, drain will not proceed if there are DaemonSet-managed pods.
+                                        Drain options ignore daemon sets
+                                      type: boolean
+                                    ignoreErrors:
+                                      description: |-
+                                        If ignore_errors is set to true,  errors that occurred between drain nodes in group are ignored.
+                                        Drain options ignore errors
+                                      type: boolean
+                                    skipWaitForDeleteTimeoutSeconds:
+                                      description: |-
+                                        Skip waiting for the pods that have a DeletionTimeStamp > N seconds to be deleted. Seconds must be greater than 0 to skip. Such pods will be force deleted.
+                                        Drain options skip wait for delete timeout seconds
+                                      type: number
+                                    timeout:
+                                      description: |-
+                                        Time to wait (in seconds) before giving up for one try.
+                                        Drain options timeout
+                                      type: number
+                                  type: object
+                                type: array
+                            type: object
+                          type: array
+                      type: object
+                    type: array
+                type: object
+              conditions:
+                description: Conditions of the resource.
+                items:
+                  description: A Condition that may apply to a resource.
+                  properties:
+                    lastTransitionTime:
+                      description: |-
+                        LastTransitionTime is the last time this condition transitioned from one
+                        status to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: |-
+                        A Message containing details about this condition's last transition from
+                        one status to another, if any.
+                      type: string
+                    observedGeneration:
+                      description: |-
+                        ObservedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      type: integer
+                    reason:
+                      description: A Reason for this condition's last transition from
+                        one status to another.
+                      type: string
+                    status:
+                      description: Status of this condition; is it currently True,
+                        False, or Unknown?
+                      type: string
+                    type:
+                      description: |-
+                        Type of this condition. At most one of each condition type may apply to
+                        a resource at any point in time.
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+              observedGeneration:
+                description: |-
+                  ObservedGeneration is the latest metadata.generation
+                  which resulted in either a ready state, or stalled due to error
+                  it can not recover from without human intervention.
+                format: int64
+                type: integer
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

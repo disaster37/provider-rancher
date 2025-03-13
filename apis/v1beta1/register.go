@@ -13,7 +13,7 @@ import (
 
 // Package type metadata.
 const (
-	Group   = "template.upbound.io"
+	Group   = "rancher.contrib.crossplane.io"
 	Version = "v1beta1"
 )
 

@@ -1,0 +1,91 @@
+apiVersion: rancher.contrib.crossplane.io/v1alpha1
+kind: NodePool
+metadata:
+  annotations:
+    meta.upbound.io/example-id: rancher/v1alpha1/nodepool
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    clusterIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: foo-custom
+    controlPlane: true
+    etcd: true
+    hostnamePrefix: foo-cluster-0
+    name: foo
+    nodeTemplateIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: foo
+    quantity: 1
+    worker: true
+
+---
+
+apiVersion: rancher.contrib.crossplane.io/v1alpha1
+kind: CloudCredential
+metadata:
+  annotations:
+    meta.upbound.io/example-id: rancher/v1alpha1/nodepool
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    amazonec2CredentialConfig:
+    - accessKeySecretRef:
+        key: example-key
+        name: example-secret
+        namespace: upbound-system
+      secretKeySecretRef:
+        key: example-key
+        name: example-secret
+        namespace: upbound-system
+    description: Terraform cloudCredential acceptance test
+    name: foo
+
+---
+
+apiVersion: rancher.contrib.crossplane.io/v1alpha1
+kind: Cluster
+metadata:
+  annotations:
+    meta.upbound.io/example-id: rancher/v1alpha1/nodepool
+  labels:
+    testing.upbound.io/example-name: foo-custom
+  name: foo-custom
+spec:
+  forProvider:
+    description: Foo rancher2 custom cluster
+    kind: rke
+    name: foo-custom
+    rkeConfig:
+    - network:
+      - plugin: canal
+
+---
+
+apiVersion: rancher.contrib.crossplane.io/v1alpha1
+kind: NodeTemplate
+metadata:
+  annotations:
+    meta.upbound.io/example-id: rancher/v1alpha1/nodepool
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    amazonec2Config:
+    - ami: <AMI_ID>
+      region: <REGION>
+      securityGroup:
+      - <AWS_SECURITY_GROUP>
+      subnetId: <SUBNET_ID>
+      vpcId: <VPC_ID>
+      zone: <ZONE>
+    cloudCredentialIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: foo
+    description: foo test
+    name: foo

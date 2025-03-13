@@ -1,0 +1,27 @@
+apiVersion: auth.contrib.crossplane.io/v1alpha1
+kind: AuthConfigOpenldap
+metadata:
+  annotations:
+    meta.upbound.io/example-id: auth/v1alpha1/authconfigopenldap
+  labels:
+    testing.upbound.io/example-name: openldap
+  name: openldap
+spec:
+  forProvider:
+    port: 389
+    servers:
+    - <OPENLDAP_SERVER>
+    serviceAccountDistinguishedNameSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    serviceAccountPasswordSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    testPasswordSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    testUsername: <USER_NAME>
+    userSearchBase: <SEARCH_BASE>

@@ -1,0 +1,19 @@
+apiVersion: rancher.contrib.crossplane.io/v1alpha1
+kind: MachineConfigV2
+metadata:
+  annotations:
+    meta.upbound.io/example-id: rancher/v1alpha1/machineconfigv2
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    amazonec2Config:
+    - ami: <AMI_ID>
+      region: <REGION>
+      securityGroup:
+      - <AWS_SG>
+      subnetId: <SUBNET_ID>
+      vpcId: <VPC_ID>
+      zone: <ZONE>
+    generateName: test-foo

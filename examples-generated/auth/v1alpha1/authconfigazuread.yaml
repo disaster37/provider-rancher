@@ -1,0 +1,23 @@
+apiVersion: auth.contrib.crossplane.io/v1alpha1
+kind: AuthConfigAzuread
+metadata:
+  annotations:
+    meta.upbound.io/example-id: auth/v1alpha1/authconfigazuread
+  labels:
+    testing.upbound.io/example-name: azuread
+  name: azuread
+spec:
+  forProvider:
+    applicationIdSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    applicationSecretSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    authEndpoint: <AZUREAD_AUTH_ENDPOINT>
+    graphEndpoint: <AZUREAD_GRAPH_ENDPOINT>
+    rancherUrl: <RANCHER_URL>
+    tenantId: <AZUREAD_TENANT_ID>
+    tokenEndpoint: <AZUREAD_TOKEN_ENDPOINT>

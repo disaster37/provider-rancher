@@ -1,0 +1,12 @@
+apiVersion: rancher.contrib.crossplane.io/v1alpha1
+kind: Setting
+metadata:
+  annotations:
+    meta.upbound.io/example-id: rancher/v1alpha1/setting
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    name: foo
+    value: <VALUE>

@@ -1,0 +1,25 @@
+apiVersion: app.contrib.crossplane.io/v1alpha1
+kind: MultiClusterApp
+metadata:
+  annotations:
+    meta.upbound.io/example-id: app/v1alpha1/multiclusterapp
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    answers:
+    - values:
+        ingress_host: test.xip.io
+    catalogNameSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    name: foo
+    roles:
+    - project-member
+    targets:
+    - projectIdSelector:
+        matchLabels:
+          testing.upbound.io/example-name: example
+    templateName: <template_name>
+    templateVersion: <template_version>

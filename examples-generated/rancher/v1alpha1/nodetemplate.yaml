@@ -1,0 +1,28 @@
+apiVersion: rancher.contrib.crossplane.io/v1alpha1
+kind: NodeTemplate
+metadata:
+  annotations:
+    meta.upbound.io/example-id: rancher/v1alpha1/nodetemplate
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    amazonec2Config:
+    - accessKeySecretRef:
+        key: example-key
+        name: example-secret
+        namespace: upbound-system
+      ami: <AMI_ID>
+      region: <REGION>
+      secretKeySecretRef:
+        key: example-key
+        name: example-secret
+        namespace: upbound-system
+      securityGroup:
+      - <AWS_SECURITY_GROUP>
+      subnetId: <SUBNET_ID>
+      vpcId: <VPC_ID>
+      zone: <ZONE>
+    description: foo test
+    name: foo

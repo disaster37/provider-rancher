@@ -1,0 +1,36 @@
+apiVersion: rancher.contrib.crossplane.io/v1alpha1
+kind: User
+metadata:
+  annotations:
+    meta.upbound.io/example-id: rancher/v1alpha1/user
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    enabled: true
+    mustChangePassword: true
+    name: Foo user
+    passwordSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    username: foo
+
+---
+
+apiVersion: rancher.contrib.crossplane.io/v1alpha1
+kind: GlobalRoleBinding
+metadata:
+  annotations:
+    meta.upbound.io/example-id: rancher/v1alpha1/user
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    globalRoleIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    name: foo
+    userId: ${rancher2_user.foo.id}
