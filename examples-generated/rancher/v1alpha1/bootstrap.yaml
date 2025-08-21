@@ -1,4 +1,4 @@
-apiVersion: rancher.contrib.crossplane.io/v1alpha1
+apiVersion: rancher.rancher.contrib.crossplane.io/v1alpha1
 kind: Bootstrap
 metadata:
   annotations:
@@ -12,4 +12,3 @@ spec:
       key: example-key
       name: example-secret
       namespace: upbound-system
-    telemetry: true

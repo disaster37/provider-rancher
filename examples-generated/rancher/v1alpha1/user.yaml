@@ -1,4 +1,4 @@
-apiVersion: rancher.contrib.crossplane.io/v1alpha1
+apiVersion: rancher.rancher.contrib.crossplane.io/v1alpha1
 kind: User
 metadata:
   annotations:
@@ -19,7 +19,7 @@ spec:
 
 ---
 
-apiVersion: rancher.contrib.crossplane.io/v1alpha1
+apiVersion: rancher.rancher.contrib.crossplane.io/v1alpha1
 kind: GlobalRoleBinding
 metadata:
   annotations:

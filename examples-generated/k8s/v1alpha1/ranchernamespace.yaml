@@ -1,0 +1,25 @@
+apiVersion: k8s.rancher.contrib.crossplane.io/v1alpha1
+kind: RancherNamespace
+metadata:
+  annotations:
+    meta.upbound.io/example-id: k8s/v1alpha1/ranchernamespace
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    containerResourceLimit:
+    - limitsCpu: 20m
+      limitsMemory: 20Mi
+      requestsCpu: 1m
+      requestsMemory: 1Mi
+    description: foo namespace
+    name: foo
+    projectIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    resourceQuota:
+    - limit:
+      - limitsCpu: 100m
+        limitsMemory: 100Mi
+        requestsStorage: 1Gi

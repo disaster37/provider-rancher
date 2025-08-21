@@ -1,4 +1,4 @@
-apiVersion: rancher.contrib.crossplane.io/v1alpha1
+apiVersion: rancher.rancher.contrib.crossplane.io/v1alpha1
 kind: ClusterSync
 metadata:
   annotations:
@@ -16,7 +16,7 @@ spec:
 
 ---
 
-apiVersion: rancher.contrib.crossplane.io/v1alpha1
+apiVersion: rancher.rancher.contrib.crossplane.io/v1alpha1
 kind: Cluster
 metadata:
   annotations:
@@ -34,7 +34,7 @@ spec:
 
 ---
 
-apiVersion: rancher.contrib.crossplane.io/v1alpha1
+apiVersion: rancher.rancher.contrib.crossplane.io/v1alpha1
 kind: NodePool
 metadata:
   annotations:
@@ -59,7 +59,7 @@ spec:
 
 ---
 
-apiVersion: rancher.contrib.crossplane.io/v1alpha1
+apiVersion: rancher.rancher.contrib.crossplane.io/v1alpha1
 kind: NodeTemplate
 metadata:
   annotations:
@@ -90,7 +90,7 @@ spec:
 
 ---
 
-apiVersion: k8s.contrib.crossplane.io/v1alpha1
+apiVersion: k8s.rancher.contrib.crossplane.io/v1alpha1
 kind: Project
 metadata:
   annotations:

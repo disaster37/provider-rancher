@@ -44,6 +44,8 @@ type AuthConfigAzureadInitParameters struct {
 	// AzureAD graph endpoint (string)
 	GraphEndpoint *string `json:"graphEndpoint,omitempty" tf:"graph_endpoint,omitempty"`
 
+	GroupMembershipFilter *string `json:"groupMembershipFilter,omitempty" tf:"group_membership_filter,omitempty"`
+
 	// Labels of the resource (map)
 	// Labels of the resource
 	// +mapType=granular
@@ -83,6 +85,8 @@ type AuthConfigAzureadObservation struct {
 
 	// AzureAD graph endpoint (string)
 	GraphEndpoint *string `json:"graphEndpoint,omitempty" tf:"graph_endpoint,omitempty"`
+
+	GroupMembershipFilter *string `json:"groupMembershipFilter,omitempty" tf:"group_membership_filter,omitempty"`
 
 	// (Computed) The ID of the resource (string)
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
@@ -147,6 +151,9 @@ type AuthConfigAzureadParameters struct {
 	// AzureAD graph endpoint (string)
 	// +kubebuilder:validation:Optional
 	GraphEndpoint *string `json:"graphEndpoint,omitempty" tf:"graph_endpoint,omitempty"`
+
+	// +kubebuilder:validation:Optional
+	GroupMembershipFilter *string `json:"groupMembershipFilter,omitempty" tf:"group_membership_filter,omitempty"`
 
 	// Labels of the resource (map)
 	// Labels of the resource

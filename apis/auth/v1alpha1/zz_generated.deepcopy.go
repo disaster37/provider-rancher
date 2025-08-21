@@ -1198,6 +1198,11 @@ func (in *AuthConfigAzureadInitParameters) DeepCopyInto(out *AuthConfigAzureadIn
 		*out = new(string)
 		**out = **in
 	}
+	if in.GroupMembershipFilter != nil {
+		in, out := &in.GroupMembershipFilter, &out.GroupMembershipFilter
+		*out = new(string)
+		**out = **in
+	}
 	if in.Labels != nil {
 		in, out := &in.Labels, &out.Labels
 		*out = make(map[string]*string, len(*in))
@@ -1328,6 +1333,11 @@ func (in *AuthConfigAzureadObservation) DeepCopyInto(out *AuthConfigAzureadObser
 		*out = new(string)
 		**out = **in
 	}
+	if in.GroupMembershipFilter != nil {
+		in, out := &in.GroupMembershipFilter, &out.GroupMembershipFilter
+		*out = new(string)
+		**out = **in
+	}
 	if in.ID != nil {
 		in, out := &in.ID, &out.ID
 		*out = new(string)
@@ -1440,6 +1450,11 @@ func (in *AuthConfigAzureadParameters) DeepCopyInto(out *AuthConfigAzureadParame
 	}
 	if in.GraphEndpoint != nil {
 		in, out := &in.GraphEndpoint, &out.GraphEndpoint
+		*out = new(string)
+		**out = **in
+	}
+	if in.GroupMembershipFilter != nil {
+		in, out := &in.GroupMembershipFilter, &out.GroupMembershipFilter
 		*out = new(string)
 		**out = **in
 	}

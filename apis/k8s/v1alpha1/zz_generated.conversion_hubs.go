@@ -13,10 +13,10 @@ func (tr *Certificate) Hub() {}
 func (tr *ConfigMapV2) Hub() {}
 
 // Hub marks this type as a conversion hub.
-func (tr *Namespace) Hub() {}
+func (tr *Project) Hub() {}
 
 // Hub marks this type as a conversion hub.
-func (tr *Project) Hub() {}
+func (tr *RancherNamespace) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *Registry) Hub() {}

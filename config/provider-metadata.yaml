@@ -465,22 +465,19 @@ resources:
             - name: admin
               manifest: |-
                 {
-                  "password": "blahblah",
-                  "telemetry": true
+                  "password": "blahblah"
                 }
             - name: admin
               manifest: |-
                 {
                   "initial_password": "\u003cINSTALL_PASSWORD\u003e",
-                  "password": "blahblah",
-                  "telemetry": true
+                  "password": "blahblah"
                 }
             - name: admin
               manifest: |-
                 {
                   "password": "blahblah",
-                  "provider": "rancher2.bootstrap",
-                  "telemetry": true
+                  "provider": "rancher2.bootstrap"
                 }
         argumentDocs:
             current_password: '- (Computed/Sensitive) Current password for Admin user (string)'
@@ -488,8 +485,6 @@ resources:
             initial_password: '- (Optional/Computed/Sensitive) Initial password for Admin user. Default: admin (string)'
             password: or generating a random one.
             server-url: setting, based on api_url.
-            telemetry: '- (Optional) Send telemetry anonymous data. Default: false (bool)'
-            telemetry-opt: setting.
             temp_token: '- (Computed) Generated API temporary token as helper. Should be empty (string)'
             temp_token_id: '- (Computed) Generated API temporary token id as helper. Should be empty (string)'
             token: '- (Computed) Generated API token for Admin User (string)'
@@ -743,43 +738,15 @@ resources:
                   "description": "Foo rancher2 imported cluster",
                   "name": "foo-imported"
                 }
-            - name: foo-custom
+            - name: foo-imported
               manifest: |-
                 {
-                  "description": "Foo rancher2 custom cluster",
-                  "name": "foo-custom",
-                  "rke_config": [
+                  "imported_config": [
                     {
-                      "network": [
-                        {
-                          "plugin": "canal"
-                        }
-                      ],
-                      "services": [
-                        {
-                          "kube_api": [
-                            {
-                              "audit_log": [
-                                {
-                                  "configuration": [
-                                    {
-                                      "format": "json",
-                                      "max_age": 5,
-                                      "max_backup": 5,
-                                      "max_size": 100,
-                                      "path": "-",
-                                      "policy": "${file(\"auditlog_policy.yaml\")}"
-                                    }
-                                  ],
-                                  "enabled": true
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "private_registry_url": "test.io"
                     }
-                  ]
+                  ],
+                  "name": "foo-imported"
                 }
             - name: foo-custom
               manifest: |-
@@ -1000,7 +967,7 @@ resources:
                                       "max_backup": 5,
                                       "max_size": 100,
                                       "path": "-",
-                                      "policy": "apiVersion: audit.k8s.io/v1\nkind: Policy\nmetadata:\n  creationTimestamp: null\nomitStages:\n- RequestReceived\nrules:\n- level: RequestResponse\n  resources:\n  - resources:\n    - pods\n"
+                                      "policy": "apiVersion: audit.k8s.io/v1\nkind: Policy\nmetadata:\n  creationTimestamp null\nomitStages:\n- RequestReceived\nrules:\n- level: RequestResponse\n  resources:\n  - resources:\n    - pods\n"
                                     }
                                   ],
                                   "enabled": true
@@ -1052,6 +1019,34 @@ resources:
                         }
                       ]
                     }
+                  ]
+                }
+            - name: foo
+              manifest: |-
+                {
+                  "cluster_agent_deployment_customization": [
+                    {
+                      "scheduling_customization": [
+                        {
+                          "pod_disruption_budget": [
+                            {
+                              "min_available": "1"
+                            }
+                          ],
+                          "priority_class": [
+                            {
+                              "preemption_policy": "PreemptLowerPriority",
+                              "value": 1000000000
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "description": "Terraform cluster with agent customization",
+                  "name": "foo",
+                  "rke_config": [
+                    {}
                   ]
                 }
             - name: foo
@@ -1110,6 +1105,39 @@ resources:
                       "imported": true,
                       "name": "\u003ccluster-name\u003e",
                       "region": "\u003ceks-region\u003e"
+                    }
+                  ],
+                  "name": "foo"
+                }
+              references:
+                eks_config_v2.cloud_credential_id: rancher2_cloud_credential.foo.id
+              dependencies:
+                rancher2_cloud_credential.foo: |-
+                    {
+                      "amazonec2_credential_config": [
+                        {
+                          "access_key": "\u003caws-access-key\u003e",
+                          "secret_key": "\u003caws-secret-key\u003e"
+                        }
+                      ],
+                      "description": "foo test",
+                      "name": "foo"
+                    }
+            - name: foo
+              manifest: |-
+                {
+                  "description": "Terraform EKS cluster",
+                  "eks_config_v2": [
+                    {
+                      "cloud_credential_id": "${rancher2_cloud_credential.foo.id}",
+                      "imported": true,
+                      "name": "\u003ccluster-name\u003e",
+                      "region": "\u003ceks-region\u003e"
+                    }
+                  ],
+                  "imported_config": [
+                    {
+                      "private_registry_url": "\u003cprivate_registry\u003e"
                     }
                   ],
                   "name": "foo"
@@ -1245,7 +1273,40 @@ resources:
                       "description": "Terraform cloudCredential acceptance test",
                       "google_credential_config": [
                         {
-                          "auth_encoded_json": "${file(\"\u003cGOOGLE_AUTH_ENCODED_JSON\u003e\")}"
+                          "auth_encoded_json": "${file(\u003cGOOGLE_AUTH_ENCODED_JSON\u003e)}"
+                        }
+                      ],
+                      "name": "foo-google"
+                    }
+            - name: foo
+              manifest: |-
+                {
+                  "description": "Terraform imported GKE cluster",
+                  "gke_config_v2": [
+                    {
+                      "google_credential_secret": "${rancher2_cloud_credential.foo-google.id}",
+                      "imported": true,
+                      "name": "foo",
+                      "project_id": "\u003cproject-id\u003e",
+                      "region": "\u003cregion\u003e"
+                    }
+                  ],
+                  "imported_config": [
+                    {
+                      "private_registry_url": "\u003cprivate_registry\u003e"
+                    }
+                  ],
+                  "name": "foo"
+                }
+              references:
+                gke_config_v2.google_credential_secret: rancher2_cloud_credential.foo-google.id
+              dependencies:
+                rancher2_cloud_credential.foo-google: |-
+                    {
+                      "description": "Terraform cloudCredential acceptance test",
+                      "google_credential_config": [
+                        {
+                          "auth_encoded_json": "${file(\u003cGOOGLE_AUTH_ENCODED_JSON\u003e)}"
                         }
                       ],
                       "name": "foo-google"
@@ -1283,7 +1344,7 @@ resources:
                       "description": "Terraform cloudCredential acceptance test",
                       "google_credential_config": [
                         {
-                          "auth_encoded_json": "${file(\"\u003cGOOGLE_AUTH_ENCODED_JSON\u003e\")}"
+                          "auth_encoded_json": "${file(\u003cGOOGLE_AUTH_ENCODED_JSON\u003e)}"
                         }
                       ],
                       "name": "foo-google"
@@ -1300,6 +1361,39 @@ resources:
                     }
                   ],
                   "description": "Terraform AKS cluster",
+                  "name": "\u003ccluster-name\u003e"
+                }
+              references:
+                aks_config_v2.cloud_credential_id: rancher2_cloud_credential.foo-aks.id
+              dependencies:
+                rancher2_cloud_credential.foo-aks: |-
+                    {
+                      "azure_credential_config": [
+                        {
+                          "client_id": "\u003cclient-id\u003e",
+                          "client_secret": "\u003cclient-secret\u003e",
+                          "subscription_id": "\u003csubscription-id\u003e"
+                        }
+                      ],
+                      "name": "foo-aks"
+                    }
+            - name: foo
+              manifest: |-
+                {
+                  "aks_config_v2": [
+                    {
+                      "cloud_credential_id": "${rancher2_cloud_credential.foo-aks.id}",
+                      "imported": true,
+                      "resource_group": "\u003cresource-group\u003e",
+                      "resource_location": "\u003cresource-location"
+                    }
+                  ],
+                  "description": "Terraform AKS cluster",
+                  "imported_config": [
+                    {
+                      "private_registry_url": "\u003cprivate_registry\u003e"
+                    }
+                  ],
                   "name": "\u003ccluster-name\u003e"
                 }
               references:
@@ -1392,29 +1486,17 @@ resources:
             aad_client_cert_path: '- (Optional/Computed) (string)'
             aad_client_id: '- (Required/Sensitive) (string)'
             aad_client_secret: '- (Required/Sensitive) (string)'
-            aad_server_app_secret: '- (Optional/Sensitive) The secret of an Azure Active Directory server application (string)'
-            aad_tenant_id: '- (Optional/Sensitive) The ID of an Azure Active Directory tenant (string)'
             access_key: '- (Optional/Sensitive) Access key for S3 service (string)'
             aci_network_provider: '- (Optional/Computed) ACI provider config for RKE network (list maxitems:63)'
-            add_client_app_id: '- (Optional/Sensitive) The ID of an Azure Active Directory client application of type "Native". This application is for user login via kubectl (string)'
-            add_server_app_id: '- (Optional/Sensitive) The ID of an Azure Active Directory server application of type "Web app/API". This application represents the managed cluster''s apiserver (Server application) (string)'
             addon_job_timeout: '- (Optional/Computed) Duration in seconds of addon job (int)'
             addons: '- (Optional) Addons descripton to deploy on RKE cluster.'
             addons_include: '- (Optional) Addons yaml manifests to deploy on RKE cluster (list)'
             address: '- (Required) Address ip for the bastion host (string)'
-            admin_username: '- (Optional) The administrator username to use for Linux hosts. Default azureuser (string)'
             admission_configuration: '- (Optional) Admission configuration (map)'
             aep: '- (Required) Attachable entity profile (string)'
-            agent_dns_prefix: '- (Required) DNS prefix to be used to create the FQDN for the agent pool (string)'
             agent_env_vars: '- (Optional) Optional Agent Env Vars for Rancher agent. For Rancher v2.5.6 and above (list)'
-            agent_os_disk_size: '- (Optional) GB size to be used to specify the disk for every machine in the agent pool. If you specify 0, it will apply the default according to the "agent vm size" specified. Default 0 (int)'
-            agent_pool_name: '- (Optional) Name for the agent pool, upto 12 alphanumeric characters. Default agentpool0 (string)'
-            agent_storage_profile: '- (Optional) Storage profile specifies what kind of storage used on machine in the agent pool. Chooses from [ManagedDisks StorageAccount]. Default ManagedDisks (string)'
-            agent_vm_size: '- (Optional) Size of machine in the agent pool. Default Standard_D1_v2 (string)'
-            aks_config: '- (Optional) The Azure AKS configuration for aks Clusters. Conflicts with aks_config_v2, eks_config, eks_config_v2, gke_config, gke_config_v2, oke_config k3s_config and rke_config (list maxitems:1)'
-            aks_config_v2: '- (Optional) The Azure AKS v2 configuration for creating/import aks Clusters. Conflicts with aks_config, eks_config, eks_config_v2, gke_config, gke_config_v2, oke_config k3s_config and rke_config (list maxitems:1)'
+            aks_config_v2: '- (Optional) The Azure AKS v2 configuration for creating/import aks Clusters. Conflicts with eks_config_v2, gke_config_v2, k3s_config, oke_config and rke_config (list maxitems:1)'
             always_pull_images: '- (Optional) Enable AlwaysPullImages Admission controller plugin. Rancher docs Default: false (bool)'
-            ami: '- (Optional) AMI ID to use for the worker nodes instead of the default (string)'
             annotations: '- (Optional/Computed) Annotations for the Cluster (map)'
             api_version: '- (Optional) Admission configuration ApiVersion. Default: apiserver.config.k8s.io/v1 (string)'
             apic_hosts: '- (Required) List of APIC hosts to connect for APIC API (list)'
@@ -1425,9 +1507,8 @@ resources:
             apic_user_key: '- (Required/Sensitive) APIC user key (string)'
             apic_user_name: '- (Required) APIC user name (string)'
             append_tolerations: '- (Optional) User defined tolerations to append to agent (list)'
-            associate_worker_node_public_ip: '- (Optional) Associate public ip EKS worker nodes. Default true (bool)'
             audit_log: '- (Optional) K8s audit log configuration. (list maxitems: 1)'
-            auth_base_url: '- (Optional) Different authentication API url to use. Default https://login.microsoftonline.com/ (string)'
+            auth_base_url: '- (Optional) The AKS auth base url (string)'
             auth_url: '- (Required) (string)'
             authentication: '- (Optional/Computed) Kubernetes cluster authentication (list maxitems:1)'
             authorization: '- (Optional/Computed) Kubernetes cluster authorization (list maxitems:1)'
@@ -1442,7 +1523,7 @@ resources:
             aws_session_token: '- (Optional/Sensitive) AWS session token (string)'
             azure_cloud_provider: '- (Optional/Computed) RKE Azure Cloud Provider config for Cloud Provider rke-azure-cloud-provider (list maxitems:1)'
             backup_config: '- (Optional/Computed) Backup options for etcd service. For Rancher v2.2.x (list maxitems:1)'
-            base_url: '- (Optional) Different resource management API url to use. Default https://management.azure.com/ (string)'
+            base_url: '- (Optional) The AKS base url (string)'
             bastion_host: '- (Optional/Computed) RKE bastion host (list maxitems:1)'
             block_storage: '- (Optional/Computed) (list maxitems:1)'
             bs_version: '- (Optional/Computed) (string)'
@@ -1456,8 +1537,6 @@ resources:
             cert: '- (Optional/Computed/Sensitive) TLS certificate for etcd service (string)'
             cidr_block: '- (Required) The GKE master authorized network config cidr block (string)'
             cidr_blocks: '- (Required) The GKE master authorized network config cidr blocks (List)'
-            client_id: '- (Required/Sensitive) Azure client ID to use (string)'
-            client_secret: '- (Required/Sensitive) Azure client secret associated with the "client id" (string)'
             cloud: '- (Optional/Computed) (string)'
             cloud_credential_id: '- (Required) The AKS Cloud Credential ID to use (string)'
             cloud_provider: '- (Optional/Computed) RKE cloud provider rke-cloud-providers (list maxitems:1)'
@@ -1476,7 +1555,6 @@ resources:
             cluster_dns_server: '- (Optional/Computed) Cluster DNS Server option for kubelet service (string)'
             cluster_domain: '- (Optional/Computed) Cluster Domain option for kubelet service (string)'
             cluster_id: '- (Optional) Cluster ID to apply answer (string)'
-            cluster_ipv4_cidr: '- (Required) The IP address range of the container pods (string)'
             cluster_ipv4_cidr_block: '- (Optional/Computed/ForceNew) The GKE ip v4 cidr block (string)'
             cluster_registration_token: '- (Computed) Cluster Registration Token generated for the cluster (list maxitems:1)'
             cluster_secondary_range_name: '- (Optional/Computed) The GKE cluster ip v4 allocation secondary range name(string)'
@@ -1484,20 +1562,21 @@ resources:
             cluster_template_id: '- (Optional) Cluster template ID. For Rancher v2.3.x and above (string)'
             cluster_template_questions: '- (Optional/Computed) Cluster template questions. For Rancher v2.3.x and above (list)'
             cluster_template_revision_id: '- (Optional) Cluster template revision ID. For Rancher v2.3.x and above (string)'
+            cluster_type: '- (Optional) Choose basic or enhanced. Default basic (string)'
             command: '- (Computed) Command to execute in a imported k8s cluster (string)'
             compartment_id: '- (Required) The OCID of the compartment in which to create resources OKE cluster and related resources (string)'
             config: '- (Optional/Computed/ForceNew) The GKE node pool node config (List maxitems:1)'
             configuration: '- (Optional) Plugin configuration. (string) Ex:'
+            control_plane_subnet_name: '- (Optional) The name of an existing subnet to use for the Kubernetes API endpoint. vcn_name is also required when specifying an existing subnet. (string)'
             controller_log_level: '- (Optional) Log level for ACI controller (string)'
             cores_per_replica: '- (Optional) number of replicas per cluster cores (float64)'
-            count: '- (Optional) Number of machines (VMs) in the agent pool. Allowed values must be in the range of 1 to 100 (inclusive). Default 1 (int)'
+            count: '- (Optional) The AKS node pool count. Default: 1 (int)'
             cpu_limit: '- (Optional) The maximum CPU limit for agent (string)'
             cpu_request: '- (Optional) The minimum CPU required for agent (string)'
             create: '- (Default 30 minutes) Used for creating clusters.'
             create_monitor: '- (Optional/Computed) (bool)'
             create_subnetwork: '- (Optional/Computed) Create GKE subnetwork? Default: false (bool)'
             creation: '- (Optional/Computed) Creation option for etcd service (string)'
-            credential: '- (Required/Sensitive) The contents of the GC credential file (string)'
             custom_boot_volume_size: '- (Optional) Optional custom boot volume size (GB) for all nodes. If you specify 0, it will apply the default according to the node_image specified. Default 0 (int)'
             custom_ca: '- (Optional) Base64 encoded custom CA for S3 service. Use filebase64() for encoding file. Available from Rancher v2.2.5 (string)'
             custom_cloud_provider: '- (Optional/Computed) RKE Custom Cloud Provider config for Cloud Provider (string)'
@@ -1514,7 +1593,6 @@ resources:
             description: '- (Optional) The description for Cluster (string)'
             desired_agent_image: '- (Optional/Computed) Desired agent image. For Rancher v2.3.x and above (string)'
             desired_auth_image: '- (Optional/Computed) Desired auth image. For Rancher v2.3.x and above (string)'
-            desired_nodes: '- (Optional) The desired number of worker nodes. For Rancher v2.3.x and above. Default 3 (int)'
             desired_size: '- (Optional) The EKS node group desired size. Default: 2 (int)'
             disable_periodic_snat_global_info_sync: '- (Optional) Whether to disable periodic SNAT global info sync (string)'
             disable_security_group_ingress: '- (Optional) Default false (bool)'
@@ -1522,14 +1600,12 @@ resources:
             disable_wait_for_network: '- (Optional) Whether to disable waiting for network (string)'
             disk: '- (Optional/Computed) (list maxitems:1)'
             disk_size: '- (Optional) The EKS node group disk size (Gb). Default: 20 (int)'
-            disk_size_gb: '- (Optional) Size of the disk attached to each node. Default 100 (int)'
-            disk_type: '- (Required) Type of the disk attached to each node (string)'
+            disk_size_gb: '- (Optional/Computed) The GKE node config disk size Gb (int)'
+            disk_type: '- (Optional/Computed) The GKE node config disk type (string)'
             display_name: '- (Optional) The GKE master authorized network config cidr block dispaly name (string)'
             dns: '- (Optional/Computed) RKE dns add-on. For Rancher v2.2.x (list maxitems:1)'
             dns_policy: '- (Optional/Computed) Ingress controller DNS policy. ClusterFirstWithHostNet, ClusterFirst, Default, and None are supported. K8S dns Policy (string)'
             dns_prefix: '- (Optional/ForceNew) The AKS dns prefix. Required if imported=false (string)'
-            dns_service_ip: '- (Optional) An IP address assigned to the Kubernetes DNS service. It must be within the Kubernetes Service address range specified in "service cidr". Default 10.0.0.10 (string)'
-            docker_bridge_cidr: '- (Required) A CIDR notation IP range assigned to the Docker bridge network. It must not overlap with any Subnet IP ranges or the Kubernetes Service address range specified in "service cidr". Default 172.17.0.1/16 (string)'
             docker_root_dir: '- (Optional/Computed) Desired auth image. For Rancher v2.3.x and above (string)'
             docker_socket: '- (Optional/Computed) Docker socket for node (string)'
             domain_id: '- (Optional/Computed/Sensitive) Required if domain_name not provided. (string)'
@@ -1544,38 +1620,25 @@ resources:
             ec2_ssh_key: '- (Optional) The EKS node group ssh key (string)'
             ecr_credential_plugin: '- (Optional) ECR credential plugin config (list maxitems:1)'
             effect: '- (Optional) The toleration effect. Default: \"NoSchedule\" (string)'
-            eks_config: '- (Optional) The Amazon EKS configuration for eks Clusters. Conflicts with aks_config, aks_config_v2, eks_config_v2, gke_config, gke_config_v2, oke_config k3s_config and rke_config (list maxitems:1)'
-            eks_config_v2: '- (Optional/Computed) The Amazon EKS V2 configuration to create or import eks Clusters. Conflicts with aks_config, eks_config, gke_config, gke_config_v2, oke_config k3s_config and rke_config. For Rancher v2.5.x and above (list maxitems:1)'
+            eks_config_v2: '- (Optional/Computed) The Amazon EKS V2 configuration to create or import eks Clusters. Conflicts with gke_config_v2, k3s_config, oke_config and rke_config. For Rancher v2.5.x and above (list maxitems:1)'
             elb_security_group: '- (Optional/Computed) (string)'
-            enable_alpha_feature: '- (Optional) To enable Kubernetes alpha feature. Default true (bool)'
-            enable_auto_repair: '- (Optional) Specifies whether the node auto-repair is enabled for the node pool. Default false (bool)'
             enable_auto_scaling: '- (Optional) Is AKS node pool auto scaling enabled? Default: false (bool)'
-            enable_auto_upgrade: '- (Optional) Specifies whether node auto-upgrade is enabled for the node pool. Default false (bool)'
             enable_cluster_istio: '- (Deprecated) Deploy istio on system project and istio-system namespace, using rancher2_app resource instead. See above example.'
             enable_cri_dockerd: '- (Optional) Enable/disable using cri-dockerd. Deafult: false enable_cri_dockerd (bool)'
             enable_endpoint_slice: '- (Optional) Whether to enable endpoint slices (string)'
-            enable_horizontal_pod_autoscaling: '- (Optional) Enable horizontal pod autoscaling for the cluster. Default true (bool)'
-            enable_http_application_routing: '- (Optional) Enable the Kubernetes ingress with automatic public DNS name creation. Default false (bool)'
-            enable_http_load_balancing: '- (Optional) Enable HTTP load balancing on GKE cluster. Default true (bool)'
             enable_kubernetes_alpha: '- (Optional/Computed/ForceNew) Enable Kubernetes alpha. Default: false (bool)'
-            enable_kubernetes_dashboard: '- (Optional) Whether to enable the Kubernetes dashboard. Default false (bool)'
-            enable_legacy_abac: '- (Optional) Whether to enable legacy abac on the cluster. Default false (bool)'
-            enable_master_authorized_network: '- (Optional) Enable master authorized network. Set to true if master_authorized_network_cidr_blocks is set. Default false (bool)'
-            enable_monitoring: '- (Optional) Turn on Azure Log Analytics monitoring. Uses the Log Analytics "Default" workspace if it exists, else creates one. if using an existing workspace, specifies "log analytics workspace resource id". Default true (bool)'
+            enable_kubernetes_dashboard: '- (Optional) Specifies whether to enable the Kubernetes dashboard. Default false (bool)'
             enable_network_policy: '- (Optional/Computed) Enable project network isolation (bool)'
-            enable_network_policy_config: '- (Optional) Enable network policy config for the cluster. Default true (bool)'
-            enable_nodepool_autoscaling: '- (Optional) Enable nodepool autoscaling. Default false (bool)'
             enable_private_control_plane: '- (Optional) Specifies whether Kubernetes API endpoint is a private IP only accessible from within the VCN. Default false for Rancher v2.5.10 and above (bool)'
-            enable_private_endpoint: '- (Optional) Whether the master''s internal IP address is used as the cluster endpoint. Default false (bool)'
-            enable_private_nodes: '- (Optional) Whether nodes have internal IP address only. Default false (bool)'
-            enable_stackdriver_logging: '- (Optional) Enable stackdriver monitoring. Default true (bool)'
-            enable_stackdriver_monitoring: '- (Optional) Enable stackdriver monitoring on GKE cluster (bool)'
+            enable_private_endpoint: '- (Optional) Enable GKE cluster private endpoint. Default: false (bool)'
+            enable_private_nodes: '- (Optional) Enable GKE cluster private endpoint. Default: false (bool)'
             enabled: '- (Optional) Enable etcd backup (bool)'
             encap_type: '- (Required) Encap type: vxlan or vlan (string)'
             endpoint: '- (Required) Endpoint for S3 service (string)'
             ep_registry: '- (Optional) EP registry (string)'
             etcd: '- (Optional/Computed) Etcd options for RKE services (list maxitems:1)'
             event_rate_limit: '- (Optional) K8s event rate limit configuration. (list maxitems: 1)'
+            eviction_grace_duration: '- (Optional) Specifies the grace period in minutes (ISO 8601 format) to allow cordon and drain to complete. Default \"PT5M\" (string)'
             extern_dynamic: '- (Required) Subnet to use for dynamic external IPs (string)'
             extern_static: '- (Required)  Subnet to use for static external IPs (string)'
             external_urls: '- (Optional) External urls for etcd service (list)'
@@ -1583,21 +1646,22 @@ resources:
             extra_binds: '- (Optional) Extra binds for etcd service (list)'
             extra_env: '- (Optional) Extra environment for etcd service (list)'
             fail_swap_on: '- (Optional/Computed) Enable or disable failing when swap on is not supported (bool)'
-            fingerprint: '- (Required) The fingerprint corresponding to the specified user''s private API Key (string)'
+            fingerprint: '- (Required) The fingerprint corresponding to the specified user''s private API Key. Required unless using instance principals or workload identity to authenticate (string)'
             flannel_network_provider: '- (Optional/Computed) Flannel provider config for RKE network (list maxitems:1)'
             fleet_agent_deployment_customization: '- (Optional) Optional customization for fleet agent. For Rancher v2.7.5 and above (list)'
             fleet_workspace_name: '- (Optional/Computed) Fleet workspace name (string)'
+            flex_memory_in_gbs: '- (Optional) Specifies number amount of memory in GB for nodes (requires flexible shape specified with node_shape) (int)'
             flex_ocpus: '- (Optional) Specifies number of OCPUs for nodes (requires flexible shape specified with node_shape) (int)'
             floating_network_id: '- (Optional/Computed) (string)'
             folder: '- (Required) (string)'
             force: '- Force RKE node drain. Default: false (bool)'
+            force_delete_after_grace_duration: '- (Optional) Specifies whether to send a SIGKILL signal if a pod does not terminate within the specified grace period. See also eviction_grace_duration. Default false (bool)'
             format: '- (Optional) Audit log format. Default: ''json'' (string)'
             fqdn: '- (Optional) FQDN for the authorized cluster endpoint (string)'
             gbp_pod_subnet: '- (Optional) GBH pod subnet (string)'
             generate_serving_certificate: Generate a certificate signed by the kube-ca. Default false (bool)
             gid: '- (Optional) Etcd service GID. Default: 0. For Rancher v2.3.x and above (int)'
-            gke_config: '- (Optional) The Google GKE configuration for gke Clusters. Conflicts with aks_config, aks_config_v2, eks_config, eks_config_v2, gke_config_v2, oke_config, k3s_config and rke_config (list maxitems:1)'
-            gke_config_v2: '- (Optional) The Google GKE V2 configuration for gke Clusters. Conflicts with aks_config, aks_config_v2, eks_config, eks_config_v2, gke_config, oke_config, k3s_config and rke_config. For Rancher v2.5.8 and above (list maxitems:1)'
+            gke_config_v2: '- (Optional) The Google GKE V2 configuration for gke Clusters. Conflicts with aks_config_v2, eks_config_v2, k3s_config, oke_config and rke_config. For Rancher v2.5.8 and above (list maxitems:1)'
             global: '- (Optional/Computed) (list maxitems:1)'
             google_credential_secret: '- (Required/Sensitive) Google credential secret (string)'
             gpu: '- (Optional) Set true to EKS use gpu. Default: false (bool)'
@@ -1618,8 +1682,10 @@ resources:
             image_id: '- (Optional) The EKS node group image ID (string)'
             image_pull_policy: '- (Optional) Image pull policy (string)'
             image_pull_secret: '- (Optional) Image pull policy (string)'
-            image_type: '- (Required) The image to use for the worker nodes (string)'
+            image_type: '- (Optional/Computed) The GKE node config image type (string)'
+            image_verification_kms_key_id: '- (Optional) Comma separated list of OCID(s) of the KMS key to verify the image signatures (string)'
             imported: '- (Optional) Is AKS cluster imported? Default: false (bool)'
+            imported_config: '- (Optional) The imported configuration for generic imported Clusters. Conflicts with aks_config_v2, eks_config_v2, gke_config_v2, rke_config, rke2_config and k3s_config (list maxitems:1)'
             infra_container_image: '- (Optional/Computed) Infra container image for kubelet service (string)'
             infra_vlan: '- (Optional) The VLAN used by ACI infra (string)'
             ingress: '- (Optional/Computed) Kubernetes ingress configuration (list maxitems:1)'
@@ -1629,28 +1695,19 @@ resources:
             insecure_node_command: '- (Computed) Insecure node command to execute in a imported k8s cluster (string)'
             insecure_windows_node_command: '- (Computed) Insecure windows command to execute in a imported k8s cluster (string)'
             install_istio: '- (Optional) Whether to install Istio (string)'
-            instance_type: '- (Optional) The type of machine to use for worker nodes. Default t2.medium (string)'
+            instance_type: '- (Optional) The EKS node group instance type. Default: t3.medium (string)'
             internal_address: '- (Optional) Internal ip for node (string)'
             interval_hours: '- (Optional) Interval hours for etcd backup. Default 12 (int)'
             ip_address: '- (required) Nodelocal dns ip address (string)'
             ip_allocation_policy: '- (Optional/Computed/ForceNew) The GKE ip allocation policy (List maxitems:1)'
-            ip_policy_cluster_ipv4_cidr_block: '- (Required) The IP address range for the cluster pod IPs (string)'
-            ip_policy_cluster_secondary_range_name: '- (Required) The name of the secondary range to be used for the cluster CIDR block (string)'
-            ip_policy_create_subnetwork: '- (Optional) Whether a new subnetwork will be created automatically for the cluster. Default false (bool)'
-            ip_policy_node_ipv4_cidr_block: '- (Required) The IP address range of the instance IPs in this cluster (string)'
-            ip_policy_services_ipv4_cidr_block: '- (Required) The IP address range of the services IPs in this cluster (string)'
-            ip_policy_services_secondary_range_name: '- (Required) The name of the secondary range to be used for the services CIDR block (string)'
-            ip_policy_subnetwork_name: '- (Required) A custom subnetwork name to be used if createSubnetwork is true (string)'
             is_default: '- (Optional) Set as default registry. Default false (bool)'
-            issue_client_certificate: '- (Optional) Issue a client certificate. Default false (bool)'
             istio_enabled: '- (Computed) Is istio enabled at cluster? For Rancher v2.3.x and above (bool)'
             istio_profile: '- (Optional) Istio profile name (string)'
-            k3s_config: '- (Optional/Computed) The K3S configuration for k3s imported Clusters. Conflicts with aks_config, aks_config_v2, eks_config, eks_config_v2, gke_config, gke_config_v2, oke_config and rke_config (list maxitems:1)'
+            k3s_config: '- (Optional/Computed) The K3S configuration for k3s imported Clusters. Conflicts with aks_config_v2, eks_config_v2, gke_config_v2, oke_config and rke_config (list maxitems:1)'
             kafka_brokers: '- (Optional) List of Kafka broker hosts (list)'
             kafka_client_crt: '- (Optional) Kafka client certificate (string)'
             kafka_client_key: '- (Optional) Kafka client key (string)'
             key: '- (Required) The toleration key (string)'
-            key_pair_name: '- (Optional) Allow user to specify key name to use. For Rancher v2.2.7 and above (string)'
             kind: '- (Optional) Admission configuration Kind. Default: AdmissionConfiguration (string)'
             kms_key: '- (Optional) The AWS kms label ARN to use (string, e.g. arn:aws:kms::<123456789100>:alias/)'
             kms_key_id: '- (Optional) The OCID of a KMS vault master key used to encrypt secrets at rest. See here for help creating a vault and master encryption key. For Rancher v2.5.9 and above (string)'
@@ -1662,7 +1719,6 @@ resources:
             kubeproxy: '- (Optional/Computed) Kubeproxy options for RKE services (list maxitems:1)'
             kubernetes_cluster_id: '- (Optional/Computed) (string)'
             kubernetes_cluster_tag: '- (Optional/Computed) (string)'
-            kubernetes_dashboard: '- (Optional) Enable the Kubernetes dashboard. Default false (bool)'
             kubernetes_version: '- (Optional/Computed) K8s version to deploy. Default: Rancher default (string) (Note - if rke_config is set at cluster_template, kubernetes_version must be set to the active cluster version so Rancher can clone the RKE template)'
             l3out: '- (Required) L3out (string)'
             l3out_external_networks: '- (Required) L3out external networks (list)'
@@ -1679,50 +1735,44 @@ resources:
             load_balancer_sku: '- (Optional) Allowed values: basic (default) standard (string)'
             load_balancer_subnet_name_1: '- (Optional) The name of the first existing subnet to use for Kubernetes services / LB. vcn_name is also required when specifying an existing subnet. (string)'
             load_balancer_subnet_name_2: '- (Optional) The name of a second existing subnet to use for Kubernetes services / LB. A second subnet is only required when it is AD-specific (non-regional) (string)'
-            local_ssd_count: '- (Optional) The number of local SSD disks to be attached to the node. Default 0 (int)'
+            local_ssd_count: '- (Optional/Computed) The GKE node config local ssd count (int)'
             location: '- (Optional/Computed) (string)'
-            locations: '- (Required) Locations for GKE cluster (list)'
-            log_analytics_workspace: '- (Optional) The name of an existing Azure Log Analytics Workspace to use for storing monitoring data. If not specified, uses ''{resource group}-{subscription id}-{location code}'' (string)'
+            locations: '- (Optional/Computed) The GKE cluster locations (List)'
             log_analytics_workspace_group: '- (Optional/Computed) The AKS log analytics workspace group (string)'
             log_analytics_workspace_name: '- (Optional/Computed) The AKS log analytics workspace name (string)'
-            log_analytics_workspace_resource_group: '- (Optional) The resource group of an existing Azure Log Analytics Workspace to use for storing monitoring data. If not specified, uses the ''Cluster'' resource group (string)'
             logging_service: '- (Optional/Computed) The GKE cluster logging service (string)'
             logging_types: '- (Optional) The AWS cloudwatch logging types. audit, api, scheduler, controllerManager and authenticator values are allowed (list)'
-            machine_type: '- (Required) Machine type for GKE cluster (string)'
-            maintenance_window: '- (Required) Maintenance window for GKE cluster (string)'
+            machine_type: '- (Optional/Computed) The GKE node config machine type (string)'
+            maintenance_window: '- (Optional/Computed) The GKE cluster maintenance window (string)'
             manage_security_groups: '- (Optional/Computed) (bool)'
             management: '- (Optional/Computed) The GKE node pool config management (List maxitems:1)'
             manifest_url: '- (Computed) K8s manifest url to execute with kubectl to import an existing k8s cluster (string)'
-            master_authorized_network_cidr_blocks: '- (Optional) Define up to 10 external networks that could access Kubernetes master through HTTPS (list)'
             master_authorized_networks_config: '- (Optional/Computed/ForceNew) The GKE cluster master authorized networks config (List maxitems:1)'
-            master_dns_prefix: '- (Required) DNS prefix to use the Kubernetes cluster control pane (string)'
-            master_ipv4_cidr_block: '- (Required) The IP range in CIDR notation to use for the hosted master network (string)'
-            master_version: '- (Required) Master version for GKE cluster (string)'
+            master_ipv4_cidr_block: '- (Required) The GKE cluster private master ip v4 cidr block (string)'
             max: '- (Optional) maximum number of replicas (int64)'
             max_age: '- (Optional) Audit log max age. Default: 30 (int)'
             max_backup: '- (Optional) Audit log max backup. Default: 10 (int)'
             max_count: '- (Optional) The AKS node pool max count. Required if enable_auto_scaling=true (int)'
-            max_node_count: '- (Optional) Maximum number of nodes in the NodePool. Must be >= minNodeCount. There has to enough quota to scale up the cluster. Default 0 (int)'
+            max_node_count: '- (Optional/Computed) The GKE node pool config max node count (int)'
             max_nodes_svc_graph: '- (Optional) Max nodes in service graph (string)'
-            max_pods: '- (Optional) Maximum number of pods that can run on a node. Default 110 (int)'
+            max_pods: '- (Optional) The AKS node pool max pods. Default: 110 (int)'
             max_pods_constraint: '- (Optional/Computed) The GKE node pool config max pods constraint. Required for create new cluster if ip_allocation_policy.use_ip_aliases = true (int)'
             max_size: '- (Optional) Audit log max size. Default: 100 (int)'
             max_surge: '- (Optional) Monitoring deployment rolling update max surge. Default: 1 (int)'
-            max_unavailable: '- (Optional) Monitoring deployment rolling update max unavailable. Default: 1 (int)'
+            max_unavailable: '- (Optional, string) The maximum number of agent replicas that can be unavailable at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as min_available.'
             max_unavailable_controlplane: '- (Optional) RKE max unavailable controlplane nodes. Default: 1 (string)'
             max_unavailable_worker: '- (Optional) RKE max unavailable worker nodes. Default: 10% (string)'
             maximum_load_balancer_rule_count: '- (Optional/Computed) (int)'
-            maximum_nodes: '- (Optional) The maximum number of worker nodes. Default 3 (int)'
             mcast_range_end: '- (Required) End of mcast range (string)'
             mcast_range_start: '- (Required) Start of mcast range (string)'
             memory_limit: '- (Optional) The maximum memory limit for agent (string)'
             memory_request: '- (Optional) The minimum memory required for agent (string)'
             metadata: '- (Optional/Computed) (list maxitems:1)'
             min: '- (Optional) minimum number of replicas (int64)'
+            min_available: '- (Optional, string) The minimum number of agent replicas that must be running at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%").  This field cannot be used at the same time as max_unavailable.'
             min_count: '- (Optional) The AKS node pool min count. Required if enable_auto_scaling=true (int)'
-            min_node_count: '- (Optional) Minimmum number of nodes in the NodePool. Must be >= 1 and <= maxNodeCount. Default 0 (int)'
+            min_node_count: '- (Optional/Computed) The GKE node pool config min node count (int)'
             min_size: '- (Optional) The EKS node group maximum size. Default 2 (int)'
-            minimum_nodes: '- (Optional) The minimum number of worker nodes. Default 1 (int)'
             mode: '- (Optional) RKE mode for authorization. rbac and none modes are available. Default rbac (string)'
             monitor_delay: '- (Optional/Computed) Default 60s (string)'
             monitor_max_retries: '- (Optional/Computed) Default 5 (int)'
@@ -1737,21 +1787,19 @@ resources:
             network_dns_service_ip: '- (Optional/Computed) The AKS network dns service ip (string)'
             network_docker_bridge_cidr: '- (Optional/Computed) The AKS network docker bridge cidr (string)'
             network_mode: '- (Optional/Computed) Network mode for RKE Ingress (string)'
-            network_plugin: '- (Optional) Network plugin used for building Kubernetes network. Chooses from azure or kubenet. Default azure (string)'
+            network_plugin: '- (Optional) The AKS network plugin. Required if imported=false (string)'
             network_pod_cidr: '- (Optional/Computed) The AKS network pod cidr (string)'
-            network_policy: '- (Optional) Network policy used for building Kubernetes network. Chooses from calico (string)'
+            network_policy: '- (Optional/Computed) The AKS network policy (string)'
             network_policy_config: '- (Optional/Computed) Enable GKE network policy config. Default: false (bool)'
             network_policy_enabled: '- (Optional/Computed) Is GKE cluster network policy enabled? Default: false (bool)'
             network_service_cidr: '- (Optional/Computed) The AKS network service cidr (string)'
             no_priority_class: '- (Optional) Whether to use priority class (string)'
             node_command: '- (Computed) Node command to execute in linux nodes for custom k8s cluster (string)'
-            node_count: '- (Optional) Node count for GKE cluster. Default 3 (int)'
             node_groups: '- (Optional/Computed) The EKS cluster name to import. Required to create a new cluster (list)'
             node_id: '- (Optional) Id for the node (string)'
             node_image: '- (Required) The Oracle Linux OS image name to use for the OKE node(s). See here for a list of images. (string)'
             node_ipv4_cidr_block: '- (Optional/Computed) The GKE node ip v4 allocation cidr block (string)'
             node_pod_if_enable: '- (Optional) Whether to enable node pod interface (string)'
-            node_pool: '- (Required) The ID of the cluster node pool (string)'
             node_pool_dns_domain_name: '- (Optional) Name for DNS domain of node pool subnet. Default nodedns (string)'
             node_pool_subnet_name: '- (Optional) Name for node pool subnet. Default nodedns (string)'
             node_pools: '- (Optional) The AKS nnode pools. Required if imported=false (list)'
@@ -1762,13 +1810,12 @@ resources:
             node_shape: '- (Required) The shape of the node (determines number of CPUs and  amount of memory on each OKE node) (string)'
             node_subnet: '- (Required) Subnet to use for nodes (string)'
             node_svc_subnet: '- (Required) Subnet to use for service graph (string)'
-            node_version: '- (Required) Node version for GKE cluster (string)'
-            node_volume_size: '- (Optional) The volume size for each node. Default 20 (int)'
+            node_user_data_contents: '- (Optional) The contents of custom cloud-init / user_data for the nodes. String will be base64 encoded internally if it is not already. See here for more information (string)'
             nodelocal: '- (Optional) Nodelocal dns config  (list Maxitem: 1)'
             nodes: '- (Optional) RKE cluster nodes (list)'
             nodes_per_replica: '- (Optional) number of replica per cluster nodes (float64)'
-            oauth_scopes: '- (Required) The set of Google API scopes to be made available on all of the node VMs under the default service account (list)'
-            oke_config: '- (Optional) The Oracle OKE configuration for oke Clusters. Conflicts with aks_config, aks_config_v2, eks_config, eks_config_v2, gke_config, gke_config_v2, k3s_config and rke_config (list maxitems:1)'
+            oauth_scopes: '- (Optional/Computed) The GKE node config oauth scopes (List)'
+            oke_config: '- (Optional) The Oracle OKE configuration for oke Clusters. Conflicts with aks_config_v2, eks_config_v2, gke_config_v2, k3s_config and rke_config (list maxitems:1)'
             openstack_cloud_provider: '- (Optional/Computed) RKE Openstack Cloud Provider config for Cloud Provider rke-openstack-cloud-provider (list maxitems:1)'
             operator: '- (Optional) The toleration operator (string)'
             opflex_client_ssl: '- (Optional) Whether to use client SSL for Opflex (string)'
@@ -1791,22 +1838,28 @@ resources:
             pbr_tracking_non_snat: '- (Optional) Policy-based routing tracking non snat (string)'
             plugin: '- (Optional/Computed) Plugin for RKE network. canal (default), flannel, calico, none and weave are supported. (string)'
             plugins: '- (Optional) Admission configuration plugins. (list plugin)'
-            pod_cidr: '- (Optional) A CIDR notation IP range from which to assign Kubernetes Pod IPs when "network plugin" is specified in "kubenet". Default 172.244.0.0/16 (string)'
+            pod_cidr: '- (Optional) A CIDR IP range from which to assign Kubernetes Pod IPs (string)'
+            pod_disruption_budget: '- (Optional, list) The definition of a Pod Disruption Budget deployed for the cluster agent'
+            pod_network: '- (Optional) Choose flannel or native CNI for pod networking. Default flannel (string)'
             pod_subnet_chunk_size: '- (Optional) Pod subnet chunk size (string)'
+            pod_subnet_name: '- (Optional) An optional pre-existing subnet that pods will be assigned IPs from when using OCI VCN-Native CNI pod networking (string)'
             policy: '- (Optional/Computed) Audit policy yaml encoded definition. apiVersion and kind: Policy\nrules:" fields are required in the yaml. More info (string) Ex:'
             port: '- (Optional) Port for bastion host. Default 22 (string)'
-            preemptible: '- (Optional) Whether the nodes are created as preemptible VM instances. Default false (bool)'
+            preemptible: '- (Optional) Enable GKE node config preemptible. Default: false (bool)'
+            preemption_policy: (Optional, string) The preemption policy set for the Priority Class. Must be set to either 'Never', or 'PreemptLowerPriority'
             prefix_path: '- (Optional/Computed) Prefix to customize Kubernetes path (string)'
             prevent_single_point_failure: '- (Optional) prevent single point of failure'
             primary_availability_set_name: '- (Optional/Computed) (string)'
             primary_scale_set_name: '- (Optional/Computed) (string)'
+            priority_class: '- (Optional, list) The definition of a Priority Class deployed for the cluster agent'
             private_access: '- (Optional/Computed) The EKS cluster has private access (bool)'
             private_cluster: '- (Optional/Computed) Is AKS cluster private? (bool)'
             private_cluster_config: '- (Optional/Computed/ForceNew) The GKE private cluster config (List maxitems:1)'
-            private_key_contents: '- (Required/Sensitive) The private API key file contents for the specified user, in PEM format (string)'
-            private_key_passphrase: '- (Optional/Sensitive) The passphrase (if any) of the private key for the OKE cluster (string)'
+            private_key_contents: '- (Required/Sensitive) The private API key file contents for the specified user, in PEM format. Required unless using instance principals or workload identity to authenticate (string)'
+            private_key_passphrase: '- (Optional/Sensitive) The passphrase (if any) of the private key for the OKE cluster. Required unless using instance principals or workload identity to authenticate (string)'
             private_registries: '- (Optional) private registries for docker images (list)'
-            project_id: '- (Required) Project ID for GKE cluster (string)'
+            private_registry_url: '- (Optional) The URL for a cluster-level private registry (string)'
+            project_id: '- (Required/ForceNew) The GKE cluster project id (string)'
             provider: '- (Optional) DNS add-on provider. kube-dns, coredns (default), and none are supported (string)'
             public_access: '- (Optional/Computed) The EKS cluster has public access (bool)'
             public_access_sources: '- (Optional/Computed) The EKS cluster public access sources (map)'
@@ -1819,14 +1872,13 @@ resources:
             request_timeout: '- (Optional/Computed) (int)'
             required: '- (Optional) Required variable. Default false (bool)'
             resource_group: '- (Optional/Computed) (string)'
-            resource_labels: '- (Optional/Computed) The map of Kubernetes labels to be applied to each cluster (map)'
             resource_location: '- (Required) The AKS resource location (string)'
             resource_tags: '- (Optional) The EKS node group resource tags (map)'
             resourcepool_path: '- (Optional/Computed) (string)'
             retention: '- (Optional/Computed) Retention option for etcd service (string)'
             reverse_cidrs: '- (Optional/Computed) DNS add-on reverse cidr  (list)'
-            rke_config: '- (Optional/Computed) The RKE configuration for rke Clusters. Conflicts with aks_config, aks_config_v2, eks_config, eks_config_v2, gke_config, gke_config_v2, oke_config and k3s_config (list maxitems:1)'
-            rke2_config: '- (Optional/Computed) The RKE2 configuration for rke2 Clusters. Conflicts with aks_config, aks_config_v2, eks_config, gke_config, oke_config, k3s_config and rke_config (list maxitems:1)'
+            rke_config: '- (Optional/Computed) The RKE configuration for rke Clusters. Conflicts with aks_config_v2, eks_config_v2, gke_config_v2, oke_config and k3s_config (list maxitems:1)'
+            rke2_config: '- (Optional/Computed) The RKE2 configuration for rke2 Clusters. Conflicts with aks_config_v2, k3s_config, oke_config and rke_config (list maxitems:1)'
             role: '- (Requires) Roles for the node. controlplane, etcd and worker are supported. (list)'
             role_arn: '- (Optional/Computed) (string)'
             rolling_update: '- (Optional) Monitoring daemon set rolling update (list Maxitems: 1)'
@@ -1840,6 +1892,7 @@ resources:
             safe_timestamp: '- (Optional) Safe timestamp for etcd backup. Default: false (bool)'
             sans: '- (Optional/Computed) RKE sans for authentication ([]string)'
             scheduler: '- (Optional/Computed) Scheduler options for RKE services (list maxitems:1)'
+            scheduling_customization: '- (Optional) Supported in Rancher 2.11.0 and above. Defines the configuration of a Priority Class and or Pod Disruption Budget. Currently only supported by the cluster_agent_deployment_customization field, and requires the cattle_cluster_agent_scheduling_customization feature to be enabled.'
             scsi_controller_type: '- (Optional/Computed) (string)'
             search_order: '- (Optional/Computed) (string)'
             seconds: '- (Optional) The number of seconds a pod will stay bound to a node with a matching taint (int)'
@@ -1847,23 +1900,22 @@ resources:
             secrets_encryption: '- (Optional/Computed) Enable EKS cluster secret encryption (bool)'
             secrets_encryption_config: '- (Optional) Encrypt k8s secret data configration. (list maxitem: 1)'
             security_group_name: '- (Optional/Computed) (string)'
-            security_groups: '- (Optional) List of security groups to use for the cluster. If it''s not specified Rancher will create a new security group (list)'
+            security_groups: '- (Optional/Computed) List of security groups to use for the cluster (list)'
             server: '- (Required) (string)'
             server_concurrency: '- (Optional) Server concurrency. Default: 1 (int)'
             service: '- (Required) (string)'
-            service_account: '- (Required) The Google Cloud Platform Service Account to be used by the node VMs (string)'
-            service_cidr: '- (Optional) A CIDR notation IP range from which to assign Kubernetes Service cluster IPs. It must not overlap with any Subnet IP ranges. Default 10.0.0.0/16 (string)'
+            service_account: '- (Optional) The GKE Service Account to be used by the node VMs (string)'
+            service_cidr: '- (Optional) A CIDR IP range from which to assign Kubernetes Service IPs (string)'
             service_cluster_ip_range: '- (Optional/Computed) Service Cluster IP Range option for kube API service (string)'
             service_dns_domain_name: '- (Optional) Name for DNS domain of service subnet. Default svcdns (string)'
             service_monitor_interval: '- (Optional) Service monitor interval (string)'
             service_node_port_range: '- (Optional/Computed) Service Node Port Range option for kube API service (string)'
             service_override: '- (Optional) (list)'
-            service_role: '- (Optional) The service role to use to perform the cluster operations in AWS. If it''s not specified Rancher will create a new service role (string)'
+            service_role: '- (Optional) The AWS service role to use (string)'
             service_vlan: '- (Required) The VLAN used by LoadBalancer services (string)'
             services: '- (Optional/Computed) Kubernetes cluster services (list maxitems:1)'
             services_ipv4_cidr_block: '- (Optional/Computed) The GKE services ip v4 allocation cidr block (string)'
             services_secondary_range_name: '- (Optional/Computed) The GKE services ip v4 allocation secondary range name (string)'
-            session_token: '- (Optional/Sensitive) A session token to use with the client key and secret if applicable (string)'
             signing_method: '- (Optional/Computed) (string)'
             signing_name: '- (Optional/Computed) (string)'
             signing_region: '- (Optional/Computed) (string)'
@@ -1881,21 +1933,18 @@ resources:
             ssh_cert_path: '- (Optional/Computed) Cluster level SSH certificate path (string)'
             ssh_key: '- (Optional/Computed/Sensitive) Bastion host SSH private key (string)'
             ssh_key_path: '- (Optional/Computed) Cluster level SSH private key path (string)'
-            ssh_public_key_contents: '- (Required) Contents of the SSH public key used to authenticate with Linux hosts (string)'
             strategy: '- (Optional/Computed) RKE strategy for authentication (string)'
-            sub_network: '- (Required) Subnetwork for GKE cluster (string)'
-            subnet: '- (Required) The name of an existing Azure Virtual Subnet. Composite of agent virtual network subnet ID (string)'
+            subnet: '- (Optional/Computed) The AKS subnet (string)'
             subnet_domain_name: '- (Optional) Subnet domain name (string)'
             subnet_id: '- (Optional/Computed) (string)'
             subnet_name: '- (Optional/Computed) (string)'
-            subnets: '- (Optional) List of subnets in the virtual network to use. If it''s not specified Rancher will create 3 news subnets (list)'
+            subnets: '- (Optional) List of subnets in the virtual network to use (list)'
             subnetwork: '- (Optional/Computed/ForceNew) The GKE cluster subnetwork. Required for create new cluster (string)'
             subnetwork_name: '- (Optional/Computed) The GKE cluster subnetwork name (string)'
             subscription_id: '- (Required/Sensitive) (string)'
             system_id: '- (Required) ACI system ID (string)'
             system_project_id: '- (Computed) System project ID for the cluster (string)'
-            tag: '- (Deprecated) Use tags argument instead as []string'
-            tags: '- (Optional/Computed) Tags for Kubernetes cluster. For example, ["foo=bar","bar=foo"] (list)'
+            tags: '- (Optional/Computed) The AKS cluster tags (map)'
             taints: '- (Optonal) The AKS node pool taints (list)'
             taints.effect: '- (Required) The GKE taint effect (string)'
             taints.key: '- (Required) The GKE taint key (string)'
@@ -1921,14 +1970,14 @@ resources:
             use_cluster_role: '- (Optional) Whether to use cluster role (string)'
             use_host_netns_volume: '- (Optional) Whether to use host netns volume (string)'
             use_instance_metadata: '- (Optional/Computed) (bool)'
-            use_ip_aliases: '- (Optional) Whether alias IPs will be used for pod IPs in the cluster. Default false (bool)'
+            use_ip_aliases: '- (Optional/Computed) Use GKE ip aliases? Default: true (bool)'
             use_managed_identity_extension: '- (Optional/Computed) (bool)'
             use_octavia: '- (Optional/Computed) (bool)'
             use_opflex_server_volume: '- (Optional) Whether use Opflex server volume (string)'
             use_privileged_container: '- (Optional) Whether ACI containers should run as privileged (string)'
             user: '- (Required) User to connect bastion host (string)'
-            user_data: '- (Optional/Computed) Pass user-data to the nodes to perform automated configuration tasks (string)'
-            user_ocid: '- (Required) The OCID of a user who has access to the tenancy/compartment (string)'
+            user_data: '- (Optional) The EKS node group user data (string)'
+            user_ocid: '- (Required) The OCID of a user who has access to the tenancy/compartment. Required unless using instance principals or workload identity to authenticate (string)'
             username: '- (Required/Sensitive) (string)'
             value: '- (Required) Rancher agent env var value (string)'
             values: '- (Optional) Key/values for answer (map)'
@@ -1937,8 +1986,8 @@ resources:
             vcn_name: '- (Optional) The name of an existing virtual network to use for the cluster creation. If set, you must also set load_balancer_subnet_name_1. A VCN and subnets will be created if none are specified. (string)'
             version: '- (Optional/Computed) RKE2 kubernetes version (string)'
             virtual_center: '- (Required) (List)'
-            virtual_network: '- (Required) The name of an existing Azure Virtual Network. Composite of agent virtual network subnet ID (string)'
-            virtual_network_resource_group: '- (Required) The resource group of an existing Azure Virtual Network. Composite of agent virtual network subnet ID (string)'
+            virtual_network: '- (Optional/Computed) The AKS virtual network (string)'
+            virtual_network_resource_group: '- (Optional/Computed) The AKS virtual network resource group (string)'
             vm_size: '- (Optional/computed) The AKS node pool orchestrator version (string)'
             vm_type: '- (Optional/Computed) (string)'
             vmm_controller: '- (Optional) VMM controller configuration (string)'
@@ -2585,6 +2634,38 @@ resources:
             - name: foo
               manifest: |-
                 {
+                  "cluster_agent_deployment_customization": [
+                    {
+                      "scheduling_customization": [
+                        {
+                          "pod_disruption_budget": [
+                            {
+                              "min_available": "1"
+                            }
+                          ],
+                          "priority_class": [
+                            {
+                              "preemption_policy": "PreemptLowerPriority",
+                              "value": 1000000000
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "kubernetes_version": "rke2/k3s-version",
+                  "name": "foo",
+                  "rke_config": [
+                    {
+                      "machine_pools": [
+                        {}
+                      ]
+                    }
+                  ]
+                }
+            - name: foo
+              manifest: |-
+                {
                   "default_pod_security_admission_configuration_template_name": "rancher-restricted",
                   "enable_network_policy": false,
                   "kubernetes_version": "rke2/k3s-version",
@@ -2939,6 +3020,7 @@ resources:
             machine_global_config: '- (Optional, string, must be in YAML format) Machine global config specifies the distribution-specified server configuration applied to all nodes. For the full list of server configurations, please refer to RKE2 server configuration or K3s server configuration.'
             machine_label_selector: '- (Optional, list, max length: 1) Machine selector label is a label query over a set of resources. The result of match_labels and match_expressions are ANDed. An empty label selector matches all objects. A null label selector matches no objects.'
             machine_labels: '- (Optional, map) Labels for Machine pool nodes.'
+            machine_os: '- (Optional) OS Type in machine pool. Default linux(string)'
             machine_pools: '- (Optional/computed, list) Cluster V2 machine pools.'
             machine_selector_config: '- (Optional/computed, list) Machine selector config is the same as machine_global_config except that a label selector can be specified with the configuration. The configuration will only be applied to nodes that match the provided label selector. The configuration from machine_selector_config takes precedence over the one from machine_global_config. This argument is available in Rancher v2.7.2 and later.'
             machine_selector_files: '- (Optional/computed, list) Machine selector files provide a means to deliver files to nodes so that the files can be in place before initiating RKE2/K3s server or agent processes. Please refer to Rancher documentation for RKE2 Cluster Configuration Reference and K3s Cluster Configuration Reference. This argument is available in Rancher v2.7.2 and later.'
@@ -2946,10 +3028,11 @@ resources:
             match_expressions: '- (Optional, list) Match expressions is a list of label selector requirements. The requirements are ANDed.'
             match_labels: '- (Optional, map) Machine selector label is a map of {key,value} pairs, the requirements are ANDed.'
             max_surge: '- (Optional, string) Rolling update max surge.'
-            max_unavailable: '- (Optional, string) Rolling update max unavailable.'
+            max_unavailable: '- (Optional, string) The maximum number of agent replicas that can be unavailable at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as min_available.'
             max_unhealthy: '- (Optional, string) Max unhealthy nodes for automated replacement to be allowed.'
             memory_limit: '- (Optional, string) The maximum memory limit for agent.'
             memory_request: '- (Optional, string) The minimum memory required for agent.'
+            min_available: '- (Optional, string) The minimum number of agent replicas that must be running at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as max_unavailable.'
             mirrors: '- (Optional, list) Cluster V2 docker registries mirror.'
             name: '- (Required, forceNew, string) The name of the cluster.'
             node_command: '- (Computed, string) Node command to execute in Linux nodes for custom k8s cluster.'
@@ -2961,6 +3044,9 @@ resources:
             path: '- (Required, string) Path is the absolute path to put the file in the target node.'
             paused: '- (Optional, bool) Machine pool paused?'
             permissions: '- (Optional, string) Permissions is the numeric representation of the file permission. It takes precedence over the default permissions at the outer level.'
+            pod_disruption_budget: '- (Optional, list) The definition of a Pod Disruption Budget deployed for the cluster agent'
+            preemption_policy: (Optional, string) The preemption policy set for the Priority Class. Must be set to either 'Never', 'PreemptLowerPriority', or omitted.
+            priority_class: '- (Optional, list) The definition of a Priority Class deployed for the cluster agent'
             quantity: '- (Optional, int) Machine pool quantity.'
             region: '- (Optional, string) ETCD snapshot S3 region.'
             registries: '- (Optional, list, max length: 1) Docker registries from which the cluster pulls images.'
@@ -2971,6 +3057,7 @@ resources:
             rolling_update: '- (Optional, list, max length: 1) Machine pool rolling update.'
             rotate_certificates: '(Optional, list, max length: 1) Cluster V2 certificate rotation.'
             s3_config: '- (Optional, list, max length: 1) Creation option for etcd service.'
+            scheduling_customization: '- (Optional, list) Supported in Rancher 2.11.0 and above. Defines the configuration of a Priority Class and or Pod Disruption Budget. Currently only supported in the cluster_agent_deployment_customization field, and requires the cattle_cluster_agent_scheduling_customization feature to be enabled.'
             seconds: '- (Optional, int) The number of seconds a pod will stay bound to a node with a matching taint.'
             secret: '- (Optional, list, max length: 1) Secret represents a K8s secret which is the source of files. It is mutually exclusive with configmap.'
             services: '- (Optional, list of string) Service certificates to rotate with this generation.'
@@ -3286,17 +3373,19 @@ resources:
         argumentDocs:
             access_token: '- (Optional/Sensitive) Digital Ocean access token. Mandatory on Rancher v2.0.x and v2.1.x. Use rancher2_cloud_credential from Rancher v2.2.x (string)'
             active_timeout: '- (Optional) OpenStack active timeout Default 200 (string)'
-            amazonec2_config: '- (Optional) AWS config for the Machine Config V2. Conflicts with azure_config, digitalocean_config, harvester_config, linode_config, openstack_config and vsphere_config (list maxitems:1)'
+            address: '- (Optional) GCE Instance External IP (string)'
+            amazonec2_config: '- (Optional) AWS config for the Machine Config V2. Conflicts with azure_config, digitalocean_config, harvester_config, linode_config, openstack_config, google_config and vsphere_config (list maxitems:1)'
             ami: '- (Required) AWS machine image (string)'
             annotations: '- (Optional) Annotations for Machine Config V2 object (map)'
             application_credential_id: '- (Optional) OpenStack application credential id. Conflicts with application_credential_name (string)'
             application_credential_name: '- (Optional) OpenStack application credential name. Conflicts with application_credential_id (string)'
             application_credential_secret: '- (Optional) OpenStack application credential secret (string)'
+            auth_encoded_json: '- (Optional/Sensitive) GCE service account auth json file path. Use rancher2_cloud_credential from Rancher v2.2.x. (string)'
             auth_url: '- (Required) OpenStack authentication URL (string)'
             authorized_users: '- (Optional) Linode user accounts (seperated by commas) whose Linode SSH keys will be permitted root access to the created node. (string)'
             availability_set: '- (Optional) Azure Availability Set to place the virtual machine into. Default docker-machine (string)'
             availability_zone: '- (Required) OpenStack availability zone (string)'
-            azure_config: '- (Optional) Azure config for the Machine Config V2. Conflicts with amazonec2_config, digitalocean_config, harvester_config, linode_config, openstack_config and vsphere_config (list maxitems:1)'
+            azure_config: '- (Optional) Azure config for the Machine Config V2. Conflicts with amazonec2_config, digitalocean_config, harvester_config, linode_config, openstack_config, google_config and vsphere_config (list maxitems:1)'
             backups: '- (Optional) Enable backups for droplet. Default false (bool)'
             block_duration_minutes: '- (Optional) AWS spot instance duration in minutes (60, 120, 180, 240, 300, or 360). Default 0 (string)'
             boot_from_volume: '- (Optional) Enable booting from volume. Default is false (bool)'
@@ -3321,10 +3410,11 @@ resources:
             datastore_cluster: '- (Optional) vSphere datastore cluster for virtual machine (string)'
             delete: '- (Default 10 minutes) Used for deleting machine configs.'
             device_name: '- (Optional) AWS root device name. Default /dev/sda1 (string)'
-            digitalocean_config: '- (Optional) Digitalocean config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, harvester_config, linode_config, openstack_config and vsphere_config (list maxitems:1)'
+            digitalocean_config: '- (Optional) Digitalocean config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, harvester_config, linode_config, openstack_config, google_config and vsphere_config (list maxitems:1)'
             disk_bus: '- (Deprecated) Use disk_info instead'
             disk_info: '- (Required) A JSON string specifying info for the disks e.g. {\"disks\":[{\"imageName\":\"harvester-public/image-57hzg\",\"bootOrder\":1,\"size\":40},{\"storageClassName\":\"node-driver-test\",\"bootOrder\":2,\"size\":1}]} (string)'
             disk_size: '- (Optional) Disk size if using managed disk. For Rancher v2.3.x and above. Default 30 (string)'
+            disk_type: '- (Required) GCE Instance Disk Type (string)'
             dns: '- (Optional) A unique DNS label for the public IP adddress (string)'
             docker_port: '- (Optional) Port number for Docker engine. Default 2376 (string)'
             domain_id: '- (Required++) OpenStack domain ID. Identity v3 only. Conflicts with domain_name (string)'
@@ -3333,6 +3423,7 @@ resources:
             endpoint: '- (Optional) Optional endpoint URL (hostname only or fully qualified URI) (string)'
             endpoint_type: '- (Optional) OpenStack endpoint type. adminURL, internalURL or publicURL (string)'
             environment: '- (Optional) Azure environment (e.g. AzurePublicCloud, AzureChinaCloud). Default AzurePublicCloud (string)'
+            external_firewall_rule_prefix: '- (Optional) A prefix to be added to firewall rules created when exposing ports publicly. Required if exposing ports publicly via the open_port field. (string)'
             fault_domain_count: '- (Optional) Fault domain count to use for availability set. Default 3 (string)'
             flavor_id: '- (Required+) OpenStack flavor id to use for the instance. Conflicts with flavor_name (string)'
             flavor_name: '- (Required+) OpenStack flavor name to use for the instance. Conflicts with flavor_id (string)'
@@ -3340,8 +3431,9 @@ resources:
             floating_ip_pool: '- (Optional) OpenStack floating IP pool to get an IP from to assign to the instance (string)'
             folder: '- (Optional) vSphere folder for the docker VM. This folder must already exist in the datacenter (string)'
             generate_name: '- (Required/ForceNew) Cluster V2 generate name. The pattern to generate machine config name. e.g  generate_name="prod-pool1" will generate "nc-prod-pool1-?????" name computed at name attribute (string)'
+            google_config: '- (Optional) Google config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, linode_config, openstack_config and vsphere_config (list maxitems:1)'
             graceful_shutdown_timeout: (Optional) Duration in seconds before the graceful shutdown of the VM times out and the VM is destroyed. A force destroy will be performed when the value is zero (string)
-            harvester_config: '- (Optional) Harvester config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, linode_config, openstack_config and vsphere_config (list maxitems:1)'
+            harvester_config: '- (Optional) Harvester config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, linode_config, openstack_config, google_config and vsphere_config (list maxitems:1)'
             hostsystem: '- (Optional) vSphere compute resource where the docker VM will be instantiated. This can be omitted if using a cluster with DRS (string)'
             http_endpoint: '- (Optional) Enables or disables the HTTP metadata endpoint on your instances (string)'
             http_tokens: '- (Optional) The state of token usage for your instance metadata requests (string)'
@@ -3353,6 +3445,7 @@ resources:
             insecure: '- (Optional) Disable TLS credential checking. Default false (bool)'
             insecure_transport: '- (Optional) Disable SSL when sending requests (bool)'
             instance_type: '- (Optional) AWS instance type. Default t3a.medium (string)'
+            internal_firewall_rule_prefix: '- (Optional) A prefix to be added to an internal firewall rule created to ensure virtual machines can communicate with one another. Omitting this field will result in an internal firewall rule not being created. (string)'
             ip_version: '- (Optional) OpenStack version of IP address assigned for the machine Default 4 (string)'
             ipv6: '- (Optional) Enable ipv6 for droplet. Default false (bool)'
             keypair_name: '- (Optional) OpenStack keypair to use to SSH to the instance (string)'
@@ -3360,8 +3453,10 @@ resources:
             kms_key: '- (Optional) Custom KMS key ID using the AWS Managed CMK (string)'
             label: '- (Optional) Linode Instance Label. (string)'
             labels: '- (Optional/Computed) Labels for Machine Config V2 object (map)'
-            linode_config: '- (Optional) Linode config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, openstack_config and vsphere_config (list maxitems:1)'
+            linode_config: '- (Optional) Linode config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, openstack_config, google_config and vsphere_config (list maxitems:1)'
             location: '- (Optional) Azure region to create the virtual machine. Default westus (string)'
+            machine_image: '- (Required) GCE instance image absolute URL (string)'
+            machine_type: '- (Required) GCE instance type (string)'
             managed_disks: '- (Optional) Configures VM and availability set for managed disks. For Rancher v2.3.x and above. Default false (bool)'
             memory_size: '- (Optional) Memory size (in GiB), Default 4 (string)'
             monitoring: '- (Optional) Set this flag to enable CloudWatch monitoring. Deafult false (bool)'
@@ -3377,13 +3472,16 @@ resources:
             nova_network: '- (Optional) Use the nova networking services instead of neutron (string)'
             nsg: '- (Optional) Azure Network Security Group to assign this node to (accepts either a name or resource ID, default is to create a new NSG for each machine). Default docker-machine-nsg (string)'
             open_port: '- (Optional) Make the specified port number accessible from the Internet. (list)'
-            openstack_config: '- (Optional) Openstack config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, linode_config and vsphere_config (list maxitems:1)'
+            openstack_config: '- (Optional) Openstack config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, linode_config, google_config and vsphere_config (list maxitems:1)'
+            os: '- (Optional) Type of virtual machine OS in vSphere. Default linux(string)'
             password: '- (Optional/Sensitive) OpenStack password. Mandatory on Rancher v2.0.x and v2.1.x. Use rancher2_cloud_credential from Rancher v2.2.x (string)'
             pool: '- (Optional) vSphere resource pool for docker VM (string)'
+            preemptable: '- (Optional) Indicates if the virtual machine can be preempted (bool)'
             private_address_only: '- (Optional) Only use a private IP address. Default false (bool)'
             private_ip_address: '- (Optional) Specify a static private IP address for the machine. (string)'
             private_key_file: '- (Optional/Sensitive) Private key content to use for SSH (string)'
             private_networking: '- (Optional) Enable private networking for droplet. Default false (bool)'
+            project: '- (Required) The GCP project to create virtual machines within (string)'
             region: '- (Required) AWS region. (string)'
             request_spot_instance: '- (Optional) Set this flag to request spot instance. Default false (bool)'
             resource_group: '- (Optional) Azure Resource Group name (will be created if missing). Default docker-machine (string)'
@@ -3391,6 +3489,7 @@ resources:
             retries: '- (Optional) Set retry count for recoverable failures (use -1 to disable). Default 5 (string)'
             root_pass: '- (Optional/Sensitive) Root Password (string)'
             root_size: '- (Optional) AWS root disk size (in GB). Default 16 (string)'
+            scopes: '- (Optional) Access scopes to be set on the virtual machine (string)'
             sec_groups: '- (Optional) OpenStack comma separated security groups for the machine (string)'
             security_group: '- (Required) AWS VPC security group. (list)'
             security_group_readonly: '- (Optional) Skip adding default rules to security groups (bool)'
@@ -3407,6 +3506,7 @@ resources:
             stackscript_data: '- (Optional) A JSON string specifying data for the selected StackScript. (string)'
             static_public_ip: '- (Optional) Assign a static public IP address to the machine. Default false (bool)'
             storage_type: '- (Optional) Type of Storage Account to host the OS Disk for the machine. Default Standard_LRS (string)'
+            sub_network: '- (Optional) The subnetwork to provision virtual machines within (string)'
             subnet: '- (Optional) Azure Subnet Name to be used within the Virtual Network. Default docker-machine (string)'
             subnet_id: '- (Required) AWS VPC subnet id (string)'
             subnet_prefix: '- (Optional) Private CIDR block to be used for the new subnet, should comply RFC 1918. Default 192.168.0.0/16 (string)'
@@ -3422,6 +3522,9 @@ resources:
             update: '- (Default 10 minutes) Used for machine config modifications.'
             update_domain_count: '- (Optional) Update domain count to use for availability set. Default 5 (string)'
             use_ebs_optimized_instance: '- (Optional) Create an EBS optimized instance. Default false (bool)'
+            use_existing: '- (Optional) Indicates if an existing VM should be used. This is not currently support in Rancher Node Drivers. (bool)'
+            use_internal_ip: '- (Optional) Indicates if the virtual machines should use an internal IP (bool)'
+            use_internal_ip_only: '- (Optional) Indicates if the virtual machines should use an internal IP only and not be assigned a public IP (bool)'
             use_private_address: '- (Optional) Force the usage of private IP address. Default false (bool)'
             use_private_ip: '- (Optional) Use private IP address of the machine to connect. Default false (bool)'
             user_data: '- (Optional) UserData content of cloud-init, base64 is supported. If the image does not contain the qemu-guest-agent package, you must install and start qemu-guest-agent using userdata (string)'
@@ -3437,6 +3540,7 @@ resources:
             vcenter: '- (Optional/Sensitive) vSphere IP/hostname for vCenter (string)'
             vcenter_port: '- (Optional/Sensitive) vSphere Port for vCenter Default 443 (string)'
             vm_affinity: '- (Optional) Virtual machine affinity, only base64 format is supported. For Rancher v2.6.7 and above (string)'
+            vm_labels: '- (Optional) A set of labels to be added to each VM, in the format of ''key1,value1,key2,value2'' (string)'
             vm_namespace: '- (Required) Virtual machine namespace e.g. default (string)'
             vnet: '- (Optional) Azure Virtual Network name to connect the virtual machine (in [resourcegroup:]name format). Default docker-machine-vnet (string)'
             volume_device_path: '- (Optional) OpenStack volume device path (attaching). Applicable only when boot_from_volume is true. Omit for auto /dev/vdb. (string)'
@@ -3445,7 +3549,7 @@ resources:
             volume_size: '- (Optional) OpenStack volume size (GiB). Required when boot_from_volume is true (string)'
             volume_type: '- (Optional) Amazon EBS volume type. Default gp2 (string)'
             vpc_id: '- (Required) AWS VPC id. (string)'
-            vsphere_config: '- (Optional) vSphere config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, linode_config and openstack_config (list maxitems:1)'
+            vsphere_config: '- (Optional) vSphere config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, linode_config, google_config and openstack_config (list maxitems:1)'
             zone: '- (Required) AWS zone for instance (i.e. a,b,c,d,e) (string)'
         importStatements: []
     rancher2_multi_cluster_app:
@@ -3621,8 +3725,6 @@ resources:
                       ]
                     }
         argumentDocs:
-            <id>: part is omitted <project_id>=<cluster_id>, the namespace'll not be assigned to any project. To move it into a project, <project_id>=<cluster_id>:<id> needs to be updated in tf file. Namespace movement is only supported inside same cluster_id.
-            <project_id>=<cluster_id>:<id>: ', the namespace''ll be assigned to corresponding cluster project once it''s imported.'
             annotations: '- (Optional/Computed) Annotations for Node Pool object (map)'
             config_maps: '- (Optional) Limit for config maps in namespace (string)'
             container_resource_limit: '- (Optional) Default containers resource limits on namespace (List maxitem:1)'
@@ -4103,6 +4205,63 @@ resources:
             vsphere_config: '- (Optional) vSphere config for the Node Template (list maxitems:1)'
             xml_rpc_url: '- (Required) Set the url for the Opennebula XML-RPC API (string)'
             zone: '- (Required) AWS zone for instance (i.e. a,b,c,d,e) (string)'
+        importStatements: []
+    rancher2_pod_security_admission_configuration_template:
+        subCategory: ""
+        description: '|Provides a rancher v2 pod security admission configration template resource. This can be used to create pod security admission configration templates and retrieve their information.'
+        name: rancher2_pod_security_admission_configuration_template
+        title: rancher2_pod_security_admission_configuration_template Resource
+        examples:
+            - name: foo
+              manifest: |-
+                {
+                  "defaults": [
+                    {
+                      "audit": "restricted",
+                      "audit_version": "latest",
+                      "enforce": "restricted",
+                      "enforce_version": "latest",
+                      "warn": "restricted",
+                      "warn_version": "latest"
+                    }
+                  ],
+                  "description": "This is my custom Pod Security Admission Configuration Template",
+                  "exemptions": [
+                    {
+                      "namespaces": [
+                        "ingress-nginx",
+                        "kube-system"
+                      ],
+                      "runtime_classes": [
+                        "testclass"
+                      ],
+                      "usernames": [
+                        "testuser"
+                      ]
+                    }
+                  ],
+                  "name": "custom-psact"
+                }
+        argumentDocs:
+            annotations: '- (Optional/Computed) Annotations of the resource (map)'
+            audit: '- (Optional) The audit-mode''s level label. Default privileged (string)'
+            audit_version: '- (Optional) The audit-mode''s version label. Default latest (string)'
+            create: '- (Default 10 minutes) Used for creating the resource.'
+            defaults: '- (Required) The default level labels and version labels to be applied when labels for a mode is not set (list maxitems:1)'
+            delete: '- (Default 10 minutes) Used for deleting the resource.'
+            description: '- (Optional) The description of the pod security admission configuration template (string)'
+            enforce: '- (Optional) The enforce-mode''s level label. Default privileged (string)'
+            enforce_version: '- (Optional) The enforce-mode''s version label. Default latest (string)'
+            exemptions: '- (Optional) The authenticated usernames, runtime class names, and namespaces to exempt (list maxitems:1)'
+            id: '- (Computed) The ID of the resource (string)'
+            labels: '- (Optional/Computed) Labels of the resource (map)'
+            name: '- (Required/ForceNew) The name of the pod security admission configuration template (string)'
+            namespaces: '- (Optional) The list of namespaces to exempt (List)'
+            runtime_classes: '- (Optional) The list of runtime class names to exempt (List)'
+            update: '- (Default 10 minutes) Used for updating the resource.'
+            usernames: '- (Optional) The list of authenticated usernames to exempt (List)'
+            warn: '- (Optional) The warn-mode''s level label. Default privileged (string)'
+            warn_version: '- (Optional) The warn-mode''s version label. Default latest (string)'
         importStatements: []
     rancher2_project:
         subCategory: ""

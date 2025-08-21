@@ -9,11 +9,8 @@ import (
 
 	"github.com/crossplane/upjet/pkg/controller"
 
-	app "github.com/disaster37/provider-rancher/internal/controller/app/app"
 	appv2 "github.com/disaster37/provider-rancher/internal/controller/app/appv2"
-	catalog "github.com/disaster37/provider-rancher/internal/controller/app/catalog"
 	catalogv2 "github.com/disaster37/provider-rancher/internal/controller/app/catalogv2"
-	multiclusterapp "github.com/disaster37/provider-rancher/internal/controller/app/multiclusterapp"
 	authconfigactivedirectory "github.com/disaster37/provider-rancher/internal/controller/auth/authconfigactivedirectory"
 	authconfigadfs "github.com/disaster37/provider-rancher/internal/controller/auth/authconfigadfs"
 	authconfigazuread "github.com/disaster37/provider-rancher/internal/controller/auth/authconfigazuread"
@@ -25,8 +22,8 @@ import (
 	authconfigping "github.com/disaster37/provider-rancher/internal/controller/auth/authconfigping"
 	certificate "github.com/disaster37/provider-rancher/internal/controller/k8s/certificate"
 	configmapv2 "github.com/disaster37/provider-rancher/internal/controller/k8s/configmapv2"
-	namespace "github.com/disaster37/provider-rancher/internal/controller/k8s/namespace"
 	project "github.com/disaster37/provider-rancher/internal/controller/k8s/project"
+	ranchernamespace "github.com/disaster37/provider-rancher/internal/controller/k8s/ranchernamespace"
 	registry "github.com/disaster37/provider-rancher/internal/controller/k8s/registry"
 	secret "github.com/disaster37/provider-rancher/internal/controller/k8s/secret"
 	secretv2 "github.com/disaster37/provider-rancher/internal/controller/k8s/secretv2"
@@ -60,11 +57,8 @@ import (
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
-		app.Setup,
 		appv2.Setup,
-		catalog.Setup,
 		catalogv2.Setup,
-		multiclusterapp.Setup,
 		authconfigactivedirectory.Setup,
 		authconfigadfs.Setup,
 		authconfigazuread.Setup,
@@ -76,8 +70,8 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		authconfigping.Setup,
 		certificate.Setup,
 		configmapv2.Setup,
-		namespace.Setup,
 		project.Setup,
+		ranchernamespace.Setup,
 		registry.Setup,
 		secret.Setup,
 		secretv2.Setup,

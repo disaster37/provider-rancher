@@ -27,8 +27,8 @@ func (mg *Certificate) ResolveReferences(ctx context.Context, c client.Reader) e
 		Reference:    mg.Spec.ForProvider.NamespaceIDRef,
 		Selector:     mg.Spec.ForProvider.NamespaceIDSelector,
 		To: reference.To{
-			List:    &NamespaceList{},
-			Managed: &Namespace{},
+			List:    &RancherNamespaceList{},
+			Managed: &RancherNamespace{},
 		},
 	})
 	if err != nil {
@@ -59,8 +59,8 @@ func (mg *Certificate) ResolveReferences(ctx context.Context, c client.Reader) e
 		Reference:    mg.Spec.InitProvider.NamespaceIDRef,
 		Selector:     mg.Spec.InitProvider.NamespaceIDSelector,
 		To: reference.To{
-			List:    &NamespaceList{},
-			Managed: &Namespace{},
+			List:    &RancherNamespaceList{},
+			Managed: &RancherNamespace{},
 		},
 	})
 	if err != nil {
@@ -117,8 +117,8 @@ func (mg *ConfigMapV2) ResolveReferences(ctx context.Context, c client.Reader) e
 		Reference:    mg.Spec.ForProvider.NamespaceRef,
 		Selector:     mg.Spec.ForProvider.NamespaceSelector,
 		To: reference.To{
-			List:    &NamespaceList{},
-			Managed: &Namespace{},
+			List:    &RancherNamespaceList{},
+			Managed: &RancherNamespace{},
 		},
 	})
 	if err != nil {
@@ -149,8 +149,8 @@ func (mg *ConfigMapV2) ResolveReferences(ctx context.Context, c client.Reader) e
 		Reference:    mg.Spec.InitProvider.NamespaceRef,
 		Selector:     mg.Spec.InitProvider.NamespaceSelector,
 		To: reference.To{
-			List:    &NamespaceList{},
-			Managed: &Namespace{},
+			List:    &RancherNamespaceList{},
+			Managed: &RancherNamespace{},
 		},
 	})
 	if err != nil {
@@ -158,48 +158,6 @@ func (mg *ConfigMapV2) ResolveReferences(ctx context.Context, c client.Reader) e
 	}
 	mg.Spec.InitProvider.Namespace = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.NamespaceRef = rsp.ResolvedReference
-
-	return nil
-}
-
-// ResolveReferences of this Namespace.
-func (mg *Namespace) ResolveReferences(ctx context.Context, c client.Reader) error {
-	r := reference.NewAPIResolver(c, mg)
-
-	var rsp reference.ResolutionResponse
-	var err error
-
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ProjectID),
-		Extract:      reference.ExternalName(),
-		Reference:    mg.Spec.ForProvider.ProjectIDRef,
-		Selector:     mg.Spec.ForProvider.ProjectIDSelector,
-		To: reference.To{
-			List:    &ProjectList{},
-			Managed: &Project{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.ForProvider.ProjectID")
-	}
-	mg.Spec.ForProvider.ProjectID = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.ForProvider.ProjectIDRef = rsp.ResolvedReference
-
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ProjectID),
-		Extract:      reference.ExternalName(),
-		Reference:    mg.Spec.InitProvider.ProjectIDRef,
-		Selector:     mg.Spec.InitProvider.ProjectIDSelector,
-		To: reference.To{
-			List:    &ProjectList{},
-			Managed: &Project{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.InitProvider.ProjectID")
-	}
-	mg.Spec.InitProvider.ProjectID = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.InitProvider.ProjectIDRef = rsp.ResolvedReference
 
 	return nil
 }
@@ -246,6 +204,48 @@ func (mg *Project) ResolveReferences(ctx context.Context, c client.Reader) error
 	return nil
 }
 
+// ResolveReferences of this RancherNamespace.
+func (mg *RancherNamespace) ResolveReferences(ctx context.Context, c client.Reader) error {
+	r := reference.NewAPIResolver(c, mg)
+
+	var rsp reference.ResolutionResponse
+	var err error
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ProjectID),
+		Extract:      reference.ExternalName(),
+		Reference:    mg.Spec.ForProvider.ProjectIDRef,
+		Selector:     mg.Spec.ForProvider.ProjectIDSelector,
+		To: reference.To{
+			List:    &ProjectList{},
+			Managed: &Project{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.ProjectID")
+	}
+	mg.Spec.ForProvider.ProjectID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.ProjectIDRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ProjectID),
+		Extract:      reference.ExternalName(),
+		Reference:    mg.Spec.InitProvider.ProjectIDRef,
+		Selector:     mg.Spec.InitProvider.ProjectIDSelector,
+		To: reference.To{
+			List:    &ProjectList{},
+			Managed: &Project{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.ProjectID")
+	}
+	mg.Spec.InitProvider.ProjectID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.ProjectIDRef = rsp.ResolvedReference
+
+	return nil
+}
+
 // ResolveReferences of this Registry.
 func (mg *Registry) ResolveReferences(ctx context.Context, c client.Reader) error {
 	r := reference.NewAPIResolver(c, mg)
@@ -259,8 +259,8 @@ func (mg *Registry) ResolveReferences(ctx context.Context, c client.Reader) erro
 		Reference:    mg.Spec.ForProvider.NamespaceIDRef,
 		Selector:     mg.Spec.ForProvider.NamespaceIDSelector,
 		To: reference.To{
-			List:    &NamespaceList{},
-			Managed: &Namespace{},
+			List:    &RancherNamespaceList{},
+			Managed: &RancherNamespace{},
 		},
 	})
 	if err != nil {
@@ -291,8 +291,8 @@ func (mg *Registry) ResolveReferences(ctx context.Context, c client.Reader) erro
 		Reference:    mg.Spec.InitProvider.NamespaceIDRef,
 		Selector:     mg.Spec.InitProvider.NamespaceIDSelector,
 		To: reference.To{
-			List:    &NamespaceList{},
-			Managed: &Namespace{},
+			List:    &RancherNamespaceList{},
+			Managed: &RancherNamespace{},
 		},
 	})
 	if err != nil {
@@ -333,8 +333,8 @@ func (mg *Secret) ResolveReferences(ctx context.Context, c client.Reader) error 
 		Reference:    mg.Spec.ForProvider.NamespaceIDRef,
 		Selector:     mg.Spec.ForProvider.NamespaceIDSelector,
 		To: reference.To{
-			List:    &NamespaceList{},
-			Managed: &Namespace{},
+			List:    &RancherNamespaceList{},
+			Managed: &RancherNamespace{},
 		},
 	})
 	if err != nil {
@@ -365,8 +365,8 @@ func (mg *Secret) ResolveReferences(ctx context.Context, c client.Reader) error 
 		Reference:    mg.Spec.InitProvider.NamespaceIDRef,
 		Selector:     mg.Spec.InitProvider.NamespaceIDSelector,
 		To: reference.To{
-			List:    &NamespaceList{},
-			Managed: &Namespace{},
+			List:    &RancherNamespaceList{},
+			Managed: &RancherNamespace{},
 		},
 	})
 	if err != nil {
@@ -423,8 +423,8 @@ func (mg *SecretV2) ResolveReferences(ctx context.Context, c client.Reader) erro
 		Reference:    mg.Spec.ForProvider.NamespaceRef,
 		Selector:     mg.Spec.ForProvider.NamespaceSelector,
 		To: reference.To{
-			List:    &NamespaceList{},
-			Managed: &Namespace{},
+			List:    &RancherNamespaceList{},
+			Managed: &RancherNamespace{},
 		},
 	})
 	if err != nil {
@@ -455,8 +455,8 @@ func (mg *SecretV2) ResolveReferences(ctx context.Context, c client.Reader) erro
 		Reference:    mg.Spec.InitProvider.NamespaceRef,
 		Selector:     mg.Spec.InitProvider.NamespaceSelector,
 		To: reference.To{
-			List:    &NamespaceList{},
-			Managed: &Namespace{},
+			List:    &RancherNamespaceList{},
+			Managed: &RancherNamespace{},
 		},
 	})
 	if err != nil {

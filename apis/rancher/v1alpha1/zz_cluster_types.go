@@ -830,504 +830,9 @@ type AgentEnvVarsParameters struct {
 	Value *string `json:"value" tf:"value,omitempty"`
 }
 
-type AksConfigInitParameters struct {
-
-	// The secret of an Azure Active Directory server application (string)
-	// The secret of an Azure Active Directory server application
-	AadServerAppSecretSecretRef *v1.SecretKeySelector `json:"aadServerAppSecretSecretRef,omitempty" tf:"-"`
-
-	// The ID of an Azure Active Directory tenant (string)
-	// The ID of an Azure Active Directory tenant
-	AadTenantIDSecretRef *v1.SecretKeySelector `json:"aadTenantIdSecretRef,omitempty" tf:"-"`
-
-	// The ID of an Azure Active Directory client application of type "Native". This application is for user login via kubectl (string)
-	// The ID of an Azure Active Directory client application of type "Native". This application is for user login via kubectl
-	AddClientAppIDSecretRef *v1.SecretKeySelector `json:"addClientAppIdSecretRef,omitempty" tf:"-"`
-
-	// The ID of an Azure Active Directory server application of type "Web app/API". This application represents the managed cluster's apiserver (Server application) (string)
-	// The ID of an Azure Active Directory server application of type "Web app/API". This application represents the managed cluster's apiserver (Server application)
-	AddServerAppIDSecretRef *v1.SecretKeySelector `json:"addServerAppIdSecretRef,omitempty" tf:"-"`
-
-	// The administrator username to use for Linux hosts. Default azureuser (string)
-	// The administrator username to use for Linux hosts
-	AdminUsername *string `json:"adminUsername,omitempty" tf:"admin_username,omitempty"`
-
-	// DNS prefix to be used to create the FQDN for the agent pool (string)
-	// DNS prefix to be used to create the FQDN for the agent pool
-	AgentDNSPrefix *string `json:"agentDnsPrefix,omitempty" tf:"agent_dns_prefix,omitempty"`
-
-	// GB size to be used to specify the disk for every machine in the agent pool. If you specify 0, it will apply the default according to the "agent vm size" specified. Default 0 (int)
-	// GB size to be used to specify the disk for every machine in the agent pool. If you specify 0, it will apply the default according to the "agent vm size" specified
-	AgentOsDiskSize *float64 `json:"agentOsDiskSize,omitempty" tf:"agent_os_disk_size,omitempty"`
-
-	// Name for the agent pool, upto 12 alphanumeric characters. Default agentpool0 (string)
-	// Name for the agent pool, upto 12 alphanumeric characters
-	AgentPoolName *string `json:"agentPoolName,omitempty" tf:"agent_pool_name,omitempty"`
-
-	// Storage profile specifies what kind of storage used on machine in the agent pool. Chooses from [ManagedDisks StorageAccount]. Default ManagedDisks (string)
-	// Storage profile specifies what kind of storage used on machine in the agent pool. Chooses from [ManagedDisks StorageAccount]
-	AgentStorageProfile *string `json:"agentStorageProfile,omitempty" tf:"agent_storage_profile,omitempty"`
-
-	// Size of machine in the agent pool. Default Standard_D1_v2 (string)
-	// Size of machine in the agent pool
-	AgentVMSize *string `json:"agentVmSize,omitempty" tf:"agent_vm_size,omitempty"`
-
-	// Different authentication API url to use. Default https://login.microsoftonline.com/ (string)
-	// Different authentication API url to use
-	AuthBaseURL *string `json:"authBaseUrl,omitempty" tf:"auth_base_url,omitempty"`
-
-	// Different resource management API url to use. Default https://management.azure.com/ (string)
-	// Different resource management API url to use
-	BaseURL *string `json:"baseUrl,omitempty" tf:"base_url,omitempty"`
-
-	// Azure client ID to use (string)
-	// Azure client ID to use
-	ClientIDSecretRef v1.SecretKeySelector `json:"clientIdSecretRef" tf:"-"`
-
-	// Azure client secret associated with the "client id" (string)
-	// Azure client secret associated with the "client id"
-	ClientSecretSecretRef v1.SecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
-
-	// Number of machines (VMs) in the agent pool. Allowed values must be in the range of 1 to 100 (inclusive). Default 1 (int)
-	// Number of machines (VMs) in the agent pool. Allowed values must be in the range of 1 to 100 (inclusive)
-	Count *float64 `json:"count,omitempty" tf:"count,omitempty"`
-
-	// An IP address assigned to the Kubernetes DNS service. It must be within the Kubernetes Service address range specified in "service cidr". Default 10.0.0.10 (string)
-	// An IP address assigned to the Kubernetes DNS service. It must be within the Kubernetes Service address range specified in "service cidr"
-	DNSServiceIP *string `json:"dnsServiceIp,omitempty" tf:"dns_service_ip,omitempty"`
-
-	// A CIDR notation IP range assigned to the Docker bridge network. It must not overlap with any Subnet IP ranges or the Kubernetes Service address range specified in "service cidr". Default 172.17.0.1/16 (string)
-	// A CIDR notation IP range assigned to the Docker bridge network. It must not overlap with any Subnet IP ranges or the Kubernetes Service address range specified in "service cidr"
-	DockerBridgeCidr *string `json:"dockerBridgeCidr,omitempty" tf:"docker_bridge_cidr,omitempty"`
-
-	// Enable the Kubernetes ingress with automatic public DNS name creation. Default false (bool)
-	// Enable the Kubernetes ingress with automatic public DNS name creation
-	EnableHTTPApplicationRouting *bool `json:"enableHttpApplicationRouting,omitempty" tf:"enable_http_application_routing,omitempty"`
-
-	// Turn on Azure Log Analytics monitoring. Uses the Log Analytics "Default" workspace if it exists, else creates one. if using an existing workspace, specifies "log analytics workspace resource id". Default true (bool)
-	// Turn on Azure Log Analytics monitoring. Uses the Log Analytics "Default" workspace if it exists, else creates one. if using an existing workspace, specifies "log analytics workspace resource id"
-	EnableMonitoring *bool `json:"enableMonitoring,omitempty" tf:"enable_monitoring,omitempty"`
-
-	// K8s version to deploy. Default: Rancher default (string) (Note - if rke_config is set at cluster_template, kubernetes_version must be set to the active cluster version so Rancher can clone the RKE template)
-	// Specify the version of Kubernetes
-	KubernetesVersion *string `json:"kubernetesVersion,omitempty" tf:"kubernetes_version,omitempty"`
-
-	// Allowed values: basic (default) standard (string)
-	// Load balancer type (basic | standard). Must be standard for auto-scaling
-	LoadBalancerSku *string `json:"loadBalancerSku,omitempty" tf:"load_balancer_sku,omitempty"`
-
-	// (string)
-	// Azure Kubernetes cluster location
-	Location *string `json:"location,omitempty" tf:"location,omitempty"`
-
-	// The name of an existing Azure Log Analytics Workspace to use for storing monitoring data. If not specified, uses '{resource group}-{subscription id}-{location code}' (string)
-	// The name of an existing Azure Log Analytics Workspace to use for storing monitoring data. If not specified, uses '{resource group}-{subscription id}-{location code}'
-	LogAnalyticsWorkspace *string `json:"logAnalyticsWorkspace,omitempty" tf:"log_analytics_workspace,omitempty"`
-
-	// The resource group of an existing Azure Log Analytics Workspace to use for storing monitoring data. If not specified, uses the 'Cluster' resource group (string)
-	// The resource group of an existing Azure Log Analytics Workspace to use for storing monitoring data. If not specified, uses the 'Cluster' resource group
-	LogAnalyticsWorkspaceResourceGroup *string `json:"logAnalyticsWorkspaceResourceGroup,omitempty" tf:"log_analytics_workspace_resource_group,omitempty"`
-
-	// DNS prefix to use the Kubernetes cluster control pane (string)
-	// DNS prefix to use the Kubernetes cluster control pane
-	MasterDNSPrefix *string `json:"masterDnsPrefix,omitempty" tf:"master_dns_prefix,omitempty"`
-
-	// Maximum number of pods that can run on a node. Default 110 (int)
-	// Maximum number of pods that can run on a node
-	MaxPods *float64 `json:"maxPods,omitempty" tf:"max_pods,omitempty"`
-
-	// Network plugin used for building Kubernetes network. Chooses from azure or kubenet. Default azure (string)
-	// Network plugin used for building Kubernetes network. Chooses from [azure kubenet]
-	NetworkPlugin *string `json:"networkPlugin,omitempty" tf:"network_plugin,omitempty"`
-
-	// Network policy used for building Kubernetes network. Chooses from calico (string)
-	// Network policy used for building Kubernetes network. Chooses from [calico]
-	NetworkPolicy *string `json:"networkPolicy,omitempty" tf:"network_policy,omitempty"`
-
-	// A CIDR notation IP range from which to assign Kubernetes Pod IPs when "network plugin" is specified in "kubenet". Default 172.244.0.0/16 (string)
-	// A CIDR notation IP range from which to assign Kubernetes Pod IPs when "network plugin" is specified in "kubenet".
-	PodCidr *string `json:"podCidr,omitempty" tf:"pod_cidr,omitempty"`
-
-	// (string)
-	// The name of the Cluster resource group
-	ResourceGroup *string `json:"resourceGroup,omitempty" tf:"resource_group,omitempty"`
-
-	// Contents of the SSH public key used to authenticate with Linux hosts (string)
-	// Contents of the SSH public key used to authenticate with Linux hosts
-	SSHPublicKeyContents *string `json:"sshPublicKeyContents,omitempty" tf:"ssh_public_key_contents,omitempty"`
-
-	// A CIDR notation IP range from which to assign Kubernetes Service cluster IPs. It must not overlap with any Subnet IP ranges. Default 10.0.0.0/16 (string)
-	// A CIDR notation IP range from which to assign Kubernetes Service cluster IPs. It must not overlap with any Subnet IP ranges
-	ServiceCidr *string `json:"serviceCidr,omitempty" tf:"service_cidr,omitempty"`
-
-	// The name of an existing Azure Virtual Subnet. Composite of agent virtual network subnet ID (string)
-	// The name of an existing Azure Virtual Subnet. Composite of agent virtual network subnet ID
-	Subnet *string `json:"subnet,omitempty" tf:"subnet,omitempty"`
-
-	// (string)
-	// Subscription credentials which uniquely identify Microsoft Azure subscription
-	SubscriptionID *string `json:"subscriptionId,omitempty" tf:"subscription_id,omitempty"`
-
-	// (Deprecated) Use tags argument instead as []string
-	// Tags for Kubernetes cluster. For example, foo=bar
-	// +mapType=granular
-	Tag map[string]*string `json:"tag,omitempty" tf:"tag,omitempty"`
-
-	// Tags for Kubernetes cluster. For example, ["foo=bar","bar=foo"] (list)
-	// Tags for Kubernetes cluster. For example, `["foo=bar","bar=foo"]`
-	Tags []*string `json:"tags,omitempty" tf:"tags,omitempty"`
-
-	// (string)
-	// Azure tenant ID to use
-	TenantID *string `json:"tenantId,omitempty" tf:"tenant_id,omitempty"`
-
-	// The name of an existing Azure Virtual Network. Composite of agent virtual network subnet ID (string)
-	// The name of an existing Azure Virtual Network. Composite of agent virtual network subnet ID
-	VirtualNetwork *string `json:"virtualNetwork,omitempty" tf:"virtual_network,omitempty"`
-
-	// The resource group of an existing Azure Virtual Network. Composite of agent virtual network subnet ID (string)
-	// The resource group of an existing Azure Virtual Network. Composite of agent virtual network subnet ID
-	VirtualNetworkResourceGroup *string `json:"virtualNetworkResourceGroup,omitempty" tf:"virtual_network_resource_group,omitempty"`
-}
-
-type AksConfigObservation struct {
-
-	// The administrator username to use for Linux hosts. Default azureuser (string)
-	// The administrator username to use for Linux hosts
-	AdminUsername *string `json:"adminUsername,omitempty" tf:"admin_username,omitempty"`
-
-	// DNS prefix to be used to create the FQDN for the agent pool (string)
-	// DNS prefix to be used to create the FQDN for the agent pool
-	AgentDNSPrefix *string `json:"agentDnsPrefix,omitempty" tf:"agent_dns_prefix,omitempty"`
-
-	// GB size to be used to specify the disk for every machine in the agent pool. If you specify 0, it will apply the default according to the "agent vm size" specified. Default 0 (int)
-	// GB size to be used to specify the disk for every machine in the agent pool. If you specify 0, it will apply the default according to the "agent vm size" specified
-	AgentOsDiskSize *float64 `json:"agentOsDiskSize,omitempty" tf:"agent_os_disk_size,omitempty"`
-
-	// Name for the agent pool, upto 12 alphanumeric characters. Default agentpool0 (string)
-	// Name for the agent pool, upto 12 alphanumeric characters
-	AgentPoolName *string `json:"agentPoolName,omitempty" tf:"agent_pool_name,omitempty"`
-
-	// Storage profile specifies what kind of storage used on machine in the agent pool. Chooses from [ManagedDisks StorageAccount]. Default ManagedDisks (string)
-	// Storage profile specifies what kind of storage used on machine in the agent pool. Chooses from [ManagedDisks StorageAccount]
-	AgentStorageProfile *string `json:"agentStorageProfile,omitempty" tf:"agent_storage_profile,omitempty"`
-
-	// Size of machine in the agent pool. Default Standard_D1_v2 (string)
-	// Size of machine in the agent pool
-	AgentVMSize *string `json:"agentVmSize,omitempty" tf:"agent_vm_size,omitempty"`
-
-	// Different authentication API url to use. Default https://login.microsoftonline.com/ (string)
-	// Different authentication API url to use
-	AuthBaseURL *string `json:"authBaseUrl,omitempty" tf:"auth_base_url,omitempty"`
-
-	// Different resource management API url to use. Default https://management.azure.com/ (string)
-	// Different resource management API url to use
-	BaseURL *string `json:"baseUrl,omitempty" tf:"base_url,omitempty"`
-
-	// Number of machines (VMs) in the agent pool. Allowed values must be in the range of 1 to 100 (inclusive). Default 1 (int)
-	// Number of machines (VMs) in the agent pool. Allowed values must be in the range of 1 to 100 (inclusive)
-	Count *float64 `json:"count,omitempty" tf:"count,omitempty"`
-
-	// An IP address assigned to the Kubernetes DNS service. It must be within the Kubernetes Service address range specified in "service cidr". Default 10.0.0.10 (string)
-	// An IP address assigned to the Kubernetes DNS service. It must be within the Kubernetes Service address range specified in "service cidr"
-	DNSServiceIP *string `json:"dnsServiceIp,omitempty" tf:"dns_service_ip,omitempty"`
-
-	// A CIDR notation IP range assigned to the Docker bridge network. It must not overlap with any Subnet IP ranges or the Kubernetes Service address range specified in "service cidr". Default 172.17.0.1/16 (string)
-	// A CIDR notation IP range assigned to the Docker bridge network. It must not overlap with any Subnet IP ranges or the Kubernetes Service address range specified in "service cidr"
-	DockerBridgeCidr *string `json:"dockerBridgeCidr,omitempty" tf:"docker_bridge_cidr,omitempty"`
-
-	// Enable the Kubernetes ingress with automatic public DNS name creation. Default false (bool)
-	// Enable the Kubernetes ingress with automatic public DNS name creation
-	EnableHTTPApplicationRouting *bool `json:"enableHttpApplicationRouting,omitempty" tf:"enable_http_application_routing,omitempty"`
-
-	// Turn on Azure Log Analytics monitoring. Uses the Log Analytics "Default" workspace if it exists, else creates one. if using an existing workspace, specifies "log analytics workspace resource id". Default true (bool)
-	// Turn on Azure Log Analytics monitoring. Uses the Log Analytics "Default" workspace if it exists, else creates one. if using an existing workspace, specifies "log analytics workspace resource id"
-	EnableMonitoring *bool `json:"enableMonitoring,omitempty" tf:"enable_monitoring,omitempty"`
-
-	// K8s version to deploy. Default: Rancher default (string) (Note - if rke_config is set at cluster_template, kubernetes_version must be set to the active cluster version so Rancher can clone the RKE template)
-	// Specify the version of Kubernetes
-	KubernetesVersion *string `json:"kubernetesVersion,omitempty" tf:"kubernetes_version,omitempty"`
-
-	// Allowed values: basic (default) standard (string)
-	// Load balancer type (basic | standard). Must be standard for auto-scaling
-	LoadBalancerSku *string `json:"loadBalancerSku,omitempty" tf:"load_balancer_sku,omitempty"`
-
-	// (string)
-	// Azure Kubernetes cluster location
-	Location *string `json:"location,omitempty" tf:"location,omitempty"`
-
-	// The name of an existing Azure Log Analytics Workspace to use for storing monitoring data. If not specified, uses '{resource group}-{subscription id}-{location code}' (string)
-	// The name of an existing Azure Log Analytics Workspace to use for storing monitoring data. If not specified, uses '{resource group}-{subscription id}-{location code}'
-	LogAnalyticsWorkspace *string `json:"logAnalyticsWorkspace,omitempty" tf:"log_analytics_workspace,omitempty"`
-
-	// The resource group of an existing Azure Log Analytics Workspace to use for storing monitoring data. If not specified, uses the 'Cluster' resource group (string)
-	// The resource group of an existing Azure Log Analytics Workspace to use for storing monitoring data. If not specified, uses the 'Cluster' resource group
-	LogAnalyticsWorkspaceResourceGroup *string `json:"logAnalyticsWorkspaceResourceGroup,omitempty" tf:"log_analytics_workspace_resource_group,omitempty"`
-
-	// DNS prefix to use the Kubernetes cluster control pane (string)
-	// DNS prefix to use the Kubernetes cluster control pane
-	MasterDNSPrefix *string `json:"masterDnsPrefix,omitempty" tf:"master_dns_prefix,omitempty"`
-
-	// Maximum number of pods that can run on a node. Default 110 (int)
-	// Maximum number of pods that can run on a node
-	MaxPods *float64 `json:"maxPods,omitempty" tf:"max_pods,omitempty"`
-
-	// Network plugin used for building Kubernetes network. Chooses from azure or kubenet. Default azure (string)
-	// Network plugin used for building Kubernetes network. Chooses from [azure kubenet]
-	NetworkPlugin *string `json:"networkPlugin,omitempty" tf:"network_plugin,omitempty"`
-
-	// Network policy used for building Kubernetes network. Chooses from calico (string)
-	// Network policy used for building Kubernetes network. Chooses from [calico]
-	NetworkPolicy *string `json:"networkPolicy,omitempty" tf:"network_policy,omitempty"`
-
-	// A CIDR notation IP range from which to assign Kubernetes Pod IPs when "network plugin" is specified in "kubenet". Default 172.244.0.0/16 (string)
-	// A CIDR notation IP range from which to assign Kubernetes Pod IPs when "network plugin" is specified in "kubenet".
-	PodCidr *string `json:"podCidr,omitempty" tf:"pod_cidr,omitempty"`
-
-	// (string)
-	// The name of the Cluster resource group
-	ResourceGroup *string `json:"resourceGroup,omitempty" tf:"resource_group,omitempty"`
-
-	// Contents of the SSH public key used to authenticate with Linux hosts (string)
-	// Contents of the SSH public key used to authenticate with Linux hosts
-	SSHPublicKeyContents *string `json:"sshPublicKeyContents,omitempty" tf:"ssh_public_key_contents,omitempty"`
-
-	// A CIDR notation IP range from which to assign Kubernetes Service cluster IPs. It must not overlap with any Subnet IP ranges. Default 10.0.0.0/16 (string)
-	// A CIDR notation IP range from which to assign Kubernetes Service cluster IPs. It must not overlap with any Subnet IP ranges
-	ServiceCidr *string `json:"serviceCidr,omitempty" tf:"service_cidr,omitempty"`
-
-	// The name of an existing Azure Virtual Subnet. Composite of agent virtual network subnet ID (string)
-	// The name of an existing Azure Virtual Subnet. Composite of agent virtual network subnet ID
-	Subnet *string `json:"subnet,omitempty" tf:"subnet,omitempty"`
-
-	// (string)
-	// Subscription credentials which uniquely identify Microsoft Azure subscription
-	SubscriptionID *string `json:"subscriptionId,omitempty" tf:"subscription_id,omitempty"`
-
-	// (Deprecated) Use tags argument instead as []string
-	// Tags for Kubernetes cluster. For example, foo=bar
-	// +mapType=granular
-	Tag map[string]*string `json:"tag,omitempty" tf:"tag,omitempty"`
-
-	// Tags for Kubernetes cluster. For example, ["foo=bar","bar=foo"] (list)
-	// Tags for Kubernetes cluster. For example, `["foo=bar","bar=foo"]`
-	Tags []*string `json:"tags,omitempty" tf:"tags,omitempty"`
-
-	// (string)
-	// Azure tenant ID to use
-	TenantID *string `json:"tenantId,omitempty" tf:"tenant_id,omitempty"`
-
-	// The name of an existing Azure Virtual Network. Composite of agent virtual network subnet ID (string)
-	// The name of an existing Azure Virtual Network. Composite of agent virtual network subnet ID
-	VirtualNetwork *string `json:"virtualNetwork,omitempty" tf:"virtual_network,omitempty"`
-
-	// The resource group of an existing Azure Virtual Network. Composite of agent virtual network subnet ID (string)
-	// The resource group of an existing Azure Virtual Network. Composite of agent virtual network subnet ID
-	VirtualNetworkResourceGroup *string `json:"virtualNetworkResourceGroup,omitempty" tf:"virtual_network_resource_group,omitempty"`
-}
-
-type AksConfigParameters struct {
-
-	// The secret of an Azure Active Directory server application (string)
-	// The secret of an Azure Active Directory server application
-	// +kubebuilder:validation:Optional
-	AadServerAppSecretSecretRef *v1.SecretKeySelector `json:"aadServerAppSecretSecretRef,omitempty" tf:"-"`
-
-	// The ID of an Azure Active Directory tenant (string)
-	// The ID of an Azure Active Directory tenant
-	// +kubebuilder:validation:Optional
-	AadTenantIDSecretRef *v1.SecretKeySelector `json:"aadTenantIdSecretRef,omitempty" tf:"-"`
-
-	// The ID of an Azure Active Directory client application of type "Native". This application is for user login via kubectl (string)
-	// The ID of an Azure Active Directory client application of type "Native". This application is for user login via kubectl
-	// +kubebuilder:validation:Optional
-	AddClientAppIDSecretRef *v1.SecretKeySelector `json:"addClientAppIdSecretRef,omitempty" tf:"-"`
-
-	// The ID of an Azure Active Directory server application of type "Web app/API". This application represents the managed cluster's apiserver (Server application) (string)
-	// The ID of an Azure Active Directory server application of type "Web app/API". This application represents the managed cluster's apiserver (Server application)
-	// +kubebuilder:validation:Optional
-	AddServerAppIDSecretRef *v1.SecretKeySelector `json:"addServerAppIdSecretRef,omitempty" tf:"-"`
-
-	// The administrator username to use for Linux hosts. Default azureuser (string)
-	// The administrator username to use for Linux hosts
-	// +kubebuilder:validation:Optional
-	AdminUsername *string `json:"adminUsername,omitempty" tf:"admin_username,omitempty"`
-
-	// DNS prefix to be used to create the FQDN for the agent pool (string)
-	// DNS prefix to be used to create the FQDN for the agent pool
-	// +kubebuilder:validation:Optional
-	AgentDNSPrefix *string `json:"agentDnsPrefix" tf:"agent_dns_prefix,omitempty"`
-
-	// GB size to be used to specify the disk for every machine in the agent pool. If you specify 0, it will apply the default according to the "agent vm size" specified. Default 0 (int)
-	// GB size to be used to specify the disk for every machine in the agent pool. If you specify 0, it will apply the default according to the "agent vm size" specified
-	// +kubebuilder:validation:Optional
-	AgentOsDiskSize *float64 `json:"agentOsDiskSize,omitempty" tf:"agent_os_disk_size,omitempty"`
-
-	// Name for the agent pool, upto 12 alphanumeric characters. Default agentpool0 (string)
-	// Name for the agent pool, upto 12 alphanumeric characters
-	// +kubebuilder:validation:Optional
-	AgentPoolName *string `json:"agentPoolName,omitempty" tf:"agent_pool_name,omitempty"`
-
-	// Storage profile specifies what kind of storage used on machine in the agent pool. Chooses from [ManagedDisks StorageAccount]. Default ManagedDisks (string)
-	// Storage profile specifies what kind of storage used on machine in the agent pool. Chooses from [ManagedDisks StorageAccount]
-	// +kubebuilder:validation:Optional
-	AgentStorageProfile *string `json:"agentStorageProfile,omitempty" tf:"agent_storage_profile,omitempty"`
-
-	// Size of machine in the agent pool. Default Standard_D1_v2 (string)
-	// Size of machine in the agent pool
-	// +kubebuilder:validation:Optional
-	AgentVMSize *string `json:"agentVmSize,omitempty" tf:"agent_vm_size,omitempty"`
-
-	// Different authentication API url to use. Default https://login.microsoftonline.com/ (string)
-	// Different authentication API url to use
-	// +kubebuilder:validation:Optional
-	AuthBaseURL *string `json:"authBaseUrl,omitempty" tf:"auth_base_url,omitempty"`
-
-	// Different resource management API url to use. Default https://management.azure.com/ (string)
-	// Different resource management API url to use
-	// +kubebuilder:validation:Optional
-	BaseURL *string `json:"baseUrl,omitempty" tf:"base_url,omitempty"`
-
-	// Azure client ID to use (string)
-	// Azure client ID to use
-	// +kubebuilder:validation:Optional
-	ClientIDSecretRef v1.SecretKeySelector `json:"clientIdSecretRef" tf:"-"`
-
-	// Azure client secret associated with the "client id" (string)
-	// Azure client secret associated with the "client id"
-	// +kubebuilder:validation:Optional
-	ClientSecretSecretRef v1.SecretKeySelector `json:"clientSecretSecretRef" tf:"-"`
-
-	// Number of machines (VMs) in the agent pool. Allowed values must be in the range of 1 to 100 (inclusive). Default 1 (int)
-	// Number of machines (VMs) in the agent pool. Allowed values must be in the range of 1 to 100 (inclusive)
-	// +kubebuilder:validation:Optional
-	Count *float64 `json:"count,omitempty" tf:"count,omitempty"`
-
-	// An IP address assigned to the Kubernetes DNS service. It must be within the Kubernetes Service address range specified in "service cidr". Default 10.0.0.10 (string)
-	// An IP address assigned to the Kubernetes DNS service. It must be within the Kubernetes Service address range specified in "service cidr"
-	// +kubebuilder:validation:Optional
-	DNSServiceIP *string `json:"dnsServiceIp,omitempty" tf:"dns_service_ip,omitempty"`
-
-	// A CIDR notation IP range assigned to the Docker bridge network. It must not overlap with any Subnet IP ranges or the Kubernetes Service address range specified in "service cidr". Default 172.17.0.1/16 (string)
-	// A CIDR notation IP range assigned to the Docker bridge network. It must not overlap with any Subnet IP ranges or the Kubernetes Service address range specified in "service cidr"
-	// +kubebuilder:validation:Optional
-	DockerBridgeCidr *string `json:"dockerBridgeCidr,omitempty" tf:"docker_bridge_cidr,omitempty"`
-
-	// Enable the Kubernetes ingress with automatic public DNS name creation. Default false (bool)
-	// Enable the Kubernetes ingress with automatic public DNS name creation
-	// +kubebuilder:validation:Optional
-	EnableHTTPApplicationRouting *bool `json:"enableHttpApplicationRouting,omitempty" tf:"enable_http_application_routing,omitempty"`
-
-	// Turn on Azure Log Analytics monitoring. Uses the Log Analytics "Default" workspace if it exists, else creates one. if using an existing workspace, specifies "log analytics workspace resource id". Default true (bool)
-	// Turn on Azure Log Analytics monitoring. Uses the Log Analytics "Default" workspace if it exists, else creates one. if using an existing workspace, specifies "log analytics workspace resource id"
-	// +kubebuilder:validation:Optional
-	EnableMonitoring *bool `json:"enableMonitoring,omitempty" tf:"enable_monitoring,omitempty"`
-
-	// K8s version to deploy. Default: Rancher default (string) (Note - if rke_config is set at cluster_template, kubernetes_version must be set to the active cluster version so Rancher can clone the RKE template)
-	// Specify the version of Kubernetes
-	// +kubebuilder:validation:Optional
-	KubernetesVersion *string `json:"kubernetesVersion" tf:"kubernetes_version,omitempty"`
-
-	// Allowed values: basic (default) standard (string)
-	// Load balancer type (basic | standard). Must be standard for auto-scaling
-	// +kubebuilder:validation:Optional
-	LoadBalancerSku *string `json:"loadBalancerSku,omitempty" tf:"load_balancer_sku,omitempty"`
-
-	// (string)
-	// Azure Kubernetes cluster location
-	// +kubebuilder:validation:Optional
-	Location *string `json:"location,omitempty" tf:"location,omitempty"`
-
-	// The name of an existing Azure Log Analytics Workspace to use for storing monitoring data. If not specified, uses '{resource group}-{subscription id}-{location code}' (string)
-	// The name of an existing Azure Log Analytics Workspace to use for storing monitoring data. If not specified, uses '{resource group}-{subscription id}-{location code}'
-	// +kubebuilder:validation:Optional
-	LogAnalyticsWorkspace *string `json:"logAnalyticsWorkspace,omitempty" tf:"log_analytics_workspace,omitempty"`
-
-	// The resource group of an existing Azure Log Analytics Workspace to use for storing monitoring data. If not specified, uses the 'Cluster' resource group (string)
-	// The resource group of an existing Azure Log Analytics Workspace to use for storing monitoring data. If not specified, uses the 'Cluster' resource group
-	// +kubebuilder:validation:Optional
-	LogAnalyticsWorkspaceResourceGroup *string `json:"logAnalyticsWorkspaceResourceGroup,omitempty" tf:"log_analytics_workspace_resource_group,omitempty"`
-
-	// DNS prefix to use the Kubernetes cluster control pane (string)
-	// DNS prefix to use the Kubernetes cluster control pane
-	// +kubebuilder:validation:Optional
-	MasterDNSPrefix *string `json:"masterDnsPrefix" tf:"master_dns_prefix,omitempty"`
-
-	// Maximum number of pods that can run on a node. Default 110 (int)
-	// Maximum number of pods that can run on a node
-	// +kubebuilder:validation:Optional
-	MaxPods *float64 `json:"maxPods,omitempty" tf:"max_pods,omitempty"`
-
-	// Network plugin used for building Kubernetes network. Chooses from azure or kubenet. Default azure (string)
-	// Network plugin used for building Kubernetes network. Chooses from [azure kubenet]
-	// +kubebuilder:validation:Optional
-	NetworkPlugin *string `json:"networkPlugin,omitempty" tf:"network_plugin,omitempty"`
-
-	// Network policy used for building Kubernetes network. Chooses from calico (string)
-	// Network policy used for building Kubernetes network. Chooses from [calico]
-	// +kubebuilder:validation:Optional
-	NetworkPolicy *string `json:"networkPolicy,omitempty" tf:"network_policy,omitempty"`
-
-	// A CIDR notation IP range from which to assign Kubernetes Pod IPs when "network plugin" is specified in "kubenet". Default 172.244.0.0/16 (string)
-	// A CIDR notation IP range from which to assign Kubernetes Pod IPs when "network plugin" is specified in "kubenet".
-	// +kubebuilder:validation:Optional
-	PodCidr *string `json:"podCidr,omitempty" tf:"pod_cidr,omitempty"`
-
-	// (string)
-	// The name of the Cluster resource group
-	// +kubebuilder:validation:Optional
-	ResourceGroup *string `json:"resourceGroup" tf:"resource_group,omitempty"`
-
-	// Contents of the SSH public key used to authenticate with Linux hosts (string)
-	// Contents of the SSH public key used to authenticate with Linux hosts
-	// +kubebuilder:validation:Optional
-	SSHPublicKeyContents *string `json:"sshPublicKeyContents" tf:"ssh_public_key_contents,omitempty"`
-
-	// A CIDR notation IP range from which to assign Kubernetes Service cluster IPs. It must not overlap with any Subnet IP ranges. Default 10.0.0.0/16 (string)
-	// A CIDR notation IP range from which to assign Kubernetes Service cluster IPs. It must not overlap with any Subnet IP ranges
-	// +kubebuilder:validation:Optional
-	ServiceCidr *string `json:"serviceCidr,omitempty" tf:"service_cidr,omitempty"`
-
-	// The name of an existing Azure Virtual Subnet. Composite of agent virtual network subnet ID (string)
-	// The name of an existing Azure Virtual Subnet. Composite of agent virtual network subnet ID
-	// +kubebuilder:validation:Optional
-	Subnet *string `json:"subnet" tf:"subnet,omitempty"`
-
-	// (string)
-	// Subscription credentials which uniquely identify Microsoft Azure subscription
-	// +kubebuilder:validation:Optional
-	SubscriptionID *string `json:"subscriptionId" tf:"subscription_id,omitempty"`
-
-	// (Deprecated) Use tags argument instead as []string
-	// Tags for Kubernetes cluster. For example, foo=bar
-	// +kubebuilder:validation:Optional
-	// +mapType=granular
-	Tag map[string]*string `json:"tag,omitempty" tf:"tag,omitempty"`
-
-	// Tags for Kubernetes cluster. For example, ["foo=bar","bar=foo"] (list)
-	// Tags for Kubernetes cluster. For example, `["foo=bar","bar=foo"]`
-	// +kubebuilder:validation:Optional
-	Tags []*string `json:"tags,omitempty" tf:"tags,omitempty"`
-
-	// (string)
-	// Azure tenant ID to use
-	// +kubebuilder:validation:Optional
-	TenantID *string `json:"tenantId" tf:"tenant_id,omitempty"`
-
-	// The name of an existing Azure Virtual Network. Composite of agent virtual network subnet ID (string)
-	// The name of an existing Azure Virtual Network. Composite of agent virtual network subnet ID
-	// +kubebuilder:validation:Optional
-	VirtualNetwork *string `json:"virtualNetwork" tf:"virtual_network,omitempty"`
-
-	// The resource group of an existing Azure Virtual Network. Composite of agent virtual network subnet ID (string)
-	// The resource group of an existing Azure Virtual Network. Composite of agent virtual network subnet ID
-	// +kubebuilder:validation:Optional
-	VirtualNetworkResourceGroup *string `json:"virtualNetworkResourceGroup" tf:"virtual_network_resource_group,omitempty"`
-}
-
 type AksConfigV2InitParameters struct {
 
-	// Different authentication API url to use. Default https://login.microsoftonline.com/ (string)
+	// The AKS auth base url (string)
 	// The AKS auth base url
 	AuthBaseURL *string `json:"authBaseUrl,omitempty" tf:"auth_base_url,omitempty"`
 
@@ -1335,7 +840,7 @@ type AksConfigV2InitParameters struct {
 	// The AKS authorized ip ranges
 	AuthorizedIPRanges []*string `json:"authorizedIpRanges,omitempty" tf:"authorized_ip_ranges,omitempty"`
 
-	// Different resource management API url to use. Default https://management.azure.com/ (string)
+	// The AKS base url (string)
 	// The AKS base url
 	BaseURL *string `json:"baseUrl,omitempty" tf:"base_url,omitempty"`
 
@@ -1395,7 +900,7 @@ type AksConfigV2InitParameters struct {
 	// The AKS network docker bridge cidr
 	NetworkDockerBridgeCidr *string `json:"networkDockerBridgeCidr,omitempty" tf:"network_docker_bridge_cidr,omitempty"`
 
-	// Network plugin used for building Kubernetes network. Chooses from azure or kubenet. Default azure (string)
+	// The AKS network plugin. Required if imported=false (string)
 	// The AKS network plugin. Required if `import=false`
 	NetworkPlugin *string `json:"networkPlugin,omitempty" tf:"network_plugin,omitempty"`
 
@@ -1403,7 +908,7 @@ type AksConfigV2InitParameters struct {
 	// The AKS network pod cidr
 	NetworkPodCidr *string `json:"networkPodCidr,omitempty" tf:"network_pod_cidr,omitempty"`
 
-	// Network policy used for building Kubernetes network. Chooses from calico (string)
+	// The AKS network policy (string)
 	// The AKS network policy
 	NetworkPolicy *string `json:"networkPolicy,omitempty" tf:"network_policy,omitempty"`
 
@@ -1435,27 +940,27 @@ type AksConfigV2InitParameters struct {
 	// The AKS resource location
 	ResourceLocation *string `json:"resourceLocation,omitempty" tf:"resource_location,omitempty"`
 
-	// The name of an existing Azure Virtual Subnet. Composite of agent virtual network subnet ID (string)
+	// The AKS subnet (string)
 	// The AKS subnet
 	Subnet *string `json:"subnet,omitempty" tf:"subnet,omitempty"`
 
-	// Tags for Kubernetes cluster. For example, ["foo=bar","bar=foo"] (list)
+	// The AKS cluster tags (map)
 	// The AKS cluster tags
 	// +mapType=granular
 	Tags map[string]*string `json:"tags,omitempty" tf:"tags,omitempty"`
 
-	// The name of an existing Azure Virtual Network. Composite of agent virtual network subnet ID (string)
+	// The AKS virtual network (string)
 	// The AKS virtual network
 	VirtualNetwork *string `json:"virtualNetwork,omitempty" tf:"virtual_network,omitempty"`
 
-	// The resource group of an existing Azure Virtual Network. Composite of agent virtual network subnet ID (string)
+	// The AKS virtual network resource group (string)
 	// The AKS virtual network resource group
 	VirtualNetworkResourceGroup *string `json:"virtualNetworkResourceGroup,omitempty" tf:"virtual_network_resource_group,omitempty"`
 }
 
 type AksConfigV2Observation struct {
 
-	// Different authentication API url to use. Default https://login.microsoftonline.com/ (string)
+	// The AKS auth base url (string)
 	// The AKS auth base url
 	AuthBaseURL *string `json:"authBaseUrl,omitempty" tf:"auth_base_url,omitempty"`
 
@@ -1463,7 +968,7 @@ type AksConfigV2Observation struct {
 	// The AKS authorized ip ranges
 	AuthorizedIPRanges []*string `json:"authorizedIpRanges,omitempty" tf:"authorized_ip_ranges,omitempty"`
 
-	// Different resource management API url to use. Default https://management.azure.com/ (string)
+	// The AKS base url (string)
 	// The AKS base url
 	BaseURL *string `json:"baseUrl,omitempty" tf:"base_url,omitempty"`
 
@@ -1523,7 +1028,7 @@ type AksConfigV2Observation struct {
 	// The AKS network docker bridge cidr
 	NetworkDockerBridgeCidr *string `json:"networkDockerBridgeCidr,omitempty" tf:"network_docker_bridge_cidr,omitempty"`
 
-	// Network plugin used for building Kubernetes network. Chooses from azure or kubenet. Default azure (string)
+	// The AKS network plugin. Required if imported=false (string)
 	// The AKS network plugin. Required if `import=false`
 	NetworkPlugin *string `json:"networkPlugin,omitempty" tf:"network_plugin,omitempty"`
 
@@ -1531,7 +1036,7 @@ type AksConfigV2Observation struct {
 	// The AKS network pod cidr
 	NetworkPodCidr *string `json:"networkPodCidr,omitempty" tf:"network_pod_cidr,omitempty"`
 
-	// Network policy used for building Kubernetes network. Chooses from calico (string)
+	// The AKS network policy (string)
 	// The AKS network policy
 	NetworkPolicy *string `json:"networkPolicy,omitempty" tf:"network_policy,omitempty"`
 
@@ -1563,27 +1068,27 @@ type AksConfigV2Observation struct {
 	// The AKS resource location
 	ResourceLocation *string `json:"resourceLocation,omitempty" tf:"resource_location,omitempty"`
 
-	// The name of an existing Azure Virtual Subnet. Composite of agent virtual network subnet ID (string)
+	// The AKS subnet (string)
 	// The AKS subnet
 	Subnet *string `json:"subnet,omitempty" tf:"subnet,omitempty"`
 
-	// Tags for Kubernetes cluster. For example, ["foo=bar","bar=foo"] (list)
+	// The AKS cluster tags (map)
 	// The AKS cluster tags
 	// +mapType=granular
 	Tags map[string]*string `json:"tags,omitempty" tf:"tags,omitempty"`
 
-	// The name of an existing Azure Virtual Network. Composite of agent virtual network subnet ID (string)
+	// The AKS virtual network (string)
 	// The AKS virtual network
 	VirtualNetwork *string `json:"virtualNetwork,omitempty" tf:"virtual_network,omitempty"`
 
-	// The resource group of an existing Azure Virtual Network. Composite of agent virtual network subnet ID (string)
+	// The AKS virtual network resource group (string)
 	// The AKS virtual network resource group
 	VirtualNetworkResourceGroup *string `json:"virtualNetworkResourceGroup,omitempty" tf:"virtual_network_resource_group,omitempty"`
 }
 
 type AksConfigV2Parameters struct {
 
-	// Different authentication API url to use. Default https://login.microsoftonline.com/ (string)
+	// The AKS auth base url (string)
 	// The AKS auth base url
 	// +kubebuilder:validation:Optional
 	AuthBaseURL *string `json:"authBaseUrl,omitempty" tf:"auth_base_url,omitempty"`
@@ -1593,7 +1098,7 @@ type AksConfigV2Parameters struct {
 	// +kubebuilder:validation:Optional
 	AuthorizedIPRanges []*string `json:"authorizedIpRanges,omitempty" tf:"authorized_ip_ranges,omitempty"`
 
-	// Different resource management API url to use. Default https://management.azure.com/ (string)
+	// The AKS base url (string)
 	// The AKS base url
 	// +kubebuilder:validation:Optional
 	BaseURL *string `json:"baseUrl,omitempty" tf:"base_url,omitempty"`
@@ -1668,7 +1173,7 @@ type AksConfigV2Parameters struct {
 	// +kubebuilder:validation:Optional
 	NetworkDockerBridgeCidr *string `json:"networkDockerBridgeCidr,omitempty" tf:"network_docker_bridge_cidr,omitempty"`
 
-	// Network plugin used for building Kubernetes network. Chooses from azure or kubenet. Default azure (string)
+	// The AKS network plugin. Required if imported=false (string)
 	// The AKS network plugin. Required if `import=false`
 	// +kubebuilder:validation:Optional
 	NetworkPlugin *string `json:"networkPlugin,omitempty" tf:"network_plugin,omitempty"`
@@ -1678,7 +1183,7 @@ type AksConfigV2Parameters struct {
 	// +kubebuilder:validation:Optional
 	NetworkPodCidr *string `json:"networkPodCidr,omitempty" tf:"network_pod_cidr,omitempty"`
 
-	// Network policy used for building Kubernetes network. Chooses from calico (string)
+	// The AKS network policy (string)
 	// The AKS network policy
 	// +kubebuilder:validation:Optional
 	NetworkPolicy *string `json:"networkPolicy,omitempty" tf:"network_policy,omitempty"`
@@ -1718,23 +1223,23 @@ type AksConfigV2Parameters struct {
 	// +kubebuilder:validation:Optional
 	ResourceLocation *string `json:"resourceLocation" tf:"resource_location,omitempty"`
 
-	// The name of an existing Azure Virtual Subnet. Composite of agent virtual network subnet ID (string)
+	// The AKS subnet (string)
 	// The AKS subnet
 	// +kubebuilder:validation:Optional
 	Subnet *string `json:"subnet,omitempty" tf:"subnet,omitempty"`
 
-	// Tags for Kubernetes cluster. For example, ["foo=bar","bar=foo"] (list)
+	// The AKS cluster tags (map)
 	// The AKS cluster tags
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
 	Tags map[string]*string `json:"tags,omitempty" tf:"tags,omitempty"`
 
-	// The name of an existing Azure Virtual Network. Composite of agent virtual network subnet ID (string)
+	// The AKS virtual network (string)
 	// The AKS virtual network
 	// +kubebuilder:validation:Optional
 	VirtualNetwork *string `json:"virtualNetwork,omitempty" tf:"virtual_network,omitempty"`
 
-	// The resource group of an existing Azure Virtual Network. Composite of agent virtual network subnet ID (string)
+	// The AKS virtual network resource group (string)
 	// The AKS virtual network resource group
 	// +kubebuilder:validation:Optional
 	VirtualNetworkResourceGroup *string `json:"virtualNetworkResourceGroup,omitempty" tf:"virtual_network_resource_group,omitempty"`
@@ -1895,11 +1400,11 @@ type AutoscalingInitParameters struct {
 	// Enable GKE node pool config autoscaling
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
 
-	// Maximum number of nodes in the NodePool. Must be >= minNodeCount. There has to enough quota to scale up the cluster. Default 0 (int)
+	// The GKE node pool config max node count (int)
 	// The GKE node pool config max node count
 	MaxNodeCount *float64 `json:"maxNodeCount,omitempty" tf:"max_node_count,omitempty"`
 
-	// Minimmum number of nodes in the NodePool. Must be >= 1 and <= maxNodeCount. Default 0 (int)
+	// The GKE node pool config min node count (int)
 	// The GKE node pool config min node count
 	MinNodeCount *float64 `json:"minNodeCount,omitempty" tf:"min_node_count,omitempty"`
 }
@@ -1910,11 +1415,11 @@ type AutoscalingObservation struct {
 	// Enable GKE node pool config autoscaling
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
 
-	// Maximum number of nodes in the NodePool. Must be >= minNodeCount. There has to enough quota to scale up the cluster. Default 0 (int)
+	// The GKE node pool config max node count (int)
 	// The GKE node pool config max node count
 	MaxNodeCount *float64 `json:"maxNodeCount,omitempty" tf:"max_node_count,omitempty"`
 
-	// Minimmum number of nodes in the NodePool. Must be >= 1 and <= maxNodeCount. Default 0 (int)
+	// The GKE node pool config min node count (int)
 	// The GKE node pool config min node count
 	MinNodeCount *float64 `json:"minNodeCount,omitempty" tf:"min_node_count,omitempty"`
 }
@@ -1926,12 +1431,12 @@ type AutoscalingParameters struct {
 	// +kubebuilder:validation:Optional
 	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
 
-	// Maximum number of nodes in the NodePool. Must be >= minNodeCount. There has to enough quota to scale up the cluster. Default 0 (int)
+	// The GKE node pool config max node count (int)
 	// The GKE node pool config max node count
 	// +kubebuilder:validation:Optional
 	MaxNodeCount *float64 `json:"maxNodeCount,omitempty" tf:"max_node_count,omitempty"`
 
-	// Minimmum number of nodes in the NodePool. Must be >= 1 and <= maxNodeCount. Default 0 (int)
+	// The GKE node pool config min node count (int)
 	// The GKE node pool config min node count
 	// +kubebuilder:validation:Optional
 	MinNodeCount *float64 `json:"minNodeCount,omitempty" tf:"min_node_count,omitempty"`
@@ -2630,6 +2135,10 @@ type ClusterAgentDeploymentCustomizationInitParameters struct {
 	// User defined resource requirements to set on the agent (list)
 	// User defined resource requirements to set on the agent
 	OverrideResourceRequirements []OverrideResourceRequirementsInitParameters `json:"overrideResourceRequirements,omitempty" tf:"override_resource_requirements,omitempty"`
+
+	// Supported in Rancher 2.11.0 and above. Defines the configuration of a Priority Class and or Pod Disruption Budget. Currently only supported by the cluster_agent_deployment_customization field, and requires the cattle_cluster_agent_scheduling_customization feature to be enabled.
+	// User defined scheduling customization for the cattle cluster agent
+	SchedulingCustomization []SchedulingCustomizationInitParameters `json:"schedulingCustomization,omitempty" tf:"scheduling_customization,omitempty"`
 }
 
 type ClusterAgentDeploymentCustomizationObservation struct {
@@ -2645,6 +2154,10 @@ type ClusterAgentDeploymentCustomizationObservation struct {
 	// User defined resource requirements to set on the agent (list)
 	// User defined resource requirements to set on the agent
 	OverrideResourceRequirements []OverrideResourceRequirementsObservation `json:"overrideResourceRequirements,omitempty" tf:"override_resource_requirements,omitempty"`
+
+	// Supported in Rancher 2.11.0 and above. Defines the configuration of a Priority Class and or Pod Disruption Budget. Currently only supported by the cluster_agent_deployment_customization field, and requires the cattle_cluster_agent_scheduling_customization feature to be enabled.
+	// User defined scheduling customization for the cattle cluster agent
+	SchedulingCustomization []SchedulingCustomizationObservation `json:"schedulingCustomization,omitempty" tf:"scheduling_customization,omitempty"`
 }
 
 type ClusterAgentDeploymentCustomizationParameters struct {
@@ -2663,6 +2176,11 @@ type ClusterAgentDeploymentCustomizationParameters struct {
 	// User defined resource requirements to set on the agent
 	// +kubebuilder:validation:Optional
 	OverrideResourceRequirements []OverrideResourceRequirementsParameters `json:"overrideResourceRequirements,omitempty" tf:"override_resource_requirements,omitempty"`
+
+	// Supported in Rancher 2.11.0 and above. Defines the configuration of a Priority Class and or Pod Disruption Budget. Currently only supported by the cluster_agent_deployment_customization field, and requires the cattle_cluster_agent_scheduling_customization feature to be enabled.
+	// User defined scheduling customization for the cattle cluster agent
+	// +kubebuilder:validation:Optional
+	SchedulingCustomization []SchedulingCustomizationParameters `json:"schedulingCustomization,omitempty" tf:"scheduling_customization,omitempty"`
 }
 
 type ClusterAuthEndpointInitParameters struct {
@@ -2710,10 +2228,7 @@ type ClusterInitParameters struct {
 	// Optional Agent Env Vars for Rancher agent
 	AgentEnvVars []AgentEnvVarsInitParameters `json:"agentEnvVars,omitempty" tf:"agent_env_vars,omitempty"`
 
-	// The Azure AKS configuration for aks Clusters. Conflicts with aks_config_v2, eks_config, eks_config_v2, gke_config, gke_config_v2, oke_config k3s_config and rke_config (list maxitems:1)
-	AksConfig []AksConfigInitParameters `json:"aksConfig,omitempty" tf:"aks_config,omitempty"`
-
-	// The Azure AKS v2 configuration for creating/import aks Clusters. Conflicts with aks_config, eks_config, eks_config_v2, gke_config, gke_config_v2, oke_config k3s_config and rke_config (list maxitems:1)
+	// The Azure AKS v2 configuration for creating/import aks Clusters. Conflicts with eks_config_v2, gke_config_v2, k3s_config, oke_config and rke_config (list maxitems:1)
 	AksConfigV2 []AksConfigV2InitParameters `json:"aksConfigV2,omitempty" tf:"aks_config_v2,omitempty"`
 
 	// Annotations for the Cluster (map)
@@ -2772,10 +2287,7 @@ type ClusterInitParameters struct {
 	// (Computed) The driver used for the Cluster. imported, azurekubernetesservice, amazonelasticcontainerservice, googlekubernetesengine and rancherKubernetesEngine are supported (string)
 	Driver *string `json:"driver,omitempty" tf:"driver,omitempty"`
 
-	// The Amazon EKS configuration for eks Clusters. Conflicts with aks_config, aks_config_v2, eks_config_v2, gke_config, gke_config_v2, oke_config k3s_config and rke_config (list maxitems:1)
-	EksConfig []EksConfigInitParameters `json:"eksConfig,omitempty" tf:"eks_config,omitempty"`
-
-	// The Amazon EKS V2 configuration to create or import eks Clusters. Conflicts with aks_config, eks_config, gke_config, gke_config_v2, oke_config k3s_config and rke_config. For Rancher v2.5.x and above (list maxitems:1)
+	// The Amazon EKS V2 configuration to create or import eks Clusters. Conflicts with gke_config_v2, k3s_config, oke_config and rke_config. For Rancher v2.5.x and above (list maxitems:1)
 	EksConfigV2 []EksConfigV2InitParameters `json:"eksConfigV2,omitempty" tf:"eks_config_v2,omitempty"`
 
 	// Enable project network isolation (bool)
@@ -2789,13 +2301,13 @@ type ClusterInitParameters struct {
 	// Fleet workspace name (string)
 	FleetWorkspaceName *string `json:"fleetWorkspaceName,omitempty" tf:"fleet_workspace_name,omitempty"`
 
-	// The Google GKE configuration for gke Clusters. Conflicts with aks_config, aks_config_v2, eks_config, eks_config_v2, gke_config_v2, oke_config, k3s_config and rke_config (list maxitems:1)
-	GkeConfig []GkeConfigInitParameters `json:"gkeConfig,omitempty" tf:"gke_config,omitempty"`
-
-	// The Google GKE V2 configuration for gke Clusters. Conflicts with aks_config, aks_config_v2, eks_config, eks_config_v2, gke_config, oke_config, k3s_config and rke_config. For Rancher v2.5.8 and above (list maxitems:1)
+	// The Google GKE V2 configuration for gke Clusters. Conflicts with aks_config_v2, eks_config_v2, k3s_config, oke_config and rke_config. For Rancher v2.5.8 and above (list maxitems:1)
 	GkeConfigV2 []GkeConfigV2InitParameters `json:"gkeConfigV2,omitempty" tf:"gke_config_v2,omitempty"`
 
-	// The K3S configuration for k3s imported Clusters. Conflicts with aks_config, aks_config_v2, eks_config, eks_config_v2, gke_config, gke_config_v2, oke_config and rke_config (list maxitems:1)
+	// The imported configuration for generic imported Clusters. Conflicts with aks_config_v2, eks_config_v2, gke_config_v2, rke_config, rke2_config and k3s_config (list maxitems:1)
+	ImportedConfig []ImportedConfigInitParameters `json:"importedConfig,omitempty" tf:"imported_config,omitempty"`
+
+	// The K3S configuration for k3s imported Clusters. Conflicts with aks_config_v2, eks_config_v2, gke_config_v2, oke_config and rke_config (list maxitems:1)
 	K3SConfig []K3SConfigInitParameters `json:"k3sConfig,omitempty" tf:"k3s_config,omitempty"`
 
 	// Labels for the Cluster (map)
@@ -2806,13 +2318,13 @@ type ClusterInitParameters struct {
 	// The name of the Cluster (string)
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// The Oracle OKE configuration for oke Clusters. Conflicts with aks_config, aks_config_v2, eks_config, eks_config_v2, gke_config, gke_config_v2, k3s_config and rke_config (list maxitems:1)
+	// The Oracle OKE configuration for oke Clusters. Conflicts with aks_config_v2, eks_config_v2, gke_config_v2, k3s_config and rke_config (list maxitems:1)
 	OkeConfig []OkeConfigInitParameters `json:"okeConfig,omitempty" tf:"oke_config,omitempty"`
 
-	// The RKE2 configuration for rke2 Clusters. Conflicts with aks_config, aks_config_v2, eks_config, gke_config, oke_config, k3s_config and rke_config (list maxitems:1)
+	// The RKE2 configuration for rke2 Clusters. Conflicts with aks_config_v2, k3s_config, oke_config and rke_config (list maxitems:1)
 	Rke2Config []Rke2ConfigInitParameters `json:"rke2Config,omitempty" tf:"rke2_config,omitempty"`
 
-	// The RKE configuration for rke Clusters. Conflicts with aks_config, aks_config_v2, eks_config, eks_config_v2, gke_config, gke_config_v2, oke_config and k3s_config (list maxitems:1)
+	// The RKE configuration for rke Clusters. Conflicts with aks_config_v2, eks_config_v2, gke_config_v2, oke_config and k3s_config (list maxitems:1)
 	RkeConfig []RkeConfigInitParameters `json:"rkeConfig,omitempty" tf:"rke_config,omitempty"`
 
 	// Windows preferred cluster. Default: false (bool)
@@ -2826,10 +2338,7 @@ type ClusterObservation struct {
 	// Optional Agent Env Vars for Rancher agent
 	AgentEnvVars []AgentEnvVarsObservation `json:"agentEnvVars,omitempty" tf:"agent_env_vars,omitempty"`
 
-	// The Azure AKS configuration for aks Clusters. Conflicts with aks_config_v2, eks_config, eks_config_v2, gke_config, gke_config_v2, oke_config k3s_config and rke_config (list maxitems:1)
-	AksConfig []AksConfigObservation `json:"aksConfig,omitempty" tf:"aks_config,omitempty"`
-
-	// The Azure AKS v2 configuration for creating/import aks Clusters. Conflicts with aks_config, eks_config, eks_config_v2, gke_config, gke_config_v2, oke_config k3s_config and rke_config (list maxitems:1)
+	// The Azure AKS v2 configuration for creating/import aks Clusters. Conflicts with eks_config_v2, gke_config_v2, k3s_config, oke_config and rke_config (list maxitems:1)
 	AksConfigV2 []AksConfigV2Observation `json:"aksConfigV2,omitempty" tf:"aks_config_v2,omitempty"`
 
 	// Annotations for the Cluster (map)
@@ -2885,10 +2394,7 @@ type ClusterObservation struct {
 	// (Computed) The driver used for the Cluster. imported, azurekubernetesservice, amazonelasticcontainerservice, googlekubernetesengine and rancherKubernetesEngine are supported (string)
 	Driver *string `json:"driver,omitempty" tf:"driver,omitempty"`
 
-	// The Amazon EKS configuration for eks Clusters. Conflicts with aks_config, aks_config_v2, eks_config_v2, gke_config, gke_config_v2, oke_config k3s_config and rke_config (list maxitems:1)
-	EksConfig []EksConfigObservation `json:"eksConfig,omitempty" tf:"eks_config,omitempty"`
-
-	// The Amazon EKS V2 configuration to create or import eks Clusters. Conflicts with aks_config, eks_config, gke_config, gke_config_v2, oke_config k3s_config and rke_config. For Rancher v2.5.x and above (list maxitems:1)
+	// The Amazon EKS V2 configuration to create or import eks Clusters. Conflicts with gke_config_v2, k3s_config, oke_config and rke_config. For Rancher v2.5.x and above (list maxitems:1)
 	EksConfigV2 []EksConfigV2Observation `json:"eksConfigV2,omitempty" tf:"eks_config_v2,omitempty"`
 
 	// (Deprecated) Deploy istio on system project and istio-system namespace, using rancher2_app resource instead. See above example.
@@ -2906,20 +2412,20 @@ type ClusterObservation struct {
 	// Fleet workspace name (string)
 	FleetWorkspaceName *string `json:"fleetWorkspaceName,omitempty" tf:"fleet_workspace_name,omitempty"`
 
-	// The Google GKE configuration for gke Clusters. Conflicts with aks_config, aks_config_v2, eks_config, eks_config_v2, gke_config_v2, oke_config, k3s_config and rke_config (list maxitems:1)
-	GkeConfig []GkeConfigObservation `json:"gkeConfig,omitempty" tf:"gke_config,omitempty"`
-
-	// The Google GKE V2 configuration for gke Clusters. Conflicts with aks_config, aks_config_v2, eks_config, eks_config_v2, gke_config, oke_config, k3s_config and rke_config. For Rancher v2.5.8 and above (list maxitems:1)
+	// The Google GKE V2 configuration for gke Clusters. Conflicts with aks_config_v2, eks_config_v2, k3s_config, oke_config and rke_config. For Rancher v2.5.8 and above (list maxitems:1)
 	GkeConfigV2 []GkeConfigV2Observation `json:"gkeConfigV2,omitempty" tf:"gke_config_v2,omitempty"`
 
 	// (Computed) The ID of the resource (string)
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
+	// The imported configuration for generic imported Clusters. Conflicts with aks_config_v2, eks_config_v2, gke_config_v2, rke_config, rke2_config and k3s_config (list maxitems:1)
+	ImportedConfig []ImportedConfigObservation `json:"importedConfig,omitempty" tf:"imported_config,omitempty"`
+
 	// (Computed) Is istio enabled at cluster? For Rancher v2.3.x and above (bool)
 	// Is istio enabled at cluster?
 	IstioEnabled *bool `json:"istioEnabled,omitempty" tf:"istio_enabled,omitempty"`
 
-	// The K3S configuration for k3s imported Clusters. Conflicts with aks_config, aks_config_v2, eks_config, eks_config_v2, gke_config, gke_config_v2, oke_config and rke_config (list maxitems:1)
+	// The K3S configuration for k3s imported Clusters. Conflicts with aks_config_v2, eks_config_v2, gke_config_v2, oke_config and rke_config (list maxitems:1)
 	K3SConfig []K3SConfigObservation `json:"k3sConfig,omitempty" tf:"k3s_config,omitempty"`
 
 	// Labels for the Cluster (map)
@@ -2930,13 +2436,13 @@ type ClusterObservation struct {
 	// The name of the Cluster (string)
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// The Oracle OKE configuration for oke Clusters. Conflicts with aks_config, aks_config_v2, eks_config, eks_config_v2, gke_config, gke_config_v2, k3s_config and rke_config (list maxitems:1)
+	// The Oracle OKE configuration for oke Clusters. Conflicts with aks_config_v2, eks_config_v2, gke_config_v2, k3s_config and rke_config (list maxitems:1)
 	OkeConfig []OkeConfigObservation `json:"okeConfig,omitempty" tf:"oke_config,omitempty"`
 
-	// The RKE2 configuration for rke2 Clusters. Conflicts with aks_config, aks_config_v2, eks_config, gke_config, oke_config, k3s_config and rke_config (list maxitems:1)
+	// The RKE2 configuration for rke2 Clusters. Conflicts with aks_config_v2, k3s_config, oke_config and rke_config (list maxitems:1)
 	Rke2Config []Rke2ConfigObservation `json:"rke2Config,omitempty" tf:"rke2_config,omitempty"`
 
-	// The RKE configuration for rke Clusters. Conflicts with aks_config, aks_config_v2, eks_config, eks_config_v2, gke_config, gke_config_v2, oke_config and k3s_config (list maxitems:1)
+	// The RKE configuration for rke Clusters. Conflicts with aks_config_v2, eks_config_v2, gke_config_v2, oke_config and k3s_config (list maxitems:1)
 	RkeConfig []RkeConfigObservation `json:"rkeConfig,omitempty" tf:"rke_config,omitempty"`
 
 	// (Computed) System project ID for the cluster (string)
@@ -2954,11 +2460,7 @@ type ClusterParameters struct {
 	// +kubebuilder:validation:Optional
 	AgentEnvVars []AgentEnvVarsParameters `json:"agentEnvVars,omitempty" tf:"agent_env_vars,omitempty"`
 
-	// The Azure AKS configuration for aks Clusters. Conflicts with aks_config_v2, eks_config, eks_config_v2, gke_config, gke_config_v2, oke_config k3s_config and rke_config (list maxitems:1)
-	// +kubebuilder:validation:Optional
-	AksConfig []AksConfigParameters `json:"aksConfig,omitempty" tf:"aks_config,omitempty"`
-
-	// The Azure AKS v2 configuration for creating/import aks Clusters. Conflicts with aks_config, eks_config, eks_config_v2, gke_config, gke_config_v2, oke_config k3s_config and rke_config (list maxitems:1)
+	// The Azure AKS v2 configuration for creating/import aks Clusters. Conflicts with eks_config_v2, gke_config_v2, k3s_config, oke_config and rke_config (list maxitems:1)
 	// +kubebuilder:validation:Optional
 	AksConfigV2 []AksConfigV2Parameters `json:"aksConfigV2,omitempty" tf:"aks_config_v2,omitempty"`
 
@@ -3031,11 +2533,7 @@ type ClusterParameters struct {
 	// +kubebuilder:validation:Optional
 	Driver *string `json:"driver,omitempty" tf:"driver,omitempty"`
 
-	// The Amazon EKS configuration for eks Clusters. Conflicts with aks_config, aks_config_v2, eks_config_v2, gke_config, gke_config_v2, oke_config k3s_config and rke_config (list maxitems:1)
-	// +kubebuilder:validation:Optional
-	EksConfig []EksConfigParameters `json:"eksConfig,omitempty" tf:"eks_config,omitempty"`
-
-	// The Amazon EKS V2 configuration to create or import eks Clusters. Conflicts with aks_config, eks_config, gke_config, gke_config_v2, oke_config k3s_config and rke_config. For Rancher v2.5.x and above (list maxitems:1)
+	// The Amazon EKS V2 configuration to create or import eks Clusters. Conflicts with gke_config_v2, k3s_config, oke_config and rke_config. For Rancher v2.5.x and above (list maxitems:1)
 	// +kubebuilder:validation:Optional
 	EksConfigV2 []EksConfigV2Parameters `json:"eksConfigV2,omitempty" tf:"eks_config_v2,omitempty"`
 
@@ -3053,15 +2551,15 @@ type ClusterParameters struct {
 	// +kubebuilder:validation:Optional
 	FleetWorkspaceName *string `json:"fleetWorkspaceName,omitempty" tf:"fleet_workspace_name,omitempty"`
 
-	// The Google GKE configuration for gke Clusters. Conflicts with aks_config, aks_config_v2, eks_config, eks_config_v2, gke_config_v2, oke_config, k3s_config and rke_config (list maxitems:1)
-	// +kubebuilder:validation:Optional
-	GkeConfig []GkeConfigParameters `json:"gkeConfig,omitempty" tf:"gke_config,omitempty"`
-
-	// The Google GKE V2 configuration for gke Clusters. Conflicts with aks_config, aks_config_v2, eks_config, eks_config_v2, gke_config, oke_config, k3s_config and rke_config. For Rancher v2.5.8 and above (list maxitems:1)
+	// The Google GKE V2 configuration for gke Clusters. Conflicts with aks_config_v2, eks_config_v2, k3s_config, oke_config and rke_config. For Rancher v2.5.8 and above (list maxitems:1)
 	// +kubebuilder:validation:Optional
 	GkeConfigV2 []GkeConfigV2Parameters `json:"gkeConfigV2,omitempty" tf:"gke_config_v2,omitempty"`
 
-	// The K3S configuration for k3s imported Clusters. Conflicts with aks_config, aks_config_v2, eks_config, eks_config_v2, gke_config, gke_config_v2, oke_config and rke_config (list maxitems:1)
+	// The imported configuration for generic imported Clusters. Conflicts with aks_config_v2, eks_config_v2, gke_config_v2, rke_config, rke2_config and k3s_config (list maxitems:1)
+	// +kubebuilder:validation:Optional
+	ImportedConfig []ImportedConfigParameters `json:"importedConfig,omitempty" tf:"imported_config,omitempty"`
+
+	// The K3S configuration for k3s imported Clusters. Conflicts with aks_config_v2, eks_config_v2, gke_config_v2, oke_config and rke_config (list maxitems:1)
 	// +kubebuilder:validation:Optional
 	K3SConfig []K3SConfigParameters `json:"k3sConfig,omitempty" tf:"k3s_config,omitempty"`
 
@@ -3075,15 +2573,15 @@ type ClusterParameters struct {
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// The Oracle OKE configuration for oke Clusters. Conflicts with aks_config, aks_config_v2, eks_config, eks_config_v2, gke_config, gke_config_v2, k3s_config and rke_config (list maxitems:1)
+	// The Oracle OKE configuration for oke Clusters. Conflicts with aks_config_v2, eks_config_v2, gke_config_v2, k3s_config and rke_config (list maxitems:1)
 	// +kubebuilder:validation:Optional
 	OkeConfig []OkeConfigParameters `json:"okeConfig,omitempty" tf:"oke_config,omitempty"`
 
-	// The RKE2 configuration for rke2 Clusters. Conflicts with aks_config, aks_config_v2, eks_config, gke_config, oke_config, k3s_config and rke_config (list maxitems:1)
+	// The RKE2 configuration for rke2 Clusters. Conflicts with aks_config_v2, k3s_config, oke_config and rke_config (list maxitems:1)
 	// +kubebuilder:validation:Optional
 	Rke2Config []Rke2ConfigParameters `json:"rke2Config,omitempty" tf:"rke2_config,omitempty"`
 
-	// The RKE configuration for rke Clusters. Conflicts with aks_config, aks_config_v2, eks_config, eks_config_v2, gke_config, gke_config_v2, oke_config and k3s_config (list maxitems:1)
+	// The RKE configuration for rke Clusters. Conflicts with aks_config_v2, eks_config_v2, gke_config_v2, oke_config and k3s_config (list maxitems:1)
 	// +kubebuilder:validation:Optional
 	RkeConfig []RkeConfigParameters `json:"rkeConfig,omitempty" tf:"rke_config,omitempty"`
 
@@ -3149,7 +2647,7 @@ type ClusterTemplateAnswersInitParameters struct {
 	// Cluster ID for answer
 	ClusterID *string `json:"clusterId,omitempty" tf:"cluster_id,omitempty"`
 
-	// Project ID for GKE cluster (string)
+	// The GKE cluster project id (string)
 	// Project ID for answer
 	ProjectID *string `json:"projectId,omitempty" tf:"project_id,omitempty"`
 
@@ -3165,7 +2663,7 @@ type ClusterTemplateAnswersObservation struct {
 	// Cluster ID for answer
 	ClusterID *string `json:"clusterId,omitempty" tf:"cluster_id,omitempty"`
 
-	// Project ID for GKE cluster (string)
+	// The GKE cluster project id (string)
 	// Project ID for answer
 	ProjectID *string `json:"projectId,omitempty" tf:"project_id,omitempty"`
 
@@ -3182,7 +2680,7 @@ type ClusterTemplateAnswersParameters struct {
 	// +kubebuilder:validation:Optional
 	ClusterID *string `json:"clusterId,omitempty" tf:"cluster_id,omitempty"`
 
-	// Project ID for GKE cluster (string)
+	// The GKE cluster project id (string)
 	// Project ID for answer
 	// +kubebuilder:validation:Optional
 	ProjectID *string `json:"projectId,omitempty" tf:"project_id,omitempty"`
@@ -3257,15 +2755,15 @@ type ClusterTemplateQuestionsParameters struct {
 
 type ConfigInitParameters struct {
 
-	// Size of the disk attached to each node. Default 100 (int)
+	// The GKE node config disk size Gb (int)
 	// The GKE node config disk size (Gb)
 	DiskSizeGb *float64 `json:"diskSizeGb,omitempty" tf:"disk_size_gb,omitempty"`
 
-	// Type of the disk attached to each node (string)
+	// The GKE node config disk type (string)
 	// The GKE node config disk type
 	DiskType *string `json:"diskType,omitempty" tf:"disk_type,omitempty"`
 
-	// The image to use for the worker nodes (string)
+	// The GKE node config image type (string)
 	// The GKE node config image type
 	ImageType *string `json:"imageType,omitempty" tf:"image_type,omitempty"`
 
@@ -3274,23 +2772,27 @@ type ConfigInitParameters struct {
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
-	// The number of local SSD disks to be attached to the node. Default 0 (int)
+	// The GKE node config local ssd count (int)
 	// The GKE node config local ssd count
 	LocalSsdCount *float64 `json:"localSsdCount,omitempty" tf:"local_ssd_count,omitempty"`
 
-	// Machine type for GKE cluster (string)
+	// The GKE node config machine type (string)
 	// The GKE node config machine type
 	MachineType *string `json:"machineType,omitempty" tf:"machine_type,omitempty"`
 
-	// The set of Google API scopes to be made available on all of the node VMs under the default service account (list)
+	// The GKE node config oauth scopes (List)
 	// The GKE node config oauth scopes
 	OauthScopes []*string `json:"oauthScopes,omitempty" tf:"oauth_scopes,omitempty"`
 
-	// Whether the nodes are created as preemptible VM instances. Default false (bool)
+	// Enable GKE node config preemptible. Default: false (bool)
 	// Enable GKE node config preemptible
 	Preemptible *bool `json:"preemptible,omitempty" tf:"preemptible,omitempty"`
 
-	// Tags for Kubernetes cluster. For example, ["foo=bar","bar=foo"] (list)
+	// The GKE Service Account to be used by the node VMs (string)
+	// The GKE node config service account
+	ServiceAccount *string `json:"serviceAccount,omitempty" tf:"service_account,omitempty"`
+
+	// The AKS cluster tags (map)
 	// The GKE node config tags
 	Tags []*string `json:"tags,omitempty" tf:"tags,omitempty"`
 
@@ -3301,15 +2803,15 @@ type ConfigInitParameters struct {
 
 type ConfigObservation struct {
 
-	// Size of the disk attached to each node. Default 100 (int)
+	// The GKE node config disk size Gb (int)
 	// The GKE node config disk size (Gb)
 	DiskSizeGb *float64 `json:"diskSizeGb,omitempty" tf:"disk_size_gb,omitempty"`
 
-	// Type of the disk attached to each node (string)
+	// The GKE node config disk type (string)
 	// The GKE node config disk type
 	DiskType *string `json:"diskType,omitempty" tf:"disk_type,omitempty"`
 
-	// The image to use for the worker nodes (string)
+	// The GKE node config image type (string)
 	// The GKE node config image type
 	ImageType *string `json:"imageType,omitempty" tf:"image_type,omitempty"`
 
@@ -3318,23 +2820,27 @@ type ConfigObservation struct {
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
-	// The number of local SSD disks to be attached to the node. Default 0 (int)
+	// The GKE node config local ssd count (int)
 	// The GKE node config local ssd count
 	LocalSsdCount *float64 `json:"localSsdCount,omitempty" tf:"local_ssd_count,omitempty"`
 
-	// Machine type for GKE cluster (string)
+	// The GKE node config machine type (string)
 	// The GKE node config machine type
 	MachineType *string `json:"machineType,omitempty" tf:"machine_type,omitempty"`
 
-	// The set of Google API scopes to be made available on all of the node VMs under the default service account (list)
+	// The GKE node config oauth scopes (List)
 	// The GKE node config oauth scopes
 	OauthScopes []*string `json:"oauthScopes,omitempty" tf:"oauth_scopes,omitempty"`
 
-	// Whether the nodes are created as preemptible VM instances. Default false (bool)
+	// Enable GKE node config preemptible. Default: false (bool)
 	// Enable GKE node config preemptible
 	Preemptible *bool `json:"preemptible,omitempty" tf:"preemptible,omitempty"`
 
-	// Tags for Kubernetes cluster. For example, ["foo=bar","bar=foo"] (list)
+	// The GKE Service Account to be used by the node VMs (string)
+	// The GKE node config service account
+	ServiceAccount *string `json:"serviceAccount,omitempty" tf:"service_account,omitempty"`
+
+	// The AKS cluster tags (map)
 	// The GKE node config tags
 	Tags []*string `json:"tags,omitempty" tf:"tags,omitempty"`
 
@@ -3345,17 +2851,17 @@ type ConfigObservation struct {
 
 type ConfigParameters struct {
 
-	// Size of the disk attached to each node. Default 100 (int)
+	// The GKE node config disk size Gb (int)
 	// The GKE node config disk size (Gb)
 	// +kubebuilder:validation:Optional
 	DiskSizeGb *float64 `json:"diskSizeGb,omitempty" tf:"disk_size_gb,omitempty"`
 
-	// Type of the disk attached to each node (string)
+	// The GKE node config disk type (string)
 	// The GKE node config disk type
 	// +kubebuilder:validation:Optional
 	DiskType *string `json:"diskType,omitempty" tf:"disk_type,omitempty"`
 
-	// The image to use for the worker nodes (string)
+	// The GKE node config image type (string)
 	// The GKE node config image type
 	// +kubebuilder:validation:Optional
 	ImageType *string `json:"imageType,omitempty" tf:"image_type,omitempty"`
@@ -3366,27 +2872,32 @@ type ConfigParameters struct {
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
-	// The number of local SSD disks to be attached to the node. Default 0 (int)
+	// The GKE node config local ssd count (int)
 	// The GKE node config local ssd count
 	// +kubebuilder:validation:Optional
 	LocalSsdCount *float64 `json:"localSsdCount,omitempty" tf:"local_ssd_count,omitempty"`
 
-	// Machine type for GKE cluster (string)
+	// The GKE node config machine type (string)
 	// The GKE node config machine type
 	// +kubebuilder:validation:Optional
 	MachineType *string `json:"machineType,omitempty" tf:"machine_type,omitempty"`
 
-	// The set of Google API scopes to be made available on all of the node VMs under the default service account (list)
+	// The GKE node config oauth scopes (List)
 	// The GKE node config oauth scopes
 	// +kubebuilder:validation:Optional
 	OauthScopes []*string `json:"oauthScopes,omitempty" tf:"oauth_scopes,omitempty"`
 
-	// Whether the nodes are created as preemptible VM instances. Default false (bool)
+	// Enable GKE node config preemptible. Default: false (bool)
 	// Enable GKE node config preemptible
 	// +kubebuilder:validation:Optional
 	Preemptible *bool `json:"preemptible,omitempty" tf:"preemptible,omitempty"`
 
-	// Tags for Kubernetes cluster. For example, ["foo=bar","bar=foo"] (list)
+	// The GKE Service Account to be used by the node VMs (string)
+	// The GKE node config service account
+	// +kubebuilder:validation:Optional
+	ServiceAccount *string `json:"serviceAccount,omitempty" tf:"service_account,omitempty"`
+
+	// The AKS cluster tags (map)
 	// The GKE node config tags
 	// +kubebuilder:validation:Optional
 	Tags []*string `json:"tags,omitempty" tf:"tags,omitempty"`
@@ -3694,247 +3205,6 @@ type EcrCredentialPluginParameters struct {
 	AwsSessionTokenSecretRef *v1.SecretKeySelector `json:"awsSessionTokenSecretRef,omitempty" tf:"-"`
 }
 
-type EksConfigInitParameters struct {
-
-	// AMI ID to use for the worker nodes instead of the default (string)
-	// A custom AMI ID to use for the worker nodes instead of the default
-	AMI *string `json:"ami,omitempty" tf:"ami,omitempty"`
-
-	// Access key for S3 service (string)
-	// The AWS Client ID to use
-	AccessKeySecretRef v1.SecretKeySelector `json:"accessKeySecretRef" tf:"-"`
-
-	// Associate public ip EKS worker nodes. Default true (bool)
-	// Associate public ip EKS worker nodes
-	AssociateWorkerNodePublicIP *bool `json:"associateWorkerNodePublicIp,omitempty" tf:"associate_worker_node_public_ip,omitempty"`
-
-	// The desired number of worker nodes. For Rancher v2.3.x and above. Default 3 (int)
-	// The desired number of worker nodes
-	DesiredNodes *float64 `json:"desiredNodes,omitempty" tf:"desired_nodes,omitempty"`
-
-	// Enables EBS encryption of worker nodes
-	EBSEncryption *bool `json:"ebsEncryption,omitempty" tf:"ebs_encryption,omitempty"`
-
-	// The type of machine to use for worker nodes. Default t2.medium (string)
-	// The type of machine to use for worker nodes
-	InstanceType *string `json:"instanceType,omitempty" tf:"instance_type,omitempty"`
-
-	// Allow user to specify key name to use. For Rancher v2.2.7 and above (string)
-	// Allow user to specify key name to use
-	KeyPairName *string `json:"keyPairName,omitempty" tf:"key_pair_name,omitempty"`
-
-	// K8s version to deploy. Default: Rancher default (string) (Note - if rke_config is set at cluster_template, kubernetes_version must be set to the active cluster version so Rancher can clone the RKE template)
-	// The kubernetes master version
-	KubernetesVersion *string `json:"kubernetesVersion,omitempty" tf:"kubernetes_version,omitempty"`
-
-	// The maximum number of worker nodes. Default 3 (int)
-	// The maximum number of worker nodes
-	MaximumNodes *float64 `json:"maximumNodes,omitempty" tf:"maximum_nodes,omitempty"`
-
-	// The minimum number of worker nodes. Default 1 (int)
-	// The minimum number of worker nodes
-	MinimumNodes *float64 `json:"minimumNodes,omitempty" tf:"minimum_nodes,omitempty"`
-
-	// The volume size for each node. Default 20 (int)
-	// The volume size for each node
-	NodeVolumeSize *float64 `json:"nodeVolumeSize,omitempty" tf:"node_volume_size,omitempty"`
-
-	// (string)
-	// The AWS Region to create the EKS cluster in
-	Region *string `json:"region,omitempty" tf:"region,omitempty"`
-
-	// Secret key for S3 service (string)
-	// The AWS Client Secret associated with the Client ID
-	SecretKeySecretRef v1.SecretKeySelector `json:"secretKeySecretRef" tf:"-"`
-
-	// List of security groups to use for the cluster. If it's not specified Rancher will create a new security group (list)
-	// List of security groups to use for the cluster
-	SecurityGroups []*string `json:"securityGroups,omitempty" tf:"security_groups,omitempty"`
-
-	// The service role to use to perform the cluster operations in AWS. If it's not specified Rancher will create a new service role (string)
-	// The service role to use to perform the cluster operations in AWS
-	ServiceRole *string `json:"serviceRole,omitempty" tf:"service_role,omitempty"`
-
-	// A session token to use with the client key and secret if applicable (string)
-	// A session token to use with the client key and secret if applicable
-	SessionTokenSecretRef *v1.SecretKeySelector `json:"sessionTokenSecretRef,omitempty" tf:"-"`
-
-	// List of subnets in the virtual network to use. If it's not specified Rancher will create 3 news subnets (list)
-	// List of subnets in the virtual network to use
-	Subnets []*string `json:"subnets,omitempty" tf:"subnets,omitempty"`
-
-	// Pass user-data to the nodes to perform automated configuration tasks (string)
-	// Pass user-data to the nodes to perform automated configuration tasks
-	UserData *string `json:"userData,omitempty" tf:"user_data,omitempty"`
-
-	// The name of an existing Azure Virtual Network. Composite of agent virtual network subnet ID (string)
-	// The name of the virtual network to use
-	VirtualNetwork *string `json:"virtualNetwork,omitempty" tf:"virtual_network,omitempty"`
-}
-
-type EksConfigObservation struct {
-
-	// AMI ID to use for the worker nodes instead of the default (string)
-	// A custom AMI ID to use for the worker nodes instead of the default
-	AMI *string `json:"ami,omitempty" tf:"ami,omitempty"`
-
-	// Associate public ip EKS worker nodes. Default true (bool)
-	// Associate public ip EKS worker nodes
-	AssociateWorkerNodePublicIP *bool `json:"associateWorkerNodePublicIp,omitempty" tf:"associate_worker_node_public_ip,omitempty"`
-
-	// The desired number of worker nodes. For Rancher v2.3.x and above. Default 3 (int)
-	// The desired number of worker nodes
-	DesiredNodes *float64 `json:"desiredNodes,omitempty" tf:"desired_nodes,omitempty"`
-
-	// Enables EBS encryption of worker nodes
-	EBSEncryption *bool `json:"ebsEncryption,omitempty" tf:"ebs_encryption,omitempty"`
-
-	// The type of machine to use for worker nodes. Default t2.medium (string)
-	// The type of machine to use for worker nodes
-	InstanceType *string `json:"instanceType,omitempty" tf:"instance_type,omitempty"`
-
-	// Allow user to specify key name to use. For Rancher v2.2.7 and above (string)
-	// Allow user to specify key name to use
-	KeyPairName *string `json:"keyPairName,omitempty" tf:"key_pair_name,omitempty"`
-
-	// K8s version to deploy. Default: Rancher default (string) (Note - if rke_config is set at cluster_template, kubernetes_version must be set to the active cluster version so Rancher can clone the RKE template)
-	// The kubernetes master version
-	KubernetesVersion *string `json:"kubernetesVersion,omitempty" tf:"kubernetes_version,omitempty"`
-
-	// The maximum number of worker nodes. Default 3 (int)
-	// The maximum number of worker nodes
-	MaximumNodes *float64 `json:"maximumNodes,omitempty" tf:"maximum_nodes,omitempty"`
-
-	// The minimum number of worker nodes. Default 1 (int)
-	// The minimum number of worker nodes
-	MinimumNodes *float64 `json:"minimumNodes,omitempty" tf:"minimum_nodes,omitempty"`
-
-	// The volume size for each node. Default 20 (int)
-	// The volume size for each node
-	NodeVolumeSize *float64 `json:"nodeVolumeSize,omitempty" tf:"node_volume_size,omitempty"`
-
-	// (string)
-	// The AWS Region to create the EKS cluster in
-	Region *string `json:"region,omitempty" tf:"region,omitempty"`
-
-	// List of security groups to use for the cluster. If it's not specified Rancher will create a new security group (list)
-	// List of security groups to use for the cluster
-	SecurityGroups []*string `json:"securityGroups,omitempty" tf:"security_groups,omitempty"`
-
-	// The service role to use to perform the cluster operations in AWS. If it's not specified Rancher will create a new service role (string)
-	// The service role to use to perform the cluster operations in AWS
-	ServiceRole *string `json:"serviceRole,omitempty" tf:"service_role,omitempty"`
-
-	// List of subnets in the virtual network to use. If it's not specified Rancher will create 3 news subnets (list)
-	// List of subnets in the virtual network to use
-	Subnets []*string `json:"subnets,omitempty" tf:"subnets,omitempty"`
-
-	// Pass user-data to the nodes to perform automated configuration tasks (string)
-	// Pass user-data to the nodes to perform automated configuration tasks
-	UserData *string `json:"userData,omitempty" tf:"user_data,omitempty"`
-
-	// The name of an existing Azure Virtual Network. Composite of agent virtual network subnet ID (string)
-	// The name of the virtual network to use
-	VirtualNetwork *string `json:"virtualNetwork,omitempty" tf:"virtual_network,omitempty"`
-}
-
-type EksConfigParameters struct {
-
-	// AMI ID to use for the worker nodes instead of the default (string)
-	// A custom AMI ID to use for the worker nodes instead of the default
-	// +kubebuilder:validation:Optional
-	AMI *string `json:"ami,omitempty" tf:"ami,omitempty"`
-
-	// Access key for S3 service (string)
-	// The AWS Client ID to use
-	// +kubebuilder:validation:Optional
-	AccessKeySecretRef v1.SecretKeySelector `json:"accessKeySecretRef" tf:"-"`
-
-	// Associate public ip EKS worker nodes. Default true (bool)
-	// Associate public ip EKS worker nodes
-	// +kubebuilder:validation:Optional
-	AssociateWorkerNodePublicIP *bool `json:"associateWorkerNodePublicIp,omitempty" tf:"associate_worker_node_public_ip,omitempty"`
-
-	// The desired number of worker nodes. For Rancher v2.3.x and above. Default 3 (int)
-	// The desired number of worker nodes
-	// +kubebuilder:validation:Optional
-	DesiredNodes *float64 `json:"desiredNodes,omitempty" tf:"desired_nodes,omitempty"`
-
-	// Enables EBS encryption of worker nodes
-	// +kubebuilder:validation:Optional
-	EBSEncryption *bool `json:"ebsEncryption,omitempty" tf:"ebs_encryption,omitempty"`
-
-	// The type of machine to use for worker nodes. Default t2.medium (string)
-	// The type of machine to use for worker nodes
-	// +kubebuilder:validation:Optional
-	InstanceType *string `json:"instanceType,omitempty" tf:"instance_type,omitempty"`
-
-	// Allow user to specify key name to use. For Rancher v2.2.7 and above (string)
-	// Allow user to specify key name to use
-	// +kubebuilder:validation:Optional
-	KeyPairName *string `json:"keyPairName,omitempty" tf:"key_pair_name,omitempty"`
-
-	// K8s version to deploy. Default: Rancher default (string) (Note - if rke_config is set at cluster_template, kubernetes_version must be set to the active cluster version so Rancher can clone the RKE template)
-	// The kubernetes master version
-	// +kubebuilder:validation:Optional
-	KubernetesVersion *string `json:"kubernetesVersion" tf:"kubernetes_version,omitempty"`
-
-	// The maximum number of worker nodes. Default 3 (int)
-	// The maximum number of worker nodes
-	// +kubebuilder:validation:Optional
-	MaximumNodes *float64 `json:"maximumNodes,omitempty" tf:"maximum_nodes,omitempty"`
-
-	// The minimum number of worker nodes. Default 1 (int)
-	// The minimum number of worker nodes
-	// +kubebuilder:validation:Optional
-	MinimumNodes *float64 `json:"minimumNodes,omitempty" tf:"minimum_nodes,omitempty"`
-
-	// The volume size for each node. Default 20 (int)
-	// The volume size for each node
-	// +kubebuilder:validation:Optional
-	NodeVolumeSize *float64 `json:"nodeVolumeSize,omitempty" tf:"node_volume_size,omitempty"`
-
-	// (string)
-	// The AWS Region to create the EKS cluster in
-	// +kubebuilder:validation:Optional
-	Region *string `json:"region,omitempty" tf:"region,omitempty"`
-
-	// Secret key for S3 service (string)
-	// The AWS Client Secret associated with the Client ID
-	// +kubebuilder:validation:Optional
-	SecretKeySecretRef v1.SecretKeySelector `json:"secretKeySecretRef" tf:"-"`
-
-	// List of security groups to use for the cluster. If it's not specified Rancher will create a new security group (list)
-	// List of security groups to use for the cluster
-	// +kubebuilder:validation:Optional
-	SecurityGroups []*string `json:"securityGroups,omitempty" tf:"security_groups,omitempty"`
-
-	// The service role to use to perform the cluster operations in AWS. If it's not specified Rancher will create a new service role (string)
-	// The service role to use to perform the cluster operations in AWS
-	// +kubebuilder:validation:Optional
-	ServiceRole *string `json:"serviceRole,omitempty" tf:"service_role,omitempty"`
-
-	// A session token to use with the client key and secret if applicable (string)
-	// A session token to use with the client key and secret if applicable
-	// +kubebuilder:validation:Optional
-	SessionTokenSecretRef *v1.SecretKeySelector `json:"sessionTokenSecretRef,omitempty" tf:"-"`
-
-	// List of subnets in the virtual network to use. If it's not specified Rancher will create 3 news subnets (list)
-	// List of subnets in the virtual network to use
-	// +kubebuilder:validation:Optional
-	Subnets []*string `json:"subnets,omitempty" tf:"subnets,omitempty"`
-
-	// Pass user-data to the nodes to perform automated configuration tasks (string)
-	// Pass user-data to the nodes to perform automated configuration tasks
-	// +kubebuilder:validation:Optional
-	UserData *string `json:"userData,omitempty" tf:"user_data,omitempty"`
-
-	// The name of an existing Azure Virtual Network. Composite of agent virtual network subnet ID (string)
-	// The name of the virtual network to use
-	// +kubebuilder:validation:Optional
-	VirtualNetwork *string `json:"virtualNetwork,omitempty" tf:"virtual_network,omitempty"`
-}
-
 type EksConfigV2InitParameters struct {
 
 	// The AKS Cloud Credential ID to use (string)
@@ -3985,19 +3255,19 @@ type EksConfigV2InitParameters struct {
 	// Enable EKS cluster secret encryption
 	SecretsEncryption *bool `json:"secretsEncryption,omitempty" tf:"secrets_encryption,omitempty"`
 
-	// List of security groups to use for the cluster. If it's not specified Rancher will create a new security group (list)
+	// List of security groups to use for the cluster (list)
 	// List of security groups to use for the cluster
 	SecurityGroups []*string `json:"securityGroups,omitempty" tf:"security_groups,omitempty"`
 
-	// The service role to use to perform the cluster operations in AWS. If it's not specified Rancher will create a new service role (string)
+	// The AWS service role to use (string)
 	// The AWS service role to use
 	ServiceRole *string `json:"serviceRole,omitempty" tf:"service_role,omitempty"`
 
-	// List of subnets in the virtual network to use. If it's not specified Rancher will create 3 news subnets (list)
+	// List of subnets in the virtual network to use (list)
 	// List of subnets in the virtual network to use
 	Subnets []*string `json:"subnets,omitempty" tf:"subnets,omitempty"`
 
-	// Tags for Kubernetes cluster. For example, ["foo=bar","bar=foo"] (list)
+	// The AKS cluster tags (map)
 	// The EKS cluster tags
 	// +mapType=granular
 	Tags map[string]*string `json:"tags,omitempty" tf:"tags,omitempty"`
@@ -4053,19 +3323,19 @@ type EksConfigV2Observation struct {
 	// Enable EKS cluster secret encryption
 	SecretsEncryption *bool `json:"secretsEncryption,omitempty" tf:"secrets_encryption,omitempty"`
 
-	// List of security groups to use for the cluster. If it's not specified Rancher will create a new security group (list)
+	// List of security groups to use for the cluster (list)
 	// List of security groups to use for the cluster
 	SecurityGroups []*string `json:"securityGroups,omitempty" tf:"security_groups,omitempty"`
 
-	// The service role to use to perform the cluster operations in AWS. If it's not specified Rancher will create a new service role (string)
+	// The AWS service role to use (string)
 	// The AWS service role to use
 	ServiceRole *string `json:"serviceRole,omitempty" tf:"service_role,omitempty"`
 
-	// List of subnets in the virtual network to use. If it's not specified Rancher will create 3 news subnets (list)
+	// List of subnets in the virtual network to use (list)
 	// List of subnets in the virtual network to use
 	Subnets []*string `json:"subnets,omitempty" tf:"subnets,omitempty"`
 
-	// Tags for Kubernetes cluster. For example, ["foo=bar","bar=foo"] (list)
+	// The AKS cluster tags (map)
 	// The EKS cluster tags
 	// +mapType=granular
 	Tags map[string]*string `json:"tags,omitempty" tf:"tags,omitempty"`
@@ -4133,22 +3403,22 @@ type EksConfigV2Parameters struct {
 	// +kubebuilder:validation:Optional
 	SecretsEncryption *bool `json:"secretsEncryption,omitempty" tf:"secrets_encryption,omitempty"`
 
-	// List of security groups to use for the cluster. If it's not specified Rancher will create a new security group (list)
+	// List of security groups to use for the cluster (list)
 	// List of security groups to use for the cluster
 	// +kubebuilder:validation:Optional
 	SecurityGroups []*string `json:"securityGroups,omitempty" tf:"security_groups,omitempty"`
 
-	// The service role to use to perform the cluster operations in AWS. If it's not specified Rancher will create a new service role (string)
+	// The AWS service role to use (string)
 	// The AWS service role to use
 	// +kubebuilder:validation:Optional
 	ServiceRole *string `json:"serviceRole,omitempty" tf:"service_role,omitempty"`
 
-	// List of subnets in the virtual network to use. If it's not specified Rancher will create 3 news subnets (list)
+	// List of subnets in the virtual network to use (list)
 	// List of subnets in the virtual network to use
 	// +kubebuilder:validation:Optional
 	Subnets []*string `json:"subnets,omitempty" tf:"subnets,omitempty"`
 
-	// Tags for Kubernetes cluster. For example, ["foo=bar","bar=foo"] (list)
+	// The AKS cluster tags (map)
 	// The EKS cluster tags
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
@@ -4527,706 +3797,6 @@ type FleetAgentDeploymentCustomizationParameters struct {
 	OverrideResourceRequirements []FleetAgentDeploymentCustomizationOverrideResourceRequirementsParameters `json:"overrideResourceRequirements,omitempty" tf:"override_resource_requirements,omitempty"`
 }
 
-type GkeConfigInitParameters struct {
-
-	// The IP address range of the container pods (string)
-	// The IP address range of the container pods
-	ClusterIPv4Cidr *string `json:"clusterIpv4Cidr,omitempty" tf:"cluster_ipv4_cidr,omitempty"`
-
-	// The contents of the GC credential file (string)
-	// The contents of the GC credential file
-	CredentialSecretRef v1.SecretKeySelector `json:"credentialSecretRef" tf:"-"`
-
-	// The description for Cluster (string)
-	// An optional description of this cluster
-	Description *string `json:"description,omitempty" tf:"description,omitempty"`
-
-	// Size of the disk attached to each node. Default 100 (int)
-	// Size of the disk attached to each node
-	DiskSizeGb *float64 `json:"diskSizeGb,omitempty" tf:"disk_size_gb,omitempty"`
-
-	// Type of the disk attached to each node (string)
-	// Type of the disk attached to each node
-	DiskType *string `json:"diskType,omitempty" tf:"disk_type,omitempty"`
-
-	// To enable Kubernetes alpha feature. Default true (bool)
-	// To enable kubernetes alpha feature
-	EnableAlphaFeature *bool `json:"enableAlphaFeature,omitempty" tf:"enable_alpha_feature,omitempty"`
-
-	// Specifies whether the node auto-repair is enabled for the node pool. Default false (bool)
-	// Specifies whether the node auto-repair is enabled for the node pool
-	EnableAutoRepair *bool `json:"enableAutoRepair,omitempty" tf:"enable_auto_repair,omitempty"`
-
-	// Specifies whether node auto-upgrade is enabled for the node pool. Default false (bool)
-	// Specifies whether node auto-upgrade is enabled for the node pool
-	EnableAutoUpgrade *bool `json:"enableAutoUpgrade,omitempty" tf:"enable_auto_upgrade,omitempty"`
-
-	// Enable HTTP load balancing on GKE cluster. Default true (bool)
-	// Enable http load balancing for the cluster
-	EnableHTTPLoadBalancing *bool `json:"enableHttpLoadBalancing,omitempty" tf:"enable_http_load_balancing,omitempty"`
-
-	// Enable horizontal pod autoscaling for the cluster. Default true (bool)
-	// Enable horizontal pod autoscaling for the cluster
-	EnableHorizontalPodAutoscaling *bool `json:"enableHorizontalPodAutoscaling,omitempty" tf:"enable_horizontal_pod_autoscaling,omitempty"`
-
-	// Whether to enable the Kubernetes dashboard. Default false (bool)
-	// Whether to enable the kubernetes dashboard
-	EnableKubernetesDashboard *bool `json:"enableKubernetesDashboard,omitempty" tf:"enable_kubernetes_dashboard,omitempty"`
-
-	// Whether to enable legacy abac on the cluster. Default false (bool)
-	// Whether to enable legacy abac on the cluster
-	EnableLegacyAbac *bool `json:"enableLegacyAbac,omitempty" tf:"enable_legacy_abac,omitempty"`
-
-	// Enable master authorized network. Set to true if master_authorized_network_cidr_blocks is set. Default false (bool)
-	// Whether or not master authorized network is enabled
-	EnableMasterAuthorizedNetwork *bool `json:"enableMasterAuthorizedNetwork,omitempty" tf:"enable_master_authorized_network,omitempty"`
-
-	// Enable network policy config for the cluster. Default true (bool)
-	// Enable network policy config for the cluster
-	EnableNetworkPolicyConfig *bool `json:"enableNetworkPolicyConfig,omitempty" tf:"enable_network_policy_config,omitempty"`
-
-	// Enable nodepool autoscaling. Default false (bool)
-	// Enable nodepool autoscaling
-	EnableNodepoolAutoscaling *bool `json:"enableNodepoolAutoscaling,omitempty" tf:"enable_nodepool_autoscaling,omitempty"`
-
-	// Whether the master's internal IP address is used as the cluster endpoint. Default false (bool)
-	// Whether the master's internal IP address is used as the cluster endpoint
-	EnablePrivateEndpoint *bool `json:"enablePrivateEndpoint,omitempty" tf:"enable_private_endpoint,omitempty"`
-
-	// Whether nodes have internal IP address only. Default false (bool)
-	// Whether nodes have internal IP address only
-	EnablePrivateNodes *bool `json:"enablePrivateNodes,omitempty" tf:"enable_private_nodes,omitempty"`
-
-	// Enable stackdriver monitoring. Default true (bool)
-	// Enable stackdriver logging
-	EnableStackdriverLogging *bool `json:"enableStackdriverLogging,omitempty" tf:"enable_stackdriver_logging,omitempty"`
-
-	// Enable stackdriver monitoring on GKE cluster (bool)
-	// Enable stackdriver monitoring
-	EnableStackdriverMonitoring *bool `json:"enableStackdriverMonitoring,omitempty" tf:"enable_stackdriver_monitoring,omitempty"`
-
-	// The IP address range for the cluster pod IPs (string)
-	// The IP address range for the cluster pod IPs
-	IPPolicyClusterIPv4CidrBlock *string `json:"ipPolicyClusterIpv4CidrBlock,omitempty" tf:"ip_policy_cluster_ipv4_cidr_block,omitempty"`
-
-	// The name of the secondary range to be used for the cluster CIDR block (string)
-	// The name of the secondary range to be used for the cluster CIDR block
-	IPPolicyClusterSecondaryRangeName *string `json:"ipPolicyClusterSecondaryRangeName,omitempty" tf:"ip_policy_cluster_secondary_range_name,omitempty"`
-
-	// Whether a new subnetwork will be created automatically for the cluster. Default false (bool)
-	// Whether a new subnetwork will be created automatically for the cluster
-	IPPolicyCreateSubnetwork *bool `json:"ipPolicyCreateSubnetwork,omitempty" tf:"ip_policy_create_subnetwork,omitempty"`
-
-	// The IP address range of the instance IPs in this cluster (string)
-	// The IP address range of the instance IPs in this cluster
-	IPPolicyNodeIPv4CidrBlock *string `json:"ipPolicyNodeIpv4CidrBlock,omitempty" tf:"ip_policy_node_ipv4_cidr_block,omitempty"`
-
-	// The IP address range of the services IPs in this cluster (string)
-	// The IP address range of the services IPs in this cluster
-	IPPolicyServicesIPv4CidrBlock *string `json:"ipPolicyServicesIpv4CidrBlock,omitempty" tf:"ip_policy_services_ipv4_cidr_block,omitempty"`
-
-	// The name of the secondary range to be used for the services CIDR block (string)
-	// The name of the secondary range to be used for the services CIDR block
-	IPPolicyServicesSecondaryRangeName *string `json:"ipPolicyServicesSecondaryRangeName,omitempty" tf:"ip_policy_services_secondary_range_name,omitempty"`
-
-	// A custom subnetwork name to be used if createSubnetwork is true (string)
-	// A custom subnetwork name to be used if createSubnetwork is true
-	IPPolicySubnetworkName *string `json:"ipPolicySubnetworkName,omitempty" tf:"ip_policy_subnetwork_name,omitempty"`
-
-	// The image to use for the worker nodes (string)
-	// The image to use for the worker nodes
-	ImageType *string `json:"imageType,omitempty" tf:"image_type,omitempty"`
-
-	// Issue a client certificate. Default false (bool)
-	// Issue a client certificate
-	IssueClientCertificate *bool `json:"issueClientCertificate,omitempty" tf:"issue_client_certificate,omitempty"`
-
-	// Enable the Kubernetes dashboard. Default false (bool)
-	// Enable the kubernetes dashboard
-	KubernetesDashboard *bool `json:"kubernetesDashboard,omitempty" tf:"kubernetes_dashboard,omitempty"`
-
-	// Labels for the Cluster (map)
-	// The map of Kubernetes labels (key/value pairs) to be applied to each node
-	// +mapType=granular
-	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
-
-	// The number of local SSD disks to be attached to the node. Default 0 (int)
-	// The number of local SSD disks to be attached to the node
-	LocalSsdCount *float64 `json:"localSsdCount,omitempty" tf:"local_ssd_count,omitempty"`
-
-	// Locations for GKE cluster (list)
-	// Locations to use for the cluster
-	Locations []*string `json:"locations,omitempty" tf:"locations,omitempty"`
-
-	// Machine type for GKE cluster (string)
-	// The machine type to use for the worker nodes
-	MachineType *string `json:"machineType,omitempty" tf:"machine_type,omitempty"`
-
-	// Maintenance window for GKE cluster (string)
-	// When to performance updates on the nodes, in 24-hour time
-	MaintenanceWindow *string `json:"maintenanceWindow,omitempty" tf:"maintenance_window,omitempty"`
-
-	// Define up to 10 external networks that could access Kubernetes master through HTTPS (list)
-	// Define up to 10 external networks that could access Kubernetes master through HTTPS
-	MasterAuthorizedNetworkCidrBlocks []*string `json:"masterAuthorizedNetworkCidrBlocks,omitempty" tf:"master_authorized_network_cidr_blocks,omitempty"`
-
-	// The IP range in CIDR notation to use for the hosted master network (string)
-	// The IP range in CIDR notation to use for the hosted master network
-	MasterIPv4CidrBlock *string `json:"masterIpv4CidrBlock,omitempty" tf:"master_ipv4_cidr_block,omitempty"`
-
-	// Master version for GKE cluster (string)
-	// The kubernetes master version
-	MasterVersion *string `json:"masterVersion,omitempty" tf:"master_version,omitempty"`
-
-	// Maximum number of nodes in the NodePool. Must be >= minNodeCount. There has to enough quota to scale up the cluster. Default 0 (int)
-	// Maximum number of nodes in the NodePool. Must be >= minNodeCount. There has to enough quota to scale up the cluster
-	MaxNodeCount *float64 `json:"maxNodeCount,omitempty" tf:"max_node_count,omitempty"`
-
-	// Minimmum number of nodes in the NodePool. Must be >= 1 and <= maxNodeCount. Default 0 (int)
-	// Minimmum number of nodes in the NodePool. Must be >= 1 and <= maxNodeCount
-	MinNodeCount *float64 `json:"minNodeCount,omitempty" tf:"min_node_count,omitempty"`
-
-	// Kubernetes cluster networking (list maxitems:1)
-	// The network to use for the cluster
-	Network *string `json:"network,omitempty" tf:"network,omitempty"`
-
-	// Node count for GKE cluster. Default 3 (int)
-	// The number of nodes to create in this cluster
-	NodeCount *float64 `json:"nodeCount,omitempty" tf:"node_count,omitempty"`
-
-	// The ID of the cluster node pool (string)
-	// The ID of the cluster node pool
-	NodePool *string `json:"nodePool,omitempty" tf:"node_pool,omitempty"`
-
-	// Node version for GKE cluster (string)
-	// The version of kubernetes to use on the nodes
-	NodeVersion *string `json:"nodeVersion,omitempty" tf:"node_version,omitempty"`
-
-	// The set of Google API scopes to be made available on all of the node VMs under the default service account (list)
-	// The set of Google API scopes to be made available on all of the node VMs under the default service account
-	OauthScopes []*string `json:"oauthScopes,omitempty" tf:"oauth_scopes,omitempty"`
-
-	// Whether the nodes are created as preemptible VM instances. Default false (bool)
-	// Whether the nodes are created as preemptible VM instances
-	Preemptible *bool `json:"preemptible,omitempty" tf:"preemptible,omitempty"`
-
-	// Project ID for GKE cluster (string)
-	// The ID of your project to use when creating a cluster
-	ProjectID *string `json:"projectId,omitempty" tf:"project_id,omitempty"`
-
-	// (string)
-	// The region to launch the cluster. Region or zone should be used
-	Region *string `json:"region,omitempty" tf:"region,omitempty"`
-
-	// The map of Kubernetes labels to be applied to each cluster (map)
-	// The map of Kubernetes labels (key/value pairs) to be applied to each cluster
-	// +mapType=granular
-	ResourceLabels map[string]*string `json:"resourceLabels,omitempty" tf:"resource_labels,omitempty"`
-
-	// The Google Cloud Platform Service Account to be used by the node VMs (string)
-	// The Google Cloud Platform Service Account to be used by the node VMs
-	ServiceAccount *string `json:"serviceAccount,omitempty" tf:"service_account,omitempty"`
-
-	// Subnetwork for GKE cluster (string)
-	// The sub-network to use for the cluster
-	SubNetwork *string `json:"subNetwork,omitempty" tf:"sub_network,omitempty"`
-
-	// (Optonal) The AKS node pool taints (list)
-	// List of kubernetes taints to be applied to each node
-	Taints []*string `json:"taints,omitempty" tf:"taints,omitempty"`
-
-	// Whether alias IPs will be used for pod IPs in the cluster. Default false (bool)
-	// Whether alias IPs will be used for pod IPs in the cluster
-	UseIPAliases *bool `json:"useIpAliases,omitempty" tf:"use_ip_aliases,omitempty"`
-
-	// (string)
-	// The zone to launch the cluster. Zone or region should be used
-	Zone *string `json:"zone,omitempty" tf:"zone,omitempty"`
-}
-
-type GkeConfigObservation struct {
-
-	// The IP address range of the container pods (string)
-	// The IP address range of the container pods
-	ClusterIPv4Cidr *string `json:"clusterIpv4Cidr,omitempty" tf:"cluster_ipv4_cidr,omitempty"`
-
-	// The description for Cluster (string)
-	// An optional description of this cluster
-	Description *string `json:"description,omitempty" tf:"description,omitempty"`
-
-	// Size of the disk attached to each node. Default 100 (int)
-	// Size of the disk attached to each node
-	DiskSizeGb *float64 `json:"diskSizeGb,omitempty" tf:"disk_size_gb,omitempty"`
-
-	// Type of the disk attached to each node (string)
-	// Type of the disk attached to each node
-	DiskType *string `json:"diskType,omitempty" tf:"disk_type,omitempty"`
-
-	// To enable Kubernetes alpha feature. Default true (bool)
-	// To enable kubernetes alpha feature
-	EnableAlphaFeature *bool `json:"enableAlphaFeature,omitempty" tf:"enable_alpha_feature,omitempty"`
-
-	// Specifies whether the node auto-repair is enabled for the node pool. Default false (bool)
-	// Specifies whether the node auto-repair is enabled for the node pool
-	EnableAutoRepair *bool `json:"enableAutoRepair,omitempty" tf:"enable_auto_repair,omitempty"`
-
-	// Specifies whether node auto-upgrade is enabled for the node pool. Default false (bool)
-	// Specifies whether node auto-upgrade is enabled for the node pool
-	EnableAutoUpgrade *bool `json:"enableAutoUpgrade,omitempty" tf:"enable_auto_upgrade,omitempty"`
-
-	// Enable HTTP load balancing on GKE cluster. Default true (bool)
-	// Enable http load balancing for the cluster
-	EnableHTTPLoadBalancing *bool `json:"enableHttpLoadBalancing,omitempty" tf:"enable_http_load_balancing,omitempty"`
-
-	// Enable horizontal pod autoscaling for the cluster. Default true (bool)
-	// Enable horizontal pod autoscaling for the cluster
-	EnableHorizontalPodAutoscaling *bool `json:"enableHorizontalPodAutoscaling,omitempty" tf:"enable_horizontal_pod_autoscaling,omitempty"`
-
-	// Whether to enable the Kubernetes dashboard. Default false (bool)
-	// Whether to enable the kubernetes dashboard
-	EnableKubernetesDashboard *bool `json:"enableKubernetesDashboard,omitempty" tf:"enable_kubernetes_dashboard,omitempty"`
-
-	// Whether to enable legacy abac on the cluster. Default false (bool)
-	// Whether to enable legacy abac on the cluster
-	EnableLegacyAbac *bool `json:"enableLegacyAbac,omitempty" tf:"enable_legacy_abac,omitempty"`
-
-	// Enable master authorized network. Set to true if master_authorized_network_cidr_blocks is set. Default false (bool)
-	// Whether or not master authorized network is enabled
-	EnableMasterAuthorizedNetwork *bool `json:"enableMasterAuthorizedNetwork,omitempty" tf:"enable_master_authorized_network,omitempty"`
-
-	// Enable network policy config for the cluster. Default true (bool)
-	// Enable network policy config for the cluster
-	EnableNetworkPolicyConfig *bool `json:"enableNetworkPolicyConfig,omitempty" tf:"enable_network_policy_config,omitempty"`
-
-	// Enable nodepool autoscaling. Default false (bool)
-	// Enable nodepool autoscaling
-	EnableNodepoolAutoscaling *bool `json:"enableNodepoolAutoscaling,omitempty" tf:"enable_nodepool_autoscaling,omitempty"`
-
-	// Whether the master's internal IP address is used as the cluster endpoint. Default false (bool)
-	// Whether the master's internal IP address is used as the cluster endpoint
-	EnablePrivateEndpoint *bool `json:"enablePrivateEndpoint,omitempty" tf:"enable_private_endpoint,omitempty"`
-
-	// Whether nodes have internal IP address only. Default false (bool)
-	// Whether nodes have internal IP address only
-	EnablePrivateNodes *bool `json:"enablePrivateNodes,omitempty" tf:"enable_private_nodes,omitempty"`
-
-	// Enable stackdriver monitoring. Default true (bool)
-	// Enable stackdriver logging
-	EnableStackdriverLogging *bool `json:"enableStackdriverLogging,omitempty" tf:"enable_stackdriver_logging,omitempty"`
-
-	// Enable stackdriver monitoring on GKE cluster (bool)
-	// Enable stackdriver monitoring
-	EnableStackdriverMonitoring *bool `json:"enableStackdriverMonitoring,omitempty" tf:"enable_stackdriver_monitoring,omitempty"`
-
-	// The IP address range for the cluster pod IPs (string)
-	// The IP address range for the cluster pod IPs
-	IPPolicyClusterIPv4CidrBlock *string `json:"ipPolicyClusterIpv4CidrBlock,omitempty" tf:"ip_policy_cluster_ipv4_cidr_block,omitempty"`
-
-	// The name of the secondary range to be used for the cluster CIDR block (string)
-	// The name of the secondary range to be used for the cluster CIDR block
-	IPPolicyClusterSecondaryRangeName *string `json:"ipPolicyClusterSecondaryRangeName,omitempty" tf:"ip_policy_cluster_secondary_range_name,omitempty"`
-
-	// Whether a new subnetwork will be created automatically for the cluster. Default false (bool)
-	// Whether a new subnetwork will be created automatically for the cluster
-	IPPolicyCreateSubnetwork *bool `json:"ipPolicyCreateSubnetwork,omitempty" tf:"ip_policy_create_subnetwork,omitempty"`
-
-	// The IP address range of the instance IPs in this cluster (string)
-	// The IP address range of the instance IPs in this cluster
-	IPPolicyNodeIPv4CidrBlock *string `json:"ipPolicyNodeIpv4CidrBlock,omitempty" tf:"ip_policy_node_ipv4_cidr_block,omitempty"`
-
-	// The IP address range of the services IPs in this cluster (string)
-	// The IP address range of the services IPs in this cluster
-	IPPolicyServicesIPv4CidrBlock *string `json:"ipPolicyServicesIpv4CidrBlock,omitempty" tf:"ip_policy_services_ipv4_cidr_block,omitempty"`
-
-	// The name of the secondary range to be used for the services CIDR block (string)
-	// The name of the secondary range to be used for the services CIDR block
-	IPPolicyServicesSecondaryRangeName *string `json:"ipPolicyServicesSecondaryRangeName,omitempty" tf:"ip_policy_services_secondary_range_name,omitempty"`
-
-	// A custom subnetwork name to be used if createSubnetwork is true (string)
-	// A custom subnetwork name to be used if createSubnetwork is true
-	IPPolicySubnetworkName *string `json:"ipPolicySubnetworkName,omitempty" tf:"ip_policy_subnetwork_name,omitempty"`
-
-	// The image to use for the worker nodes (string)
-	// The image to use for the worker nodes
-	ImageType *string `json:"imageType,omitempty" tf:"image_type,omitempty"`
-
-	// Issue a client certificate. Default false (bool)
-	// Issue a client certificate
-	IssueClientCertificate *bool `json:"issueClientCertificate,omitempty" tf:"issue_client_certificate,omitempty"`
-
-	// Enable the Kubernetes dashboard. Default false (bool)
-	// Enable the kubernetes dashboard
-	KubernetesDashboard *bool `json:"kubernetesDashboard,omitempty" tf:"kubernetes_dashboard,omitempty"`
-
-	// Labels for the Cluster (map)
-	// The map of Kubernetes labels (key/value pairs) to be applied to each node
-	// +mapType=granular
-	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
-
-	// The number of local SSD disks to be attached to the node. Default 0 (int)
-	// The number of local SSD disks to be attached to the node
-	LocalSsdCount *float64 `json:"localSsdCount,omitempty" tf:"local_ssd_count,omitempty"`
-
-	// Locations for GKE cluster (list)
-	// Locations to use for the cluster
-	Locations []*string `json:"locations,omitempty" tf:"locations,omitempty"`
-
-	// Machine type for GKE cluster (string)
-	// The machine type to use for the worker nodes
-	MachineType *string `json:"machineType,omitempty" tf:"machine_type,omitempty"`
-
-	// Maintenance window for GKE cluster (string)
-	// When to performance updates on the nodes, in 24-hour time
-	MaintenanceWindow *string `json:"maintenanceWindow,omitempty" tf:"maintenance_window,omitempty"`
-
-	// Define up to 10 external networks that could access Kubernetes master through HTTPS (list)
-	// Define up to 10 external networks that could access Kubernetes master through HTTPS
-	MasterAuthorizedNetworkCidrBlocks []*string `json:"masterAuthorizedNetworkCidrBlocks,omitempty" tf:"master_authorized_network_cidr_blocks,omitempty"`
-
-	// The IP range in CIDR notation to use for the hosted master network (string)
-	// The IP range in CIDR notation to use for the hosted master network
-	MasterIPv4CidrBlock *string `json:"masterIpv4CidrBlock,omitempty" tf:"master_ipv4_cidr_block,omitempty"`
-
-	// Master version for GKE cluster (string)
-	// The kubernetes master version
-	MasterVersion *string `json:"masterVersion,omitempty" tf:"master_version,omitempty"`
-
-	// Maximum number of nodes in the NodePool. Must be >= minNodeCount. There has to enough quota to scale up the cluster. Default 0 (int)
-	// Maximum number of nodes in the NodePool. Must be >= minNodeCount. There has to enough quota to scale up the cluster
-	MaxNodeCount *float64 `json:"maxNodeCount,omitempty" tf:"max_node_count,omitempty"`
-
-	// Minimmum number of nodes in the NodePool. Must be >= 1 and <= maxNodeCount. Default 0 (int)
-	// Minimmum number of nodes in the NodePool. Must be >= 1 and <= maxNodeCount
-	MinNodeCount *float64 `json:"minNodeCount,omitempty" tf:"min_node_count,omitempty"`
-
-	// Kubernetes cluster networking (list maxitems:1)
-	// The network to use for the cluster
-	Network *string `json:"network,omitempty" tf:"network,omitempty"`
-
-	// Node count for GKE cluster. Default 3 (int)
-	// The number of nodes to create in this cluster
-	NodeCount *float64 `json:"nodeCount,omitempty" tf:"node_count,omitempty"`
-
-	// The ID of the cluster node pool (string)
-	// The ID of the cluster node pool
-	NodePool *string `json:"nodePool,omitempty" tf:"node_pool,omitempty"`
-
-	// Node version for GKE cluster (string)
-	// The version of kubernetes to use on the nodes
-	NodeVersion *string `json:"nodeVersion,omitempty" tf:"node_version,omitempty"`
-
-	// The set of Google API scopes to be made available on all of the node VMs under the default service account (list)
-	// The set of Google API scopes to be made available on all of the node VMs under the default service account
-	OauthScopes []*string `json:"oauthScopes,omitempty" tf:"oauth_scopes,omitempty"`
-
-	// Whether the nodes are created as preemptible VM instances. Default false (bool)
-	// Whether the nodes are created as preemptible VM instances
-	Preemptible *bool `json:"preemptible,omitempty" tf:"preemptible,omitempty"`
-
-	// Project ID for GKE cluster (string)
-	// The ID of your project to use when creating a cluster
-	ProjectID *string `json:"projectId,omitempty" tf:"project_id,omitempty"`
-
-	// (string)
-	// The region to launch the cluster. Region or zone should be used
-	Region *string `json:"region,omitempty" tf:"region,omitempty"`
-
-	// The map of Kubernetes labels to be applied to each cluster (map)
-	// The map of Kubernetes labels (key/value pairs) to be applied to each cluster
-	// +mapType=granular
-	ResourceLabels map[string]*string `json:"resourceLabels,omitempty" tf:"resource_labels,omitempty"`
-
-	// The Google Cloud Platform Service Account to be used by the node VMs (string)
-	// The Google Cloud Platform Service Account to be used by the node VMs
-	ServiceAccount *string `json:"serviceAccount,omitempty" tf:"service_account,omitempty"`
-
-	// Subnetwork for GKE cluster (string)
-	// The sub-network to use for the cluster
-	SubNetwork *string `json:"subNetwork,omitempty" tf:"sub_network,omitempty"`
-
-	// (Optonal) The AKS node pool taints (list)
-	// List of kubernetes taints to be applied to each node
-	Taints []*string `json:"taints,omitempty" tf:"taints,omitempty"`
-
-	// Whether alias IPs will be used for pod IPs in the cluster. Default false (bool)
-	// Whether alias IPs will be used for pod IPs in the cluster
-	UseIPAliases *bool `json:"useIpAliases,omitempty" tf:"use_ip_aliases,omitempty"`
-
-	// (string)
-	// The zone to launch the cluster. Zone or region should be used
-	Zone *string `json:"zone,omitempty" tf:"zone,omitempty"`
-}
-
-type GkeConfigParameters struct {
-
-	// The IP address range of the container pods (string)
-	// The IP address range of the container pods
-	// +kubebuilder:validation:Optional
-	ClusterIPv4Cidr *string `json:"clusterIpv4Cidr" tf:"cluster_ipv4_cidr,omitempty"`
-
-	// The contents of the GC credential file (string)
-	// The contents of the GC credential file
-	// +kubebuilder:validation:Optional
-	CredentialSecretRef v1.SecretKeySelector `json:"credentialSecretRef" tf:"-"`
-
-	// The description for Cluster (string)
-	// An optional description of this cluster
-	// +kubebuilder:validation:Optional
-	Description *string `json:"description,omitempty" tf:"description,omitempty"`
-
-	// Size of the disk attached to each node. Default 100 (int)
-	// Size of the disk attached to each node
-	// +kubebuilder:validation:Optional
-	DiskSizeGb *float64 `json:"diskSizeGb,omitempty" tf:"disk_size_gb,omitempty"`
-
-	// Type of the disk attached to each node (string)
-	// Type of the disk attached to each node
-	// +kubebuilder:validation:Optional
-	DiskType *string `json:"diskType" tf:"disk_type,omitempty"`
-
-	// To enable Kubernetes alpha feature. Default true (bool)
-	// To enable kubernetes alpha feature
-	// +kubebuilder:validation:Optional
-	EnableAlphaFeature *bool `json:"enableAlphaFeature,omitempty" tf:"enable_alpha_feature,omitempty"`
-
-	// Specifies whether the node auto-repair is enabled for the node pool. Default false (bool)
-	// Specifies whether the node auto-repair is enabled for the node pool
-	// +kubebuilder:validation:Optional
-	EnableAutoRepair *bool `json:"enableAutoRepair,omitempty" tf:"enable_auto_repair,omitempty"`
-
-	// Specifies whether node auto-upgrade is enabled for the node pool. Default false (bool)
-	// Specifies whether node auto-upgrade is enabled for the node pool
-	// +kubebuilder:validation:Optional
-	EnableAutoUpgrade *bool `json:"enableAutoUpgrade,omitempty" tf:"enable_auto_upgrade,omitempty"`
-
-	// Enable HTTP load balancing on GKE cluster. Default true (bool)
-	// Enable http load balancing for the cluster
-	// +kubebuilder:validation:Optional
-	EnableHTTPLoadBalancing *bool `json:"enableHttpLoadBalancing,omitempty" tf:"enable_http_load_balancing,omitempty"`
-
-	// Enable horizontal pod autoscaling for the cluster. Default true (bool)
-	// Enable horizontal pod autoscaling for the cluster
-	// +kubebuilder:validation:Optional
-	EnableHorizontalPodAutoscaling *bool `json:"enableHorizontalPodAutoscaling,omitempty" tf:"enable_horizontal_pod_autoscaling,omitempty"`
-
-	// Whether to enable the Kubernetes dashboard. Default false (bool)
-	// Whether to enable the kubernetes dashboard
-	// +kubebuilder:validation:Optional
-	EnableKubernetesDashboard *bool `json:"enableKubernetesDashboard,omitempty" tf:"enable_kubernetes_dashboard,omitempty"`
-
-	// Whether to enable legacy abac on the cluster. Default false (bool)
-	// Whether to enable legacy abac on the cluster
-	// +kubebuilder:validation:Optional
-	EnableLegacyAbac *bool `json:"enableLegacyAbac,omitempty" tf:"enable_legacy_abac,omitempty"`
-
-	// Enable master authorized network. Set to true if master_authorized_network_cidr_blocks is set. Default false (bool)
-	// Whether or not master authorized network is enabled
-	// +kubebuilder:validation:Optional
-	EnableMasterAuthorizedNetwork *bool `json:"enableMasterAuthorizedNetwork,omitempty" tf:"enable_master_authorized_network,omitempty"`
-
-	// Enable network policy config for the cluster. Default true (bool)
-	// Enable network policy config for the cluster
-	// +kubebuilder:validation:Optional
-	EnableNetworkPolicyConfig *bool `json:"enableNetworkPolicyConfig,omitempty" tf:"enable_network_policy_config,omitempty"`
-
-	// Enable nodepool autoscaling. Default false (bool)
-	// Enable nodepool autoscaling
-	// +kubebuilder:validation:Optional
-	EnableNodepoolAutoscaling *bool `json:"enableNodepoolAutoscaling,omitempty" tf:"enable_nodepool_autoscaling,omitempty"`
-
-	// Whether the master's internal IP address is used as the cluster endpoint. Default false (bool)
-	// Whether the master's internal IP address is used as the cluster endpoint
-	// +kubebuilder:validation:Optional
-	EnablePrivateEndpoint *bool `json:"enablePrivateEndpoint,omitempty" tf:"enable_private_endpoint,omitempty"`
-
-	// Whether nodes have internal IP address only. Default false (bool)
-	// Whether nodes have internal IP address only
-	// +kubebuilder:validation:Optional
-	EnablePrivateNodes *bool `json:"enablePrivateNodes,omitempty" tf:"enable_private_nodes,omitempty"`
-
-	// Enable stackdriver monitoring. Default true (bool)
-	// Enable stackdriver logging
-	// +kubebuilder:validation:Optional
-	EnableStackdriverLogging *bool `json:"enableStackdriverLogging,omitempty" tf:"enable_stackdriver_logging,omitempty"`
-
-	// Enable stackdriver monitoring on GKE cluster (bool)
-	// Enable stackdriver monitoring
-	// +kubebuilder:validation:Optional
-	EnableStackdriverMonitoring *bool `json:"enableStackdriverMonitoring,omitempty" tf:"enable_stackdriver_monitoring,omitempty"`
-
-	// The IP address range for the cluster pod IPs (string)
-	// The IP address range for the cluster pod IPs
-	// +kubebuilder:validation:Optional
-	IPPolicyClusterIPv4CidrBlock *string `json:"ipPolicyClusterIpv4CidrBlock" tf:"ip_policy_cluster_ipv4_cidr_block,omitempty"`
-
-	// The name of the secondary range to be used for the cluster CIDR block (string)
-	// The name of the secondary range to be used for the cluster CIDR block
-	// +kubebuilder:validation:Optional
-	IPPolicyClusterSecondaryRangeName *string `json:"ipPolicyClusterSecondaryRangeName" tf:"ip_policy_cluster_secondary_range_name,omitempty"`
-
-	// Whether a new subnetwork will be created automatically for the cluster. Default false (bool)
-	// Whether a new subnetwork will be created automatically for the cluster
-	// +kubebuilder:validation:Optional
-	IPPolicyCreateSubnetwork *bool `json:"ipPolicyCreateSubnetwork,omitempty" tf:"ip_policy_create_subnetwork,omitempty"`
-
-	// The IP address range of the instance IPs in this cluster (string)
-	// The IP address range of the instance IPs in this cluster
-	// +kubebuilder:validation:Optional
-	IPPolicyNodeIPv4CidrBlock *string `json:"ipPolicyNodeIpv4CidrBlock" tf:"ip_policy_node_ipv4_cidr_block,omitempty"`
-
-	// The IP address range of the services IPs in this cluster (string)
-	// The IP address range of the services IPs in this cluster
-	// +kubebuilder:validation:Optional
-	IPPolicyServicesIPv4CidrBlock *string `json:"ipPolicyServicesIpv4CidrBlock" tf:"ip_policy_services_ipv4_cidr_block,omitempty"`
-
-	// The name of the secondary range to be used for the services CIDR block (string)
-	// The name of the secondary range to be used for the services CIDR block
-	// +kubebuilder:validation:Optional
-	IPPolicyServicesSecondaryRangeName *string `json:"ipPolicyServicesSecondaryRangeName" tf:"ip_policy_services_secondary_range_name,omitempty"`
-
-	// A custom subnetwork name to be used if createSubnetwork is true (string)
-	// A custom subnetwork name to be used if createSubnetwork is true
-	// +kubebuilder:validation:Optional
-	IPPolicySubnetworkName *string `json:"ipPolicySubnetworkName" tf:"ip_policy_subnetwork_name,omitempty"`
-
-	// The image to use for the worker nodes (string)
-	// The image to use for the worker nodes
-	// +kubebuilder:validation:Optional
-	ImageType *string `json:"imageType" tf:"image_type,omitempty"`
-
-	// Issue a client certificate. Default false (bool)
-	// Issue a client certificate
-	// +kubebuilder:validation:Optional
-	IssueClientCertificate *bool `json:"issueClientCertificate,omitempty" tf:"issue_client_certificate,omitempty"`
-
-	// Enable the Kubernetes dashboard. Default false (bool)
-	// Enable the kubernetes dashboard
-	// +kubebuilder:validation:Optional
-	KubernetesDashboard *bool `json:"kubernetesDashboard,omitempty" tf:"kubernetes_dashboard,omitempty"`
-
-	// Labels for the Cluster (map)
-	// The map of Kubernetes labels (key/value pairs) to be applied to each node
-	// +kubebuilder:validation:Optional
-	// +mapType=granular
-	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
-
-	// The number of local SSD disks to be attached to the node. Default 0 (int)
-	// The number of local SSD disks to be attached to the node
-	// +kubebuilder:validation:Optional
-	LocalSsdCount *float64 `json:"localSsdCount,omitempty" tf:"local_ssd_count,omitempty"`
-
-	// Locations for GKE cluster (list)
-	// Locations to use for the cluster
-	// +kubebuilder:validation:Optional
-	Locations []*string `json:"locations" tf:"locations,omitempty"`
-
-	// Machine type for GKE cluster (string)
-	// The machine type to use for the worker nodes
-	// +kubebuilder:validation:Optional
-	MachineType *string `json:"machineType" tf:"machine_type,omitempty"`
-
-	// Maintenance window for GKE cluster (string)
-	// When to performance updates on the nodes, in 24-hour time
-	// +kubebuilder:validation:Optional
-	MaintenanceWindow *string `json:"maintenanceWindow" tf:"maintenance_window,omitempty"`
-
-	// Define up to 10 external networks that could access Kubernetes master through HTTPS (list)
-	// Define up to 10 external networks that could access Kubernetes master through HTTPS
-	// +kubebuilder:validation:Optional
-	MasterAuthorizedNetworkCidrBlocks []*string `json:"masterAuthorizedNetworkCidrBlocks,omitempty" tf:"master_authorized_network_cidr_blocks,omitempty"`
-
-	// The IP range in CIDR notation to use for the hosted master network (string)
-	// The IP range in CIDR notation to use for the hosted master network
-	// +kubebuilder:validation:Optional
-	MasterIPv4CidrBlock *string `json:"masterIpv4CidrBlock" tf:"master_ipv4_cidr_block,omitempty"`
-
-	// Master version for GKE cluster (string)
-	// The kubernetes master version
-	// +kubebuilder:validation:Optional
-	MasterVersion *string `json:"masterVersion" tf:"master_version,omitempty"`
-
-	// Maximum number of nodes in the NodePool. Must be >= minNodeCount. There has to enough quota to scale up the cluster. Default 0 (int)
-	// Maximum number of nodes in the NodePool. Must be >= minNodeCount. There has to enough quota to scale up the cluster
-	// +kubebuilder:validation:Optional
-	MaxNodeCount *float64 `json:"maxNodeCount,omitempty" tf:"max_node_count,omitempty"`
-
-	// Minimmum number of nodes in the NodePool. Must be >= 1 and <= maxNodeCount. Default 0 (int)
-	// Minimmum number of nodes in the NodePool. Must be >= 1 and <= maxNodeCount
-	// +kubebuilder:validation:Optional
-	MinNodeCount *float64 `json:"minNodeCount,omitempty" tf:"min_node_count,omitempty"`
-
-	// Kubernetes cluster networking (list maxitems:1)
-	// The network to use for the cluster
-	// +kubebuilder:validation:Optional
-	Network *string `json:"network" tf:"network,omitempty"`
-
-	// Node count for GKE cluster. Default 3 (int)
-	// The number of nodes to create in this cluster
-	// +kubebuilder:validation:Optional
-	NodeCount *float64 `json:"nodeCount,omitempty" tf:"node_count,omitempty"`
-
-	// The ID of the cluster node pool (string)
-	// The ID of the cluster node pool
-	// +kubebuilder:validation:Optional
-	NodePool *string `json:"nodePool" tf:"node_pool,omitempty"`
-
-	// Node version for GKE cluster (string)
-	// The version of kubernetes to use on the nodes
-	// +kubebuilder:validation:Optional
-	NodeVersion *string `json:"nodeVersion" tf:"node_version,omitempty"`
-
-	// The set of Google API scopes to be made available on all of the node VMs under the default service account (list)
-	// The set of Google API scopes to be made available on all of the node VMs under the default service account
-	// +kubebuilder:validation:Optional
-	OauthScopes []*string `json:"oauthScopes" tf:"oauth_scopes,omitempty"`
-
-	// Whether the nodes are created as preemptible VM instances. Default false (bool)
-	// Whether the nodes are created as preemptible VM instances
-	// +kubebuilder:validation:Optional
-	Preemptible *bool `json:"preemptible,omitempty" tf:"preemptible,omitempty"`
-
-	// Project ID for GKE cluster (string)
-	// The ID of your project to use when creating a cluster
-	// +kubebuilder:validation:Optional
-	ProjectID *string `json:"projectId" tf:"project_id,omitempty"`
-
-	// (string)
-	// The region to launch the cluster. Region or zone should be used
-	// +kubebuilder:validation:Optional
-	Region *string `json:"region,omitempty" tf:"region,omitempty"`
-
-	// The map of Kubernetes labels to be applied to each cluster (map)
-	// The map of Kubernetes labels (key/value pairs) to be applied to each cluster
-	// +kubebuilder:validation:Optional
-	// +mapType=granular
-	ResourceLabels map[string]*string `json:"resourceLabels,omitempty" tf:"resource_labels,omitempty"`
-
-	// The Google Cloud Platform Service Account to be used by the node VMs (string)
-	// The Google Cloud Platform Service Account to be used by the node VMs
-	// +kubebuilder:validation:Optional
-	ServiceAccount *string `json:"serviceAccount" tf:"service_account,omitempty"`
-
-	// Subnetwork for GKE cluster (string)
-	// The sub-network to use for the cluster
-	// +kubebuilder:validation:Optional
-	SubNetwork *string `json:"subNetwork" tf:"sub_network,omitempty"`
-
-	// (Optonal) The AKS node pool taints (list)
-	// List of kubernetes taints to be applied to each node
-	// +kubebuilder:validation:Optional
-	Taints []*string `json:"taints,omitempty" tf:"taints,omitempty"`
-
-	// Whether alias IPs will be used for pod IPs in the cluster. Default false (bool)
-	// Whether alias IPs will be used for pod IPs in the cluster
-	// +kubebuilder:validation:Optional
-	UseIPAliases *bool `json:"useIpAliases,omitempty" tf:"use_ip_aliases,omitempty"`
-
-	// (string)
-	// The zone to launch the cluster. Zone or region should be used
-	// +kubebuilder:validation:Optional
-	Zone *string `json:"zone,omitempty" tf:"zone,omitempty"`
-}
-
 type GkeConfigV2InitParameters struct {
 
 	// The GKE cluster addons (List maxitems:1)
@@ -5266,7 +3836,7 @@ type GkeConfigV2InitParameters struct {
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
-	// Locations for GKE cluster (list)
+	// The GKE cluster locations (List)
 	// The GKE cluster locations
 	Locations []*string `json:"locations,omitempty" tf:"locations,omitempty"`
 
@@ -5274,7 +3844,7 @@ type GkeConfigV2InitParameters struct {
 	// The GKE cluster logging service
 	LoggingService *string `json:"loggingService,omitempty" tf:"logging_service,omitempty"`
 
-	// Maintenance window for GKE cluster (string)
+	// The GKE cluster maintenance window (string)
 	// The GKE cluster maintenance window
 	MaintenanceWindow *string `json:"maintenanceWindow,omitempty" tf:"maintenance_window,omitempty"`
 
@@ -5306,7 +3876,7 @@ type GkeConfigV2InitParameters struct {
 	// The GKE private cluster config
 	PrivateClusterConfig []PrivateClusterConfigInitParameters `json:"privateClusterConfig,omitempty" tf:"private_cluster_config,omitempty"`
 
-	// Project ID for GKE cluster (string)
+	// The GKE cluster project id (string)
 	// The GKE project id
 	ProjectID *string `json:"projectId,omitempty" tf:"project_id,omitempty"`
 
@@ -5458,7 +4028,7 @@ type GkeConfigV2Observation struct {
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
-	// Locations for GKE cluster (list)
+	// The GKE cluster locations (List)
 	// The GKE cluster locations
 	Locations []*string `json:"locations,omitempty" tf:"locations,omitempty"`
 
@@ -5466,7 +4036,7 @@ type GkeConfigV2Observation struct {
 	// The GKE cluster logging service
 	LoggingService *string `json:"loggingService,omitempty" tf:"logging_service,omitempty"`
 
-	// Maintenance window for GKE cluster (string)
+	// The GKE cluster maintenance window (string)
 	// The GKE cluster maintenance window
 	MaintenanceWindow *string `json:"maintenanceWindow,omitempty" tf:"maintenance_window,omitempty"`
 
@@ -5498,7 +4068,7 @@ type GkeConfigV2Observation struct {
 	// The GKE private cluster config
 	PrivateClusterConfig []PrivateClusterConfigObservation `json:"privateClusterConfig,omitempty" tf:"private_cluster_config,omitempty"`
 
-	// Project ID for GKE cluster (string)
+	// The GKE cluster project id (string)
 	// The GKE project id
 	ProjectID *string `json:"projectId,omitempty" tf:"project_id,omitempty"`
 
@@ -5563,7 +4133,7 @@ type GkeConfigV2Parameters struct {
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
-	// Locations for GKE cluster (list)
+	// The GKE cluster locations (List)
 	// The GKE cluster locations
 	// +kubebuilder:validation:Optional
 	Locations []*string `json:"locations,omitempty" tf:"locations,omitempty"`
@@ -5573,7 +4143,7 @@ type GkeConfigV2Parameters struct {
 	// +kubebuilder:validation:Optional
 	LoggingService *string `json:"loggingService,omitempty" tf:"logging_service,omitempty"`
 
-	// Maintenance window for GKE cluster (string)
+	// The GKE cluster maintenance window (string)
 	// The GKE cluster maintenance window
 	// +kubebuilder:validation:Optional
 	MaintenanceWindow *string `json:"maintenanceWindow,omitempty" tf:"maintenance_window,omitempty"`
@@ -5613,7 +4183,7 @@ type GkeConfigV2Parameters struct {
 	// +kubebuilder:validation:Optional
 	PrivateClusterConfig []PrivateClusterConfigParameters `json:"privateClusterConfig,omitempty" tf:"private_cluster_config,omitempty"`
 
-	// Project ID for GKE cluster (string)
+	// The GKE cluster project id (string)
 	// The GKE project id
 	// +kubebuilder:validation:Optional
 	ProjectID *string `json:"projectId" tf:"project_id,omitempty"`
@@ -5773,7 +4343,7 @@ type IPAllocationPolicyInitParameters struct {
 	// The GKE cluster subnetwork name
 	SubnetworkName *string `json:"subnetworkName,omitempty" tf:"subnetwork_name,omitempty"`
 
-	// Whether alias IPs will be used for pod IPs in the cluster. Default false (bool)
+	// Use GKE ip aliases? Default: true (bool)
 	// Use GKE ip aliases?
 	UseIPAliases *bool `json:"useIpAliases,omitempty" tf:"use_ip_aliases,omitempty"`
 }
@@ -5808,7 +4378,7 @@ type IPAllocationPolicyObservation struct {
 	// The GKE cluster subnetwork name
 	SubnetworkName *string `json:"subnetworkName,omitempty" tf:"subnetwork_name,omitempty"`
 
-	// Whether alias IPs will be used for pod IPs in the cluster. Default false (bool)
+	// Use GKE ip aliases? Default: true (bool)
 	// Use GKE ip aliases?
 	UseIPAliases *bool `json:"useIpAliases,omitempty" tf:"use_ip_aliases,omitempty"`
 }
@@ -5850,10 +4420,32 @@ type IPAllocationPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	SubnetworkName *string `json:"subnetworkName,omitempty" tf:"subnetwork_name,omitempty"`
 
-	// Whether alias IPs will be used for pod IPs in the cluster. Default false (bool)
+	// Use GKE ip aliases? Default: true (bool)
 	// Use GKE ip aliases?
 	// +kubebuilder:validation:Optional
 	UseIPAliases *bool `json:"useIpAliases,omitempty" tf:"use_ip_aliases,omitempty"`
+}
+
+type ImportedConfigInitParameters struct {
+
+	// The URL for a cluster-level private registry (string)
+	// Private registry URL
+	PrivateRegistryURL *string `json:"privateRegistryUrl,omitempty" tf:"private_registry_url,omitempty"`
+}
+
+type ImportedConfigObservation struct {
+
+	// The URL for a cluster-level private registry (string)
+	// Private registry URL
+	PrivateRegistryURL *string `json:"privateRegistryUrl,omitempty" tf:"private_registry_url,omitempty"`
+}
+
+type ImportedConfigParameters struct {
+
+	// The URL for a cluster-level private registry (string)
+	// Private registry URL
+	// +kubebuilder:validation:Optional
+	PrivateRegistryURL *string `json:"privateRegistryUrl,omitempty" tf:"private_registry_url,omitempty"`
 }
 
 type IngressInitParameters struct {
@@ -6976,7 +5568,7 @@ type MonitoringUpdateStrategyRollingUpdateInitParameters struct {
 	// Rolling update max surge
 	MaxSurge *float64 `json:"maxSurge,omitempty" tf:"max_surge,omitempty"`
 
-	// Monitoring deployment rolling update max unavailable. Default: 1 (int)
+	// The maximum number of agent replicas that can be unavailable at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as min_available.
 	// Rolling update max unavailable
 	MaxUnavailable *float64 `json:"maxUnavailable,omitempty" tf:"max_unavailable,omitempty"`
 }
@@ -6987,7 +5579,7 @@ type MonitoringUpdateStrategyRollingUpdateObservation struct {
 	// Rolling update max surge
 	MaxSurge *float64 `json:"maxSurge,omitempty" tf:"max_surge,omitempty"`
 
-	// Monitoring deployment rolling update max unavailable. Default: 1 (int)
+	// The maximum number of agent replicas that can be unavailable at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as min_available.
 	// Rolling update max unavailable
 	MaxUnavailable *float64 `json:"maxUnavailable,omitempty" tf:"max_unavailable,omitempty"`
 }
@@ -6999,7 +5591,7 @@ type MonitoringUpdateStrategyRollingUpdateParameters struct {
 	// +kubebuilder:validation:Optional
 	MaxSurge *float64 `json:"maxSurge,omitempty" tf:"max_surge,omitempty"`
 
-	// Monitoring deployment rolling update max unavailable. Default: 1 (int)
+	// The maximum number of agent replicas that can be unavailable at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as min_available.
 	// Rolling update max unavailable
 	// +kubebuilder:validation:Optional
 	MaxUnavailable *float64 `json:"maxUnavailable,omitempty" tf:"max_unavailable,omitempty"`
@@ -7105,7 +5697,7 @@ type NodeGroupsInitParameters struct {
 	// The EKS node group image ID
 	ImageID *string `json:"imageId,omitempty" tf:"image_id,omitempty"`
 
-	// The type of machine to use for worker nodes. Default t2.medium (string)
+	// The EKS node group instance type. Default: t3.medium (string)
 	// The EKS node group instance type
 	InstanceType *string `json:"instanceType,omitempty" tf:"instance_type,omitempty"`
 
@@ -7147,16 +5739,16 @@ type NodeGroupsInitParameters struct {
 	// The EKS node group spot instance types
 	SpotInstanceTypes []*string `json:"spotInstanceTypes,omitempty" tf:"spot_instance_types,omitempty"`
 
-	// List of subnets in the virtual network to use. If it's not specified Rancher will create 3 news subnets (list)
+	// List of subnets in the virtual network to use (list)
 	// The EKS node group subnets
 	Subnets []*string `json:"subnets,omitempty" tf:"subnets,omitempty"`
 
-	// Tags for Kubernetes cluster. For example, ["foo=bar","bar=foo"] (list)
+	// The AKS cluster tags (map)
 	// The EKS node group tags
 	// +mapType=granular
 	Tags map[string]*string `json:"tags,omitempty" tf:"tags,omitempty"`
 
-	// Pass user-data to the nodes to perform automated configuration tasks (string)
+	// The EKS node group user data (string)
 	// The EKS node group user data
 	UserData *string `json:"userData,omitempty" tf:"user_data,omitempty"`
 }
@@ -7183,7 +5775,7 @@ type NodeGroupsObservation struct {
 	// The EKS node group image ID
 	ImageID *string `json:"imageId,omitempty" tf:"image_id,omitempty"`
 
-	// The type of machine to use for worker nodes. Default t2.medium (string)
+	// The EKS node group instance type. Default: t3.medium (string)
 	// The EKS node group instance type
 	InstanceType *string `json:"instanceType,omitempty" tf:"instance_type,omitempty"`
 
@@ -7225,16 +5817,16 @@ type NodeGroupsObservation struct {
 	// The EKS node group spot instance types
 	SpotInstanceTypes []*string `json:"spotInstanceTypes,omitempty" tf:"spot_instance_types,omitempty"`
 
-	// List of subnets in the virtual network to use. If it's not specified Rancher will create 3 news subnets (list)
+	// List of subnets in the virtual network to use (list)
 	// The EKS node group subnets
 	Subnets []*string `json:"subnets,omitempty" tf:"subnets,omitempty"`
 
-	// Tags for Kubernetes cluster. For example, ["foo=bar","bar=foo"] (list)
+	// The AKS cluster tags (map)
 	// The EKS node group tags
 	// +mapType=granular
 	Tags map[string]*string `json:"tags,omitempty" tf:"tags,omitempty"`
 
-	// Pass user-data to the nodes to perform automated configuration tasks (string)
+	// The EKS node group user data (string)
 	// The EKS node group user data
 	UserData *string `json:"userData,omitempty" tf:"user_data,omitempty"`
 
@@ -7270,7 +5862,7 @@ type NodeGroupsParameters struct {
 	// +kubebuilder:validation:Optional
 	ImageID *string `json:"imageId,omitempty" tf:"image_id,omitempty"`
 
-	// The type of machine to use for worker nodes. Default t2.medium (string)
+	// The EKS node group instance type. Default: t3.medium (string)
 	// The EKS node group instance type
 	// +kubebuilder:validation:Optional
 	InstanceType *string `json:"instanceType,omitempty" tf:"instance_type,omitempty"`
@@ -7322,18 +5914,18 @@ type NodeGroupsParameters struct {
 	// +kubebuilder:validation:Optional
 	SpotInstanceTypes []*string `json:"spotInstanceTypes,omitempty" tf:"spot_instance_types,omitempty"`
 
-	// List of subnets in the virtual network to use. If it's not specified Rancher will create 3 news subnets (list)
+	// List of subnets in the virtual network to use (list)
 	// The EKS node group subnets
 	// +kubebuilder:validation:Optional
 	Subnets []*string `json:"subnets,omitempty" tf:"subnets,omitempty"`
 
-	// Tags for Kubernetes cluster. For example, ["foo=bar","bar=foo"] (list)
+	// The AKS cluster tags (map)
 	// The EKS node group tags
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
 	Tags map[string]*string `json:"tags,omitempty" tf:"tags,omitempty"`
 
-	// Pass user-data to the nodes to perform automated configuration tasks (string)
+	// The EKS node group user data (string)
 	// The EKS node group user data
 	// +kubebuilder:validation:Optional
 	UserData *string `json:"userData,omitempty" tf:"user_data,omitempty"`
@@ -7345,7 +5937,7 @@ type NodePoolsInitParameters struct {
 	// The AKS node pool availability zones
 	AvailabilityZones []*string `json:"availabilityZones,omitempty" tf:"availability_zones,omitempty"`
 
-	// Number of machines (VMs) in the agent pool. Allowed values must be in the range of 1 to 100 (inclusive). Default 1 (int)
+	// The AKS node pool count. Default: 1 (int)
 	// The AKS node pool count
 	Count *float64 `json:"count,omitempty" tf:"count,omitempty"`
 
@@ -7362,7 +5954,7 @@ type NodePoolsInitParameters struct {
 	// The AKS node pool max count
 	MaxCount *float64 `json:"maxCount,omitempty" tf:"max_count,omitempty"`
 
-	// Maximum number of pods that can run on a node. Default 110 (int)
+	// The AKS node pool max pods. Default: 110 (int)
 	// The AKS node pool max pods
 	MaxPods *float64 `json:"maxPods,omitempty" tf:"max_pods,omitempty"`
 
@@ -7413,7 +6005,7 @@ type NodePoolsObservation struct {
 	// The AKS node pool availability zones
 	AvailabilityZones []*string `json:"availabilityZones,omitempty" tf:"availability_zones,omitempty"`
 
-	// Number of machines (VMs) in the agent pool. Allowed values must be in the range of 1 to 100 (inclusive). Default 1 (int)
+	// The AKS node pool count. Default: 1 (int)
 	// The AKS node pool count
 	Count *float64 `json:"count,omitempty" tf:"count,omitempty"`
 
@@ -7430,7 +6022,7 @@ type NodePoolsObservation struct {
 	// The AKS node pool max count
 	MaxCount *float64 `json:"maxCount,omitempty" tf:"max_count,omitempty"`
 
-	// Maximum number of pods that can run on a node. Default 110 (int)
+	// The AKS node pool max pods. Default: 110 (int)
 	// The AKS node pool max pods
 	MaxPods *float64 `json:"maxPods,omitempty" tf:"max_pods,omitempty"`
 
@@ -7482,7 +6074,7 @@ type NodePoolsParameters struct {
 	// +kubebuilder:validation:Optional
 	AvailabilityZones []*string `json:"availabilityZones,omitempty" tf:"availability_zones,omitempty"`
 
-	// Number of machines (VMs) in the agent pool. Allowed values must be in the range of 1 to 100 (inclusive). Default 1 (int)
+	// The AKS node pool count. Default: 1 (int)
 	// The AKS node pool count
 	// +kubebuilder:validation:Optional
 	Count *float64 `json:"count,omitempty" tf:"count,omitempty"`
@@ -7503,7 +6095,7 @@ type NodePoolsParameters struct {
 	// +kubebuilder:validation:Optional
 	MaxCount *float64 `json:"maxCount,omitempty" tf:"max_count,omitempty"`
 
-	// Maximum number of pods that can run on a node. Default 110 (int)
+	// The AKS node pool max pods. Default: 110 (int)
 	// The AKS node pool max pods
 	// +kubebuilder:validation:Optional
 	MaxPods *float64 `json:"maxPods,omitempty" tf:"max_pods,omitempty"`
@@ -7722,9 +6314,17 @@ type NodesParameters struct {
 
 type OkeConfigInitParameters struct {
 
+	// Choose basic or enhanced. Default basic (string)
+	// Optionally specify a cluster type of basic or enhanced
+	ClusterType *string `json:"clusterType,omitempty" tf:"cluster_type,omitempty"`
+
 	// The OCID of the compartment in which to create resources OKE cluster and related resources (string)
 	// The OCID of the compartment in which to create resources (VCN, worker nodes, etc.)
 	CompartmentID *string `json:"compartmentId,omitempty" tf:"compartment_id,omitempty"`
+
+	// The name of an existing subnet to use for the Kubernetes API endpoint. vcn_name is also required when specifying an existing subnet. (string)
+	// The (optional) name of a pre-existing subnet (public or private) for the Kubernetes API endpoint
+	ControlPlaneSubnetName *string `json:"controlPlaneSubnetName,omitempty" tf:"control_plane_subnet_name,omitempty"`
 
 	// Optional custom boot volume size (GB) for all nodes. If you specify 0, it will apply the default according to the node_image specified. Default 0 (int)
 	// An optional custom boot volume size (in GB) for the nodes
@@ -7734,7 +6334,7 @@ type OkeConfigInitParameters struct {
 	// An optional description of this cluster
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// Whether to enable the Kubernetes dashboard. Default false (bool)
+	// Specifies whether to enable the Kubernetes dashboard. Default false (bool)
 	// Enable the kubernetes dashboard
 	EnableKubernetesDashboard *bool `json:"enableKubernetesDashboard,omitempty" tf:"enable_kubernetes_dashboard,omitempty"`
 
@@ -7742,24 +6342,40 @@ type OkeConfigInitParameters struct {
 	// Whether Kubernetes API endpoint is a private IP only accessible from within the VCN
 	EnablePrivateControlPlane *bool `json:"enablePrivateControlPlane,omitempty" tf:"enable_private_control_plane,omitempty"`
 
-	// Whether nodes have internal IP address only. Default false (bool)
+	// Enable GKE cluster private endpoint. Default: false (bool)
 	// Whether worker nodes are deployed into a new private subnet
 	EnablePrivateNodes *bool `json:"enablePrivateNodes,omitempty" tf:"enable_private_nodes,omitempty"`
 
-	// The fingerprint corresponding to the specified user's private API Key (string)
+	// Specifies the grace period in minutes (ISO 8601 format) to allow cordon and drain to complete. Default \"PT5M\" (string)
+	// The optional grace period in minutes to allow cordon and drain to complete successfuly
+	EvictionGraceDuration *string `json:"evictionGraceDuration,omitempty" tf:"eviction_grace_duration,omitempty"`
+
+	// The fingerprint corresponding to the specified user's private API Key. Required unless using instance principals or workload identity to authenticate (string)
 	// The fingerprint corresponding to the specified user's private API Key
 	Fingerprint *string `json:"fingerprint,omitempty" tf:"fingerprint,omitempty"`
+
+	// Specifies number amount of memory in GB for nodes (requires flexible shape specified with node_shape) (int)
+	// Optional amount of memory in GB for nodes (requires flexible node_shape)
+	FlexMemoryInGbs *float64 `json:"flexMemoryInGbs,omitempty" tf:"flex_memory_in_gbs,omitempty"`
 
 	// Specifies number of OCPUs for nodes (requires flexible shape specified with node_shape) (int)
 	// Optional number of OCPUs for nodes (requires flexible node_shape)
 	FlexOcpus *float64 `json:"flexOcpus,omitempty" tf:"flex_ocpus,omitempty"`
 
+	// Specifies whether to send a SIGKILL signal if a pod does not terminate within the specified grace period. See also eviction_grace_duration. Default false (bool)
+	// Whether to send a SIGKILL signal if a pod does not terminate within the specified grace period
+	ForceDeleteAfterGraceDuration *bool `json:"forceDeleteAfterGraceDuration,omitempty" tf:"force_delete_after_grace_duration,omitempty"`
+
+	// Comma separated list of OCID(s) of the KMS key to verify the image signatures (string)
+	// Optional specify a comma separated list of master encryption key OCID(s) to verify images
+	ImageVerificationKMSKeyID *string `json:"imageVerificationKmsKeyId,omitempty" tf:"image_verification_kms_key_id,omitempty"`
+
 	// The OCID of a KMS vault master key used to encrypt secrets at rest. See here for help creating a vault and master encryption key. For Rancher v2.5.9 and above (string)
 	// Optional specify the OCID of the KMS Vault master key
-	KMSKeyIDSecretRef *v1.SecretKeySelector `json:"kmsKeyIdSecretRef,omitempty" tf:"-"`
+	KMSKeyID *string `json:"kmsKeyId,omitempty" tf:"kms_key_id,omitempty"`
 
 	// K8s version to deploy. Default: Rancher default (string) (Note - if rke_config is set at cluster_template, kubernetes_version must be set to the active cluster version so Rancher can clone the RKE template)
-	// The Kubernetes version that will be used for your master *and* worker nodes e.g. v1.19.7
+	// The Kubernetes version that will be used for your master *and* worker nodes e.g. v1.33.1
 	KubernetesVersion *string `json:"kubernetesVersion,omitempty" tf:"kubernetes_version,omitempty"`
 
 	// The maximum number of worker nodes. Can limit quantity_per_subnet. Default 0 (no limit) (int)
@@ -7783,7 +6399,7 @@ type OkeConfigInitParameters struct {
 	NodePoolDNSDomainName *string `json:"nodePoolDnsDomainName,omitempty" tf:"node_pool_dns_domain_name,omitempty"`
 
 	// Name for node pool subnet. Default nodedns (string)
-	// Optional name for node pool subnet
+	// Optional pre-existing subnet (public or private) for nodes
 	NodePoolSubnetName *string `json:"nodePoolSubnetName,omitempty" tf:"node_pool_subnet_name,omitempty"`
 
 	// The contents of the SSH public key file to use for the nodes (string)
@@ -7794,15 +6410,27 @@ type OkeConfigInitParameters struct {
 	// The shape of the node (determines number of CPUs and  amount of memory on each node)
 	NodeShape *string `json:"nodeShape,omitempty" tf:"node_shape,omitempty"`
 
-	// A CIDR notation IP range from which to assign Kubernetes Pod IPs when "network plugin" is specified in "kubenet". Default 172.244.0.0/16 (string)
+	// The contents of custom cloud-init / user_data for the nodes. String will be base64 encoded internally if it is not already. See here for more information (string)
+	// The contents of custom cloud-init / user_data for the nodes - will be base64 encoded internally if it is not already
+	NodeUserDataContents *string `json:"nodeUserDataContents,omitempty" tf:"node_user_data_contents,omitempty"`
+
+	// A CIDR IP range from which to assign Kubernetes Pod IPs (string)
 	// Optional specify the pod CIDR, defaults to 10.244.0.0/16
 	PodCidr *string `json:"podCidr,omitempty" tf:"pod_cidr,omitempty"`
 
-	// The private API key file contents for the specified user, in PEM format (string)
-	// The private API key file contents for the specified user, in PEM format
-	PrivateKeyContentsSecretRef v1.SecretKeySelector `json:"privateKeyContentsSecretRef" tf:"-"`
+	// Choose flannel or native CNI for pod networking. Default flannel (string)
+	// Optional Pod Network plugin. Choose flannel or native. Defaults to flannel
+	PodNetwork *string `json:"podNetwork,omitempty" tf:"pod_network,omitempty"`
 
-	// The passphrase (if any) of the private key for the OKE cluster (string)
+	// An optional pre-existing subnet that pods will be assigned IPs from when using OCI VCN-Native CNI pod networking (string)
+	// The (optional) name of a pre-existing subnet that pods will be assigned IPs from when using native pod networking
+	PodSubnetName *string `json:"podSubnetName,omitempty" tf:"pod_subnet_name,omitempty"`
+
+	// The private API key file contents for the specified user, in PEM format. Required unless using instance principals or workload identity to authenticate (string)
+	// The private API key file contents for the specified user, in PEM format
+	PrivateKeyContentsSecretRef *v1.SecretKeySelector `json:"privateKeyContentsSecretRef,omitempty" tf:"-"`
+
+	// The passphrase (if any) of the private key for the OKE cluster. Required unless using instance principals or workload identity to authenticate (string)
 	// The passphrase of the private key for the OKE cluster
 	PrivateKeyPassphraseSecretRef *v1.SecretKeySelector `json:"privateKeyPassphraseSecretRef,omitempty" tf:"-"`
 
@@ -7818,7 +6446,7 @@ type OkeConfigInitParameters struct {
 	// The availability domain within the region to host the OKE cluster
 	Region *string `json:"region,omitempty" tf:"region,omitempty"`
 
-	// A CIDR notation IP range from which to assign Kubernetes Service cluster IPs. It must not overlap with any Subnet IP ranges. Default 10.0.0.0/16 (string)
+	// A CIDR IP range from which to assign Kubernetes Service IPs (string)
 	// Optional specify the service CIDR, defaults to 10.96.0.0/16
 	ServiceCidr *string `json:"serviceCidr,omitempty" tf:"service_cidr,omitempty"`
 
@@ -7834,7 +6462,7 @@ type OkeConfigInitParameters struct {
 	// The OCID of the tenancy in which to create resources
 	TenancyID *string `json:"tenancyId,omitempty" tf:"tenancy_id,omitempty"`
 
-	// The OCID of a user who has access to the tenancy/compartment (string)
+	// The OCID of a user who has access to the tenancy/compartment. Required unless using instance principals or workload identity to authenticate (string)
 	// The OCID of a user who has access to the tenancy/compartment
 	UserOcid *string `json:"userOcid,omitempty" tf:"user_ocid,omitempty"`
 
@@ -7853,9 +6481,17 @@ type OkeConfigInitParameters struct {
 
 type OkeConfigObservation struct {
 
+	// Choose basic or enhanced. Default basic (string)
+	// Optionally specify a cluster type of basic or enhanced
+	ClusterType *string `json:"clusterType,omitempty" tf:"cluster_type,omitempty"`
+
 	// The OCID of the compartment in which to create resources OKE cluster and related resources (string)
 	// The OCID of the compartment in which to create resources (VCN, worker nodes, etc.)
 	CompartmentID *string `json:"compartmentId,omitempty" tf:"compartment_id,omitempty"`
+
+	// The name of an existing subnet to use for the Kubernetes API endpoint. vcn_name is also required when specifying an existing subnet. (string)
+	// The (optional) name of a pre-existing subnet (public or private) for the Kubernetes API endpoint
+	ControlPlaneSubnetName *string `json:"controlPlaneSubnetName,omitempty" tf:"control_plane_subnet_name,omitempty"`
 
 	// Optional custom boot volume size (GB) for all nodes. If you specify 0, it will apply the default according to the node_image specified. Default 0 (int)
 	// An optional custom boot volume size (in GB) for the nodes
@@ -7865,7 +6501,7 @@ type OkeConfigObservation struct {
 	// An optional description of this cluster
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// Whether to enable the Kubernetes dashboard. Default false (bool)
+	// Specifies whether to enable the Kubernetes dashboard. Default false (bool)
 	// Enable the kubernetes dashboard
 	EnableKubernetesDashboard *bool `json:"enableKubernetesDashboard,omitempty" tf:"enable_kubernetes_dashboard,omitempty"`
 
@@ -7873,20 +6509,40 @@ type OkeConfigObservation struct {
 	// Whether Kubernetes API endpoint is a private IP only accessible from within the VCN
 	EnablePrivateControlPlane *bool `json:"enablePrivateControlPlane,omitempty" tf:"enable_private_control_plane,omitempty"`
 
-	// Whether nodes have internal IP address only. Default false (bool)
+	// Enable GKE cluster private endpoint. Default: false (bool)
 	// Whether worker nodes are deployed into a new private subnet
 	EnablePrivateNodes *bool `json:"enablePrivateNodes,omitempty" tf:"enable_private_nodes,omitempty"`
 
-	// The fingerprint corresponding to the specified user's private API Key (string)
+	// Specifies the grace period in minutes (ISO 8601 format) to allow cordon and drain to complete. Default \"PT5M\" (string)
+	// The optional grace period in minutes to allow cordon and drain to complete successfuly
+	EvictionGraceDuration *string `json:"evictionGraceDuration,omitempty" tf:"eviction_grace_duration,omitempty"`
+
+	// The fingerprint corresponding to the specified user's private API Key. Required unless using instance principals or workload identity to authenticate (string)
 	// The fingerprint corresponding to the specified user's private API Key
 	Fingerprint *string `json:"fingerprint,omitempty" tf:"fingerprint,omitempty"`
+
+	// Specifies number amount of memory in GB for nodes (requires flexible shape specified with node_shape) (int)
+	// Optional amount of memory in GB for nodes (requires flexible node_shape)
+	FlexMemoryInGbs *float64 `json:"flexMemoryInGbs,omitempty" tf:"flex_memory_in_gbs,omitempty"`
 
 	// Specifies number of OCPUs for nodes (requires flexible shape specified with node_shape) (int)
 	// Optional number of OCPUs for nodes (requires flexible node_shape)
 	FlexOcpus *float64 `json:"flexOcpus,omitempty" tf:"flex_ocpus,omitempty"`
 
+	// Specifies whether to send a SIGKILL signal if a pod does not terminate within the specified grace period. See also eviction_grace_duration. Default false (bool)
+	// Whether to send a SIGKILL signal if a pod does not terminate within the specified grace period
+	ForceDeleteAfterGraceDuration *bool `json:"forceDeleteAfterGraceDuration,omitempty" tf:"force_delete_after_grace_duration,omitempty"`
+
+	// Comma separated list of OCID(s) of the KMS key to verify the image signatures (string)
+	// Optional specify a comma separated list of master encryption key OCID(s) to verify images
+	ImageVerificationKMSKeyID *string `json:"imageVerificationKmsKeyId,omitempty" tf:"image_verification_kms_key_id,omitempty"`
+
+	// The OCID of a KMS vault master key used to encrypt secrets at rest. See here for help creating a vault and master encryption key. For Rancher v2.5.9 and above (string)
+	// Optional specify the OCID of the KMS Vault master key
+	KMSKeyID *string `json:"kmsKeyId,omitempty" tf:"kms_key_id,omitempty"`
+
 	// K8s version to deploy. Default: Rancher default (string) (Note - if rke_config is set at cluster_template, kubernetes_version must be set to the active cluster version so Rancher can clone the RKE template)
-	// The Kubernetes version that will be used for your master *and* worker nodes e.g. v1.19.7
+	// The Kubernetes version that will be used for your master *and* worker nodes e.g. v1.33.1
 	KubernetesVersion *string `json:"kubernetesVersion,omitempty" tf:"kubernetes_version,omitempty"`
 
 	// The maximum number of worker nodes. Can limit quantity_per_subnet. Default 0 (no limit) (int)
@@ -7910,7 +6566,7 @@ type OkeConfigObservation struct {
 	NodePoolDNSDomainName *string `json:"nodePoolDnsDomainName,omitempty" tf:"node_pool_dns_domain_name,omitempty"`
 
 	// Name for node pool subnet. Default nodedns (string)
-	// Optional name for node pool subnet
+	// Optional pre-existing subnet (public or private) for nodes
 	NodePoolSubnetName *string `json:"nodePoolSubnetName,omitempty" tf:"node_pool_subnet_name,omitempty"`
 
 	// The contents of the SSH public key file to use for the nodes (string)
@@ -7921,9 +6577,21 @@ type OkeConfigObservation struct {
 	// The shape of the node (determines number of CPUs and  amount of memory on each node)
 	NodeShape *string `json:"nodeShape,omitempty" tf:"node_shape,omitempty"`
 
-	// A CIDR notation IP range from which to assign Kubernetes Pod IPs when "network plugin" is specified in "kubenet". Default 172.244.0.0/16 (string)
+	// The contents of custom cloud-init / user_data for the nodes. String will be base64 encoded internally if it is not already. See here for more information (string)
+	// The contents of custom cloud-init / user_data for the nodes - will be base64 encoded internally if it is not already
+	NodeUserDataContents *string `json:"nodeUserDataContents,omitempty" tf:"node_user_data_contents,omitempty"`
+
+	// A CIDR IP range from which to assign Kubernetes Pod IPs (string)
 	// Optional specify the pod CIDR, defaults to 10.244.0.0/16
 	PodCidr *string `json:"podCidr,omitempty" tf:"pod_cidr,omitempty"`
+
+	// Choose flannel or native CNI for pod networking. Default flannel (string)
+	// Optional Pod Network plugin. Choose flannel or native. Defaults to flannel
+	PodNetwork *string `json:"podNetwork,omitempty" tf:"pod_network,omitempty"`
+
+	// An optional pre-existing subnet that pods will be assigned IPs from when using OCI VCN-Native CNI pod networking (string)
+	// The (optional) name of a pre-existing subnet that pods will be assigned IPs from when using native pod networking
+	PodSubnetName *string `json:"podSubnetName,omitempty" tf:"pod_subnet_name,omitempty"`
 
 	// Number of node subnets. Default 1 (int)
 	// Number of node subnets (defaults to creating 1 regional subnet)
@@ -7937,7 +6605,7 @@ type OkeConfigObservation struct {
 	// The availability domain within the region to host the OKE cluster
 	Region *string `json:"region,omitempty" tf:"region,omitempty"`
 
-	// A CIDR notation IP range from which to assign Kubernetes Service cluster IPs. It must not overlap with any Subnet IP ranges. Default 10.0.0.0/16 (string)
+	// A CIDR IP range from which to assign Kubernetes Service IPs (string)
 	// Optional specify the service CIDR, defaults to 10.96.0.0/16
 	ServiceCidr *string `json:"serviceCidr,omitempty" tf:"service_cidr,omitempty"`
 
@@ -7953,7 +6621,7 @@ type OkeConfigObservation struct {
 	// The OCID of the tenancy in which to create resources
 	TenancyID *string `json:"tenancyId,omitempty" tf:"tenancy_id,omitempty"`
 
-	// The OCID of a user who has access to the tenancy/compartment (string)
+	// The OCID of a user who has access to the tenancy/compartment. Required unless using instance principals or workload identity to authenticate (string)
 	// The OCID of a user who has access to the tenancy/compartment
 	UserOcid *string `json:"userOcid,omitempty" tf:"user_ocid,omitempty"`
 
@@ -7972,10 +6640,20 @@ type OkeConfigObservation struct {
 
 type OkeConfigParameters struct {
 
+	// Choose basic or enhanced. Default basic (string)
+	// Optionally specify a cluster type of basic or enhanced
+	// +kubebuilder:validation:Optional
+	ClusterType *string `json:"clusterType,omitempty" tf:"cluster_type,omitempty"`
+
 	// The OCID of the compartment in which to create resources OKE cluster and related resources (string)
 	// The OCID of the compartment in which to create resources (VCN, worker nodes, etc.)
 	// +kubebuilder:validation:Optional
 	CompartmentID *string `json:"compartmentId" tf:"compartment_id,omitempty"`
+
+	// The name of an existing subnet to use for the Kubernetes API endpoint. vcn_name is also required when specifying an existing subnet. (string)
+	// The (optional) name of a pre-existing subnet (public or private) for the Kubernetes API endpoint
+	// +kubebuilder:validation:Optional
+	ControlPlaneSubnetName *string `json:"controlPlaneSubnetName,omitempty" tf:"control_plane_subnet_name,omitempty"`
 
 	// Optional custom boot volume size (GB) for all nodes. If you specify 0, it will apply the default according to the node_image specified. Default 0 (int)
 	// An optional custom boot volume size (in GB) for the nodes
@@ -7987,7 +6665,7 @@ type OkeConfigParameters struct {
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// Whether to enable the Kubernetes dashboard. Default false (bool)
+	// Specifies whether to enable the Kubernetes dashboard. Default false (bool)
 	// Enable the kubernetes dashboard
 	// +kubebuilder:validation:Optional
 	EnableKubernetesDashboard *bool `json:"enableKubernetesDashboard,omitempty" tf:"enable_kubernetes_dashboard,omitempty"`
@@ -7997,28 +6675,48 @@ type OkeConfigParameters struct {
 	// +kubebuilder:validation:Optional
 	EnablePrivateControlPlane *bool `json:"enablePrivateControlPlane,omitempty" tf:"enable_private_control_plane,omitempty"`
 
-	// Whether nodes have internal IP address only. Default false (bool)
+	// Enable GKE cluster private endpoint. Default: false (bool)
 	// Whether worker nodes are deployed into a new private subnet
 	// +kubebuilder:validation:Optional
 	EnablePrivateNodes *bool `json:"enablePrivateNodes,omitempty" tf:"enable_private_nodes,omitempty"`
 
-	// The fingerprint corresponding to the specified user's private API Key (string)
+	// Specifies the grace period in minutes (ISO 8601 format) to allow cordon and drain to complete. Default \"PT5M\" (string)
+	// The optional grace period in minutes to allow cordon and drain to complete successfuly
+	// +kubebuilder:validation:Optional
+	EvictionGraceDuration *string `json:"evictionGraceDuration,omitempty" tf:"eviction_grace_duration,omitempty"`
+
+	// The fingerprint corresponding to the specified user's private API Key. Required unless using instance principals or workload identity to authenticate (string)
 	// The fingerprint corresponding to the specified user's private API Key
 	// +kubebuilder:validation:Optional
-	Fingerprint *string `json:"fingerprint" tf:"fingerprint,omitempty"`
+	Fingerprint *string `json:"fingerprint,omitempty" tf:"fingerprint,omitempty"`
+
+	// Specifies number amount of memory in GB for nodes (requires flexible shape specified with node_shape) (int)
+	// Optional amount of memory in GB for nodes (requires flexible node_shape)
+	// +kubebuilder:validation:Optional
+	FlexMemoryInGbs *float64 `json:"flexMemoryInGbs,omitempty" tf:"flex_memory_in_gbs,omitempty"`
 
 	// Specifies number of OCPUs for nodes (requires flexible shape specified with node_shape) (int)
 	// Optional number of OCPUs for nodes (requires flexible node_shape)
 	// +kubebuilder:validation:Optional
 	FlexOcpus *float64 `json:"flexOcpus,omitempty" tf:"flex_ocpus,omitempty"`
 
+	// Specifies whether to send a SIGKILL signal if a pod does not terminate within the specified grace period. See also eviction_grace_duration. Default false (bool)
+	// Whether to send a SIGKILL signal if a pod does not terminate within the specified grace period
+	// +kubebuilder:validation:Optional
+	ForceDeleteAfterGraceDuration *bool `json:"forceDeleteAfterGraceDuration,omitempty" tf:"force_delete_after_grace_duration,omitempty"`
+
+	// Comma separated list of OCID(s) of the KMS key to verify the image signatures (string)
+	// Optional specify a comma separated list of master encryption key OCID(s) to verify images
+	// +kubebuilder:validation:Optional
+	ImageVerificationKMSKeyID *string `json:"imageVerificationKmsKeyId,omitempty" tf:"image_verification_kms_key_id,omitempty"`
+
 	// The OCID of a KMS vault master key used to encrypt secrets at rest. See here for help creating a vault and master encryption key. For Rancher v2.5.9 and above (string)
 	// Optional specify the OCID of the KMS Vault master key
 	// +kubebuilder:validation:Optional
-	KMSKeyIDSecretRef *v1.SecretKeySelector `json:"kmsKeyIdSecretRef,omitempty" tf:"-"`
+	KMSKeyID *string `json:"kmsKeyId,omitempty" tf:"kms_key_id,omitempty"`
 
 	// K8s version to deploy. Default: Rancher default (string) (Note - if rke_config is set at cluster_template, kubernetes_version must be set to the active cluster version so Rancher can clone the RKE template)
-	// The Kubernetes version that will be used for your master *and* worker nodes e.g. v1.19.7
+	// The Kubernetes version that will be used for your master *and* worker nodes e.g. v1.33.1
 	// +kubebuilder:validation:Optional
 	KubernetesVersion *string `json:"kubernetesVersion" tf:"kubernetes_version,omitempty"`
 
@@ -8048,7 +6746,7 @@ type OkeConfigParameters struct {
 	NodePoolDNSDomainName *string `json:"nodePoolDnsDomainName,omitempty" tf:"node_pool_dns_domain_name,omitempty"`
 
 	// Name for node pool subnet. Default nodedns (string)
-	// Optional name for node pool subnet
+	// Optional pre-existing subnet (public or private) for nodes
 	// +kubebuilder:validation:Optional
 	NodePoolSubnetName *string `json:"nodePoolSubnetName,omitempty" tf:"node_pool_subnet_name,omitempty"`
 
@@ -8062,17 +6760,32 @@ type OkeConfigParameters struct {
 	// +kubebuilder:validation:Optional
 	NodeShape *string `json:"nodeShape" tf:"node_shape,omitempty"`
 
-	// A CIDR notation IP range from which to assign Kubernetes Pod IPs when "network plugin" is specified in "kubenet". Default 172.244.0.0/16 (string)
+	// The contents of custom cloud-init / user_data for the nodes. String will be base64 encoded internally if it is not already. See here for more information (string)
+	// The contents of custom cloud-init / user_data for the nodes - will be base64 encoded internally if it is not already
+	// +kubebuilder:validation:Optional
+	NodeUserDataContents *string `json:"nodeUserDataContents,omitempty" tf:"node_user_data_contents,omitempty"`
+
+	// A CIDR IP range from which to assign Kubernetes Pod IPs (string)
 	// Optional specify the pod CIDR, defaults to 10.244.0.0/16
 	// +kubebuilder:validation:Optional
 	PodCidr *string `json:"podCidr,omitempty" tf:"pod_cidr,omitempty"`
 
-	// The private API key file contents for the specified user, in PEM format (string)
+	// Choose flannel or native CNI for pod networking. Default flannel (string)
+	// Optional Pod Network plugin. Choose flannel or native. Defaults to flannel
+	// +kubebuilder:validation:Optional
+	PodNetwork *string `json:"podNetwork,omitempty" tf:"pod_network,omitempty"`
+
+	// An optional pre-existing subnet that pods will be assigned IPs from when using OCI VCN-Native CNI pod networking (string)
+	// The (optional) name of a pre-existing subnet that pods will be assigned IPs from when using native pod networking
+	// +kubebuilder:validation:Optional
+	PodSubnetName *string `json:"podSubnetName,omitempty" tf:"pod_subnet_name,omitempty"`
+
+	// The private API key file contents for the specified user, in PEM format. Required unless using instance principals or workload identity to authenticate (string)
 	// The private API key file contents for the specified user, in PEM format
 	// +kubebuilder:validation:Optional
-	PrivateKeyContentsSecretRef v1.SecretKeySelector `json:"privateKeyContentsSecretRef" tf:"-"`
+	PrivateKeyContentsSecretRef *v1.SecretKeySelector `json:"privateKeyContentsSecretRef,omitempty" tf:"-"`
 
-	// The passphrase (if any) of the private key for the OKE cluster (string)
+	// The passphrase (if any) of the private key for the OKE cluster. Required unless using instance principals or workload identity to authenticate (string)
 	// The passphrase of the private key for the OKE cluster
 	// +kubebuilder:validation:Optional
 	PrivateKeyPassphraseSecretRef *v1.SecretKeySelector `json:"privateKeyPassphraseSecretRef,omitempty" tf:"-"`
@@ -8092,7 +6805,7 @@ type OkeConfigParameters struct {
 	// +kubebuilder:validation:Optional
 	Region *string `json:"region" tf:"region,omitempty"`
 
-	// A CIDR notation IP range from which to assign Kubernetes Service cluster IPs. It must not overlap with any Subnet IP ranges. Default 10.0.0.0/16 (string)
+	// A CIDR IP range from which to assign Kubernetes Service IPs (string)
 	// Optional specify the service CIDR, defaults to 10.96.0.0/16
 	// +kubebuilder:validation:Optional
 	ServiceCidr *string `json:"serviceCidr,omitempty" tf:"service_cidr,omitempty"`
@@ -8112,10 +6825,10 @@ type OkeConfigParameters struct {
 	// +kubebuilder:validation:Optional
 	TenancyID *string `json:"tenancyId" tf:"tenancy_id,omitempty"`
 
-	// The OCID of a user who has access to the tenancy/compartment (string)
+	// The OCID of a user who has access to the tenancy/compartment. Required unless using instance principals or workload identity to authenticate (string)
 	// The OCID of a user who has access to the tenancy/compartment
 	// +kubebuilder:validation:Optional
-	UserOcid *string `json:"userOcid" tf:"user_ocid,omitempty"`
+	UserOcid *string `json:"userOcid,omitempty" tf:"user_ocid,omitempty"`
 
 	// The OCID of the compartment (if different from compartment_id) in which to find the pre-existing virtual network set with vcn_name. (string)
 	// The OCID of the compartment (if different from compartment_id) in which to find the pre-existing virtual network set with vcn_name.
@@ -8395,49 +7108,119 @@ type PluginsParameters struct {
 	Path *string `json:"path,omitempty" tf:"path,omitempty"`
 }
 
+type PodDisruptionBudgetInitParameters struct {
+
+	// The maximum number of agent replicas that can be unavailable at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as min_available.
+	// The maximum number of cattle cluster agent replicas that can be down at a given time.
+	MaxUnavailable *string `json:"maxUnavailable,omitempty" tf:"max_unavailable,omitempty"`
+
+	// The minimum number of agent replicas that must be running at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%").  This field cannot be used at the same time as max_unavailable.
+	// The minimum number of cattle cluster agent replicas that must be running at a given time.
+	MinAvailable *string `json:"minAvailable,omitempty" tf:"min_available,omitempty"`
+}
+
+type PodDisruptionBudgetObservation struct {
+
+	// The maximum number of agent replicas that can be unavailable at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as min_available.
+	// The maximum number of cattle cluster agent replicas that can be down at a given time.
+	MaxUnavailable *string `json:"maxUnavailable,omitempty" tf:"max_unavailable,omitempty"`
+
+	// The minimum number of agent replicas that must be running at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%").  This field cannot be used at the same time as max_unavailable.
+	// The minimum number of cattle cluster agent replicas that must be running at a given time.
+	MinAvailable *string `json:"minAvailable,omitempty" tf:"min_available,omitempty"`
+}
+
+type PodDisruptionBudgetParameters struct {
+
+	// The maximum number of agent replicas that can be unavailable at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as min_available.
+	// The maximum number of cattle cluster agent replicas that can be down at a given time.
+	// +kubebuilder:validation:Optional
+	MaxUnavailable *string `json:"maxUnavailable,omitempty" tf:"max_unavailable,omitempty"`
+
+	// The minimum number of agent replicas that must be running at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%").  This field cannot be used at the same time as max_unavailable.
+	// The minimum number of cattle cluster agent replicas that must be running at a given time.
+	// +kubebuilder:validation:Optional
+	MinAvailable *string `json:"minAvailable,omitempty" tf:"min_available,omitempty"`
+}
+
+type PriorityClassInitParameters struct {
+
+	// The preemption policy set for the Priority Class. Must be set to either 'Never', or 'PreemptLowerPriority'
+	// The preemption behavior for the cattle cluster agent. Must be either 'PreemptLowerPriority' or 'Never'
+	PreemptionPolicy *string `json:"preemptionPolicy,omitempty" tf:"preemption_policy,omitempty"`
+
+	// Rancher agent env var value (string)
+	// The priority value for the cattle cluster agent. Must be between negative 1 billion and 1 billion.
+	Value *float64 `json:"value,omitempty" tf:"value,omitempty"`
+}
+
+type PriorityClassObservation struct {
+
+	// The preemption policy set for the Priority Class. Must be set to either 'Never', or 'PreemptLowerPriority'
+	// The preemption behavior for the cattle cluster agent. Must be either 'PreemptLowerPriority' or 'Never'
+	PreemptionPolicy *string `json:"preemptionPolicy,omitempty" tf:"preemption_policy,omitempty"`
+
+	// Rancher agent env var value (string)
+	// The priority value for the cattle cluster agent. Must be between negative 1 billion and 1 billion.
+	Value *float64 `json:"value,omitempty" tf:"value,omitempty"`
+}
+
+type PriorityClassParameters struct {
+
+	// The preemption policy set for the Priority Class. Must be set to either 'Never', or 'PreemptLowerPriority'
+	// The preemption behavior for the cattle cluster agent. Must be either 'PreemptLowerPriority' or 'Never'
+	// +kubebuilder:validation:Optional
+	PreemptionPolicy *string `json:"preemptionPolicy,omitempty" tf:"preemption_policy,omitempty"`
+
+	// Rancher agent env var value (string)
+	// The priority value for the cattle cluster agent. Must be between negative 1 billion and 1 billion.
+	// +kubebuilder:validation:Optional
+	Value *float64 `json:"value" tf:"value,omitempty"`
+}
+
 type PrivateClusterConfigInitParameters struct {
 
-	// Whether the master's internal IP address is used as the cluster endpoint. Default false (bool)
+	// Enable GKE cluster private endpoint. Default: false (bool)
 	// Enable GKE cluster private endpoint
 	EnablePrivateEndpoint *bool `json:"enablePrivateEndpoint,omitempty" tf:"enable_private_endpoint,omitempty"`
 
-	// Whether nodes have internal IP address only. Default false (bool)
+	// Enable GKE cluster private endpoint. Default: false (bool)
 	// Enable GKE cluster private nodes
 	EnablePrivateNodes *bool `json:"enablePrivateNodes,omitempty" tf:"enable_private_nodes,omitempty"`
 
-	// The IP range in CIDR notation to use for the hosted master network (string)
+	// The GKE cluster private master ip v4 cidr block (string)
 	// The GKE cluster private master ip v4 cidr block
 	MasterIPv4CidrBlock *string `json:"masterIpv4CidrBlock,omitempty" tf:"master_ipv4_cidr_block,omitempty"`
 }
 
 type PrivateClusterConfigObservation struct {
 
-	// Whether the master's internal IP address is used as the cluster endpoint. Default false (bool)
+	// Enable GKE cluster private endpoint. Default: false (bool)
 	// Enable GKE cluster private endpoint
 	EnablePrivateEndpoint *bool `json:"enablePrivateEndpoint,omitempty" tf:"enable_private_endpoint,omitempty"`
 
-	// Whether nodes have internal IP address only. Default false (bool)
+	// Enable GKE cluster private endpoint. Default: false (bool)
 	// Enable GKE cluster private nodes
 	EnablePrivateNodes *bool `json:"enablePrivateNodes,omitempty" tf:"enable_private_nodes,omitempty"`
 
-	// The IP range in CIDR notation to use for the hosted master network (string)
+	// The GKE cluster private master ip v4 cidr block (string)
 	// The GKE cluster private master ip v4 cidr block
 	MasterIPv4CidrBlock *string `json:"masterIpv4CidrBlock,omitempty" tf:"master_ipv4_cidr_block,omitempty"`
 }
 
 type PrivateClusterConfigParameters struct {
 
-	// Whether the master's internal IP address is used as the cluster endpoint. Default false (bool)
+	// Enable GKE cluster private endpoint. Default: false (bool)
 	// Enable GKE cluster private endpoint
 	// +kubebuilder:validation:Optional
 	EnablePrivateEndpoint *bool `json:"enablePrivateEndpoint,omitempty" tf:"enable_private_endpoint,omitempty"`
 
-	// Whether nodes have internal IP address only. Default false (bool)
+	// Enable GKE cluster private endpoint. Default: false (bool)
 	// Enable GKE cluster private nodes
 	// +kubebuilder:validation:Optional
 	EnablePrivateNodes *bool `json:"enablePrivateNodes,omitempty" tf:"enable_private_nodes,omitempty"`
 
-	// The IP range in CIDR notation to use for the hosted master network (string)
+	// The GKE cluster private master ip v4 cidr block (string)
 	// The GKE cluster private master ip v4 cidr block
 	// +kubebuilder:validation:Optional
 	MasterIPv4CidrBlock *string `json:"masterIpv4CidrBlock" tf:"master_ipv4_cidr_block,omitempty"`
@@ -9057,7 +7840,7 @@ type RollingUpdateInitParameters struct {
 	// Rolling update max surge
 	MaxSurge *float64 `json:"maxSurge,omitempty" tf:"max_surge,omitempty"`
 
-	// Monitoring deployment rolling update max unavailable. Default: 1 (int)
+	// The maximum number of agent replicas that can be unavailable at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as min_available.
 	// Rolling update max unavailable
 	MaxUnavailable *float64 `json:"maxUnavailable,omitempty" tf:"max_unavailable,omitempty"`
 }
@@ -9068,7 +7851,7 @@ type RollingUpdateObservation struct {
 	// Rolling update max surge
 	MaxSurge *float64 `json:"maxSurge,omitempty" tf:"max_surge,omitempty"`
 
-	// Monitoring deployment rolling update max unavailable. Default: 1 (int)
+	// The maximum number of agent replicas that can be unavailable at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as min_available.
 	// Rolling update max unavailable
 	MaxUnavailable *float64 `json:"maxUnavailable,omitempty" tf:"max_unavailable,omitempty"`
 }
@@ -9080,7 +7863,7 @@ type RollingUpdateParameters struct {
 	// +kubebuilder:validation:Optional
 	MaxSurge *float64 `json:"maxSurge,omitempty" tf:"max_surge,omitempty"`
 
-	// Monitoring deployment rolling update max unavailable. Default: 1 (int)
+	// The maximum number of agent replicas that can be unavailable at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as min_available.
 	// Rolling update max unavailable
 	// +kubebuilder:validation:Optional
 	MaxUnavailable *float64 `json:"maxUnavailable,omitempty" tf:"max_unavailable,omitempty"`
@@ -9228,6 +8011,41 @@ type SchedulerParameters struct {
 	// Docker image for etcd service (string)
 	// +kubebuilder:validation:Optional
 	Image *string `json:"image,omitempty" tf:"image,omitempty"`
+}
+
+type SchedulingCustomizationInitParameters struct {
+
+	// The definition of a Pod Disruption Budget deployed for the cluster agent
+	// The Pod Disruption Budget created for the cattle cluster agent
+	PodDisruptionBudget []PodDisruptionBudgetInitParameters `json:"podDisruptionBudget,omitempty" tf:"pod_disruption_budget,omitempty"`
+
+	// The definition of a Priority Class deployed for the cluster agent
+	// The Priority Class created for the cattle cluster agent
+	PriorityClass []PriorityClassInitParameters `json:"priorityClass,omitempty" tf:"priority_class,omitempty"`
+}
+
+type SchedulingCustomizationObservation struct {
+
+	// The definition of a Pod Disruption Budget deployed for the cluster agent
+	// The Pod Disruption Budget created for the cattle cluster agent
+	PodDisruptionBudget []PodDisruptionBudgetObservation `json:"podDisruptionBudget,omitempty" tf:"pod_disruption_budget,omitempty"`
+
+	// The definition of a Priority Class deployed for the cluster agent
+	// The Priority Class created for the cattle cluster agent
+	PriorityClass []PriorityClassObservation `json:"priorityClass,omitempty" tf:"priority_class,omitempty"`
+}
+
+type SchedulingCustomizationParameters struct {
+
+	// The definition of a Pod Disruption Budget deployed for the cluster agent
+	// The Pod Disruption Budget created for the cattle cluster agent
+	// +kubebuilder:validation:Optional
+	PodDisruptionBudget []PodDisruptionBudgetParameters `json:"podDisruptionBudget,omitempty" tf:"pod_disruption_budget,omitempty"`
+
+	// The definition of a Priority Class deployed for the cluster agent
+	// The Priority Class created for the cattle cluster agent
+	// +kubebuilder:validation:Optional
+	PriorityClass []PriorityClassParameters `json:"priorityClass,omitempty" tf:"priority_class,omitempty"`
 }
 
 type SecretsEncryptionConfigInitParameters struct {
@@ -9532,21 +8350,21 @@ type UpdateStrategyParameters struct {
 
 type UpdateStrategyRollingUpdateInitParameters struct {
 
-	// Monitoring deployment rolling update max unavailable. Default: 1 (int)
+	// The maximum number of agent replicas that can be unavailable at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as min_available.
 	// Rolling update max unavailable
 	MaxUnavailable *float64 `json:"maxUnavailable,omitempty" tf:"max_unavailable,omitempty"`
 }
 
 type UpdateStrategyRollingUpdateObservation struct {
 
-	// Monitoring deployment rolling update max unavailable. Default: 1 (int)
+	// The maximum number of agent replicas that can be unavailable at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as min_available.
 	// Rolling update max unavailable
 	MaxUnavailable *float64 `json:"maxUnavailable,omitempty" tf:"max_unavailable,omitempty"`
 }
 
 type UpdateStrategyRollingUpdateParameters struct {
 
-	// Monitoring deployment rolling update max unavailable. Default: 1 (int)
+	// The maximum number of agent replicas that can be unavailable at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as min_available.
 	// Rolling update max unavailable
 	// +kubebuilder:validation:Optional
 	MaxUnavailable *float64 `json:"maxUnavailable,omitempty" tf:"max_unavailable,omitempty"`

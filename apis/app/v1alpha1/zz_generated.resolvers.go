@@ -9,117 +9,11 @@ package v1alpha1
 import (
 	"context"
 	reference "github.com/crossplane/crossplane-runtime/pkg/reference"
-	v1alpha1 "github.com/disaster37/provider-rancher/apis/k8s/v1alpha1"
-	v1alpha11 "github.com/disaster37/provider-rancher/apis/rancher/v1alpha1"
+	v1alpha11 "github.com/disaster37/provider-rancher/apis/k8s/v1alpha1"
+	v1alpha1 "github.com/disaster37/provider-rancher/apis/rancher/v1alpha1"
 	errors "github.com/pkg/errors"
 	client "sigs.k8s.io/controller-runtime/pkg/client"
 )
-
-// ResolveReferences of this App.
-func (mg *App) ResolveReferences(ctx context.Context, c client.Reader) error {
-	r := reference.NewAPIResolver(c, mg)
-
-	var rsp reference.ResolutionResponse
-	var err error
-
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.CatalogName),
-		Extract:      reference.ExternalName(),
-		Reference:    mg.Spec.ForProvider.CatalogNameRef,
-		Selector:     mg.Spec.ForProvider.CatalogNameSelector,
-		To: reference.To{
-			List:    &CatalogList{},
-			Managed: &Catalog{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.ForProvider.CatalogName")
-	}
-	mg.Spec.ForProvider.CatalogName = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.ForProvider.CatalogNameRef = rsp.ResolvedReference
-
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ProjectID),
-		Extract:      reference.ExternalName(),
-		Reference:    mg.Spec.ForProvider.ProjectIDRef,
-		Selector:     mg.Spec.ForProvider.ProjectIDSelector,
-		To: reference.To{
-			List:    &v1alpha1.ProjectList{},
-			Managed: &v1alpha1.Project{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.ForProvider.ProjectID")
-	}
-	mg.Spec.ForProvider.ProjectID = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.ForProvider.ProjectIDRef = rsp.ResolvedReference
-
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.TargetNamespace),
-		Extract:      reference.ExternalName(),
-		Reference:    mg.Spec.ForProvider.TargetNamespaceRef,
-		Selector:     mg.Spec.ForProvider.TargetNamespaceSelector,
-		To: reference.To{
-			List:    &v1alpha1.NamespaceList{},
-			Managed: &v1alpha1.Namespace{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.ForProvider.TargetNamespace")
-	}
-	mg.Spec.ForProvider.TargetNamespace = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.ForProvider.TargetNamespaceRef = rsp.ResolvedReference
-
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.CatalogName),
-		Extract:      reference.ExternalName(),
-		Reference:    mg.Spec.InitProvider.CatalogNameRef,
-		Selector:     mg.Spec.InitProvider.CatalogNameSelector,
-		To: reference.To{
-			List:    &CatalogList{},
-			Managed: &Catalog{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.InitProvider.CatalogName")
-	}
-	mg.Spec.InitProvider.CatalogName = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.InitProvider.CatalogNameRef = rsp.ResolvedReference
-
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ProjectID),
-		Extract:      reference.ExternalName(),
-		Reference:    mg.Spec.InitProvider.ProjectIDRef,
-		Selector:     mg.Spec.InitProvider.ProjectIDSelector,
-		To: reference.To{
-			List:    &v1alpha1.ProjectList{},
-			Managed: &v1alpha1.Project{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.InitProvider.ProjectID")
-	}
-	mg.Spec.InitProvider.ProjectID = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.InitProvider.ProjectIDRef = rsp.ResolvedReference
-
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.TargetNamespace),
-		Extract:      reference.ExternalName(),
-		Reference:    mg.Spec.InitProvider.TargetNamespaceRef,
-		Selector:     mg.Spec.InitProvider.TargetNamespaceSelector,
-		To: reference.To{
-			List:    &v1alpha1.NamespaceList{},
-			Managed: &v1alpha1.Namespace{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.InitProvider.TargetNamespace")
-	}
-	mg.Spec.InitProvider.TargetNamespace = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.InitProvider.TargetNamespaceRef = rsp.ResolvedReference
-
-	return nil
-}
 
 // ResolveReferences of this AppV2.
 func (mg *AppV2) ResolveReferences(ctx context.Context, c client.Reader) error {
@@ -134,8 +28,8 @@ func (mg *AppV2) ResolveReferences(ctx context.Context, c client.Reader) error {
 		Reference:    mg.Spec.ForProvider.ClusterIDRef,
 		Selector:     mg.Spec.ForProvider.ClusterIDSelector,
 		To: reference.To{
-			List:    &v1alpha11.ClusterV2List{},
-			Managed: &v1alpha11.ClusterV2{},
+			List:    &v1alpha1.ClusterV2List{},
+			Managed: &v1alpha1.ClusterV2{},
 		},
 	})
 	if err != nil {
@@ -150,8 +44,8 @@ func (mg *AppV2) ResolveReferences(ctx context.Context, c client.Reader) error {
 		Reference:    mg.Spec.ForProvider.NamespaceRef,
 		Selector:     mg.Spec.ForProvider.NamespaceSelector,
 		To: reference.To{
-			List:    &v1alpha1.NamespaceList{},
-			Managed: &v1alpha1.Namespace{},
+			List:    &v1alpha11.RancherNamespaceList{},
+			Managed: &v1alpha11.RancherNamespace{},
 		},
 	})
 	if err != nil {
@@ -166,8 +60,8 @@ func (mg *AppV2) ResolveReferences(ctx context.Context, c client.Reader) error {
 		Reference:    mg.Spec.ForProvider.ProjectIDRef,
 		Selector:     mg.Spec.ForProvider.ProjectIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.ProjectList{},
-			Managed: &v1alpha1.Project{},
+			List:    &v1alpha11.ProjectList{},
+			Managed: &v1alpha11.Project{},
 		},
 	})
 	if err != nil {
@@ -198,8 +92,8 @@ func (mg *AppV2) ResolveReferences(ctx context.Context, c client.Reader) error {
 		Reference:    mg.Spec.InitProvider.ClusterIDRef,
 		Selector:     mg.Spec.InitProvider.ClusterIDSelector,
 		To: reference.To{
-			List:    &v1alpha11.ClusterV2List{},
-			Managed: &v1alpha11.ClusterV2{},
+			List:    &v1alpha1.ClusterV2List{},
+			Managed: &v1alpha1.ClusterV2{},
 		},
 	})
 	if err != nil {
@@ -214,8 +108,8 @@ func (mg *AppV2) ResolveReferences(ctx context.Context, c client.Reader) error {
 		Reference:    mg.Spec.InitProvider.NamespaceRef,
 		Selector:     mg.Spec.InitProvider.NamespaceSelector,
 		To: reference.To{
-			List:    &v1alpha1.NamespaceList{},
-			Managed: &v1alpha1.Namespace{},
+			List:    &v1alpha11.RancherNamespaceList{},
+			Managed: &v1alpha11.RancherNamespace{},
 		},
 	})
 	if err != nil {
@@ -230,8 +124,8 @@ func (mg *AppV2) ResolveReferences(ctx context.Context, c client.Reader) error {
 		Reference:    mg.Spec.InitProvider.ProjectIDRef,
 		Selector:     mg.Spec.InitProvider.ProjectIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.ProjectList{},
-			Managed: &v1alpha1.Project{},
+			List:    &v1alpha11.ProjectList{},
+			Managed: &v1alpha11.Project{},
 		},
 	})
 	if err != nil {
@@ -259,80 +153,6 @@ func (mg *AppV2) ResolveReferences(ctx context.Context, c client.Reader) error {
 	return nil
 }
 
-// ResolveReferences of this Catalog.
-func (mg *Catalog) ResolveReferences(ctx context.Context, c client.Reader) error {
-	r := reference.NewAPIResolver(c, mg)
-
-	var rsp reference.ResolutionResponse
-	var err error
-
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ClusterID),
-		Extract:      reference.ExternalName(),
-		Reference:    mg.Spec.ForProvider.ClusterIDRef,
-		Selector:     mg.Spec.ForProvider.ClusterIDSelector,
-		To: reference.To{
-			List:    &v1alpha11.ClusterList{},
-			Managed: &v1alpha11.Cluster{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.ForProvider.ClusterID")
-	}
-	mg.Spec.ForProvider.ClusterID = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.ForProvider.ClusterIDRef = rsp.ResolvedReference
-
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ProjectID),
-		Extract:      reference.ExternalName(),
-		Reference:    mg.Spec.ForProvider.ProjectIDRef,
-		Selector:     mg.Spec.ForProvider.ProjectIDSelector,
-		To: reference.To{
-			List:    &v1alpha1.ProjectList{},
-			Managed: &v1alpha1.Project{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.ForProvider.ProjectID")
-	}
-	mg.Spec.ForProvider.ProjectID = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.ForProvider.ProjectIDRef = rsp.ResolvedReference
-
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ClusterID),
-		Extract:      reference.ExternalName(),
-		Reference:    mg.Spec.InitProvider.ClusterIDRef,
-		Selector:     mg.Spec.InitProvider.ClusterIDSelector,
-		To: reference.To{
-			List:    &v1alpha11.ClusterList{},
-			Managed: &v1alpha11.Cluster{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.InitProvider.ClusterID")
-	}
-	mg.Spec.InitProvider.ClusterID = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.InitProvider.ClusterIDRef = rsp.ResolvedReference
-
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ProjectID),
-		Extract:      reference.ExternalName(),
-		Reference:    mg.Spec.InitProvider.ProjectIDRef,
-		Selector:     mg.Spec.InitProvider.ProjectIDSelector,
-		To: reference.To{
-			List:    &v1alpha1.ProjectList{},
-			Managed: &v1alpha1.Project{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.InitProvider.ProjectID")
-	}
-	mg.Spec.InitProvider.ProjectID = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.InitProvider.ProjectIDRef = rsp.ResolvedReference
-
-	return nil
-}
-
 // ResolveReferences of this CatalogV2.
 func (mg *CatalogV2) ResolveReferences(ctx context.Context, c client.Reader) error {
 	r := reference.NewAPIResolver(c, mg)
@@ -346,8 +166,8 @@ func (mg *CatalogV2) ResolveReferences(ctx context.Context, c client.Reader) err
 		Reference:    mg.Spec.ForProvider.ClusterIDRef,
 		Selector:     mg.Spec.ForProvider.ClusterIDSelector,
 		To: reference.To{
-			List:    &v1alpha11.ClusterV2List{},
-			Managed: &v1alpha11.ClusterV2{},
+			List:    &v1alpha1.ClusterV2List{},
+			Managed: &v1alpha1.ClusterV2{},
 		},
 	})
 	if err != nil {
@@ -362,8 +182,8 @@ func (mg *CatalogV2) ResolveReferences(ctx context.Context, c client.Reader) err
 		Reference:    mg.Spec.InitProvider.ClusterIDRef,
 		Selector:     mg.Spec.InitProvider.ClusterIDSelector,
 		To: reference.To{
-			List:    &v1alpha11.ClusterV2List{},
-			Managed: &v1alpha11.ClusterV2{},
+			List:    &v1alpha1.ClusterV2List{},
+			Managed: &v1alpha1.ClusterV2{},
 		},
 	})
 	if err != nil {
@@ -371,85 +191,6 @@ func (mg *CatalogV2) ResolveReferences(ctx context.Context, c client.Reader) err
 	}
 	mg.Spec.InitProvider.ClusterID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.ClusterIDRef = rsp.ResolvedReference
-
-	return nil
-}
-
-// ResolveReferences of this MultiClusterApp.
-func (mg *MultiClusterApp) ResolveReferences(ctx context.Context, c client.Reader) error {
-	r := reference.NewAPIResolver(c, mg)
-
-	var rsp reference.ResolutionResponse
-	var err error
-
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.CatalogName),
-		Extract:      reference.ExternalName(),
-		Reference:    mg.Spec.ForProvider.CatalogNameRef,
-		Selector:     mg.Spec.ForProvider.CatalogNameSelector,
-		To: reference.To{
-			List:    &CatalogV2List{},
-			Managed: &CatalogV2{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.ForProvider.CatalogName")
-	}
-	mg.Spec.ForProvider.CatalogName = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.ForProvider.CatalogNameRef = rsp.ResolvedReference
-
-	for i3 := 0; i3 < len(mg.Spec.ForProvider.Targets); i3++ {
-		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.Targets[i3].ProjectID),
-			Extract:      reference.ExternalName(),
-			Reference:    mg.Spec.ForProvider.Targets[i3].ProjectIDRef,
-			Selector:     mg.Spec.ForProvider.Targets[i3].ProjectIDSelector,
-			To: reference.To{
-				List:    &v1alpha1.ProjectList{},
-				Managed: &v1alpha1.Project{},
-			},
-		})
-		if err != nil {
-			return errors.Wrap(err, "mg.Spec.ForProvider.Targets[i3].ProjectID")
-		}
-		mg.Spec.ForProvider.Targets[i3].ProjectID = reference.ToPtrValue(rsp.ResolvedValue)
-		mg.Spec.ForProvider.Targets[i3].ProjectIDRef = rsp.ResolvedReference
-
-	}
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.CatalogName),
-		Extract:      reference.ExternalName(),
-		Reference:    mg.Spec.InitProvider.CatalogNameRef,
-		Selector:     mg.Spec.InitProvider.CatalogNameSelector,
-		To: reference.To{
-			List:    &CatalogV2List{},
-			Managed: &CatalogV2{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.InitProvider.CatalogName")
-	}
-	mg.Spec.InitProvider.CatalogName = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.InitProvider.CatalogNameRef = rsp.ResolvedReference
-
-	for i3 := 0; i3 < len(mg.Spec.InitProvider.Targets); i3++ {
-		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.Targets[i3].ProjectID),
-			Extract:      reference.ExternalName(),
-			Reference:    mg.Spec.InitProvider.Targets[i3].ProjectIDRef,
-			Selector:     mg.Spec.InitProvider.Targets[i3].ProjectIDSelector,
-			To: reference.To{
-				List:    &v1alpha1.ProjectList{},
-				Managed: &v1alpha1.Project{},
-			},
-		})
-		if err != nil {
-			return errors.Wrap(err, "mg.Spec.InitProvider.Targets[i3].ProjectID")
-		}
-		mg.Spec.InitProvider.Targets[i3].ProjectID = reference.ToPtrValue(rsp.ResolvedValue)
-		mg.Spec.InitProvider.Targets[i3].ProjectIDRef = rsp.ResolvedReference
-
-	}
 
 	return nil
 }

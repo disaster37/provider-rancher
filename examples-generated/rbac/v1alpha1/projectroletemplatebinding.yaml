@@ -1,4 +1,4 @@
-apiVersion: rbac.contrib.crossplane.io/v1alpha1
+apiVersion: rbac.rancher.contrib.crossplane.io/v1alpha1
 kind: ProjectRoleTemplateBinding
 metadata:
   annotations:

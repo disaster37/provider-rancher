@@ -21,9 +21,6 @@ type BootstrapInitParameters struct {
 	// or generating a random one.
 	PasswordSecretRef *v1.SecretKeySelector `json:"passwordSecretRef,omitempty" tf:"-"`
 
-	// Send telemetry anonymous data. Default: false (bool)
-	Telemetry *bool `json:"telemetry,omitempty" tf:"telemetry,omitempty"`
-
 	// TTL in seconds for generated admin token. Default: 0  (int)
 	TokenTTL *float64 `json:"tokenTtl,omitempty" tf:"token_ttl,omitempty"`
 
@@ -38,9 +35,6 @@ type BootstrapObservation struct {
 
 	// (Computed) The ID of the resource (string)
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
-
-	// Send telemetry anonymous data. Default: false (bool)
-	Telemetry *bool `json:"telemetry,omitempty" tf:"telemetry,omitempty"`
 
 	// (Computed) Generated API temporary token id as helper. Should be empty (string)
 	TempTokenID *string `json:"tempTokenId,omitempty" tf:"temp_token_id,omitempty"`
@@ -73,10 +67,6 @@ type BootstrapParameters struct {
 	// or generating a random one.
 	// +kubebuilder:validation:Optional
 	PasswordSecretRef *v1.SecretKeySelector `json:"passwordSecretRef,omitempty" tf:"-"`
-
-	// Send telemetry anonymous data. Default: false (bool)
-	// +kubebuilder:validation:Optional
-	Telemetry *bool `json:"telemetry,omitempty" tf:"telemetry,omitempty"`
 
 	// TTL in seconds for generated admin token. Default: 0  (int)
 	// +kubebuilder:validation:Optional

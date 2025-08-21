@@ -12,10 +12,10 @@ TERRAFORM_VERSION_VALID := $(shell [ "$(TERRAFORM_VERSION)" = "`printf "$(TERRAF
 
 export TERRAFORM_PROVIDER_SOURCE ?= rancher/rancher2
 export TERRAFORM_PROVIDER_REPO ?= https://github.com/rancher/terraform-provider-rancher2
-export TERRAFORM_PROVIDER_VERSION ?= 6.0.0
+export TERRAFORM_PROVIDER_VERSION ?= 8.0.0
 export TERRAFORM_PROVIDER_DOWNLOAD_NAME ?= terraform-provider-rancher2
 export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX ?= https://releases.hashicorp.com/$(TERRAFORM_PROVIDER_DOWNLOAD_NAME)/$(TERRAFORM_PROVIDER_VERSION)
-export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-rancher2_v6.0.0
+export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-rancher2_v8.0.0
 export TERRAFORM_DOCS_PATH ?= docs/resources
 
 

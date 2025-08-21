@@ -133,6 +133,41 @@ type ClusterAgentDeploymentCustomizationOverrideResourceRequirementsParameters s
 	MemoryRequest *string `json:"memoryRequest,omitempty" tf:"memory_request,omitempty"`
 }
 
+type ClusterAgentDeploymentCustomizationSchedulingCustomizationInitParameters struct {
+
+	// The definition of a Pod Disruption Budget deployed for the cluster agent
+	// The Pod Disruption Budget created for the cattle cluster agent
+	PodDisruptionBudget []SchedulingCustomizationPodDisruptionBudgetInitParameters `json:"podDisruptionBudget,omitempty" tf:"pod_disruption_budget,omitempty"`
+
+	// The definition of a Priority Class deployed for the cluster agent
+	// The Priority Class created for the cattle cluster agent
+	PriorityClass []SchedulingCustomizationPriorityClassInitParameters `json:"priorityClass,omitempty" tf:"priority_class,omitempty"`
+}
+
+type ClusterAgentDeploymentCustomizationSchedulingCustomizationObservation struct {
+
+	// The definition of a Pod Disruption Budget deployed for the cluster agent
+	// The Pod Disruption Budget created for the cattle cluster agent
+	PodDisruptionBudget []SchedulingCustomizationPodDisruptionBudgetObservation `json:"podDisruptionBudget,omitempty" tf:"pod_disruption_budget,omitempty"`
+
+	// The definition of a Priority Class deployed for the cluster agent
+	// The Priority Class created for the cattle cluster agent
+	PriorityClass []SchedulingCustomizationPriorityClassObservation `json:"priorityClass,omitempty" tf:"priority_class,omitempty"`
+}
+
+type ClusterAgentDeploymentCustomizationSchedulingCustomizationParameters struct {
+
+	// The definition of a Pod Disruption Budget deployed for the cluster agent
+	// The Pod Disruption Budget created for the cattle cluster agent
+	// +kubebuilder:validation:Optional
+	PodDisruptionBudget []SchedulingCustomizationPodDisruptionBudgetParameters `json:"podDisruptionBudget,omitempty" tf:"pod_disruption_budget,omitempty"`
+
+	// The definition of a Priority Class deployed for the cluster agent
+	// The Priority Class created for the cattle cluster agent
+	// +kubebuilder:validation:Optional
+	PriorityClass []SchedulingCustomizationPriorityClassParameters `json:"priorityClass,omitempty" tf:"priority_class,omitempty"`
+}
+
 type ClusterV2AgentEnvVarsInitParameters struct {
 
 	// The name of the cluster.
@@ -175,6 +210,10 @@ type ClusterV2ClusterAgentDeploymentCustomizationInitParameters struct {
 	// Override resource requirements overrides the default value for requests and/or limits.
 	// User defined resource requirements to set on the agent
 	OverrideResourceRequirements []ClusterAgentDeploymentCustomizationOverrideResourceRequirementsInitParameters `json:"overrideResourceRequirements,omitempty" tf:"override_resource_requirements,omitempty"`
+
+	// Supported in Rancher 2.11.0 and above. Defines the configuration of a Priority Class and or Pod Disruption Budget. Currently only supported in the cluster_agent_deployment_customization field, and requires the cattle_cluster_agent_scheduling_customization feature to be enabled.
+	// User defined scheduling customization for the cattle cluster agent
+	SchedulingCustomization []ClusterAgentDeploymentCustomizationSchedulingCustomizationInitParameters `json:"schedulingCustomization,omitempty" tf:"scheduling_customization,omitempty"`
 }
 
 type ClusterV2ClusterAgentDeploymentCustomizationObservation struct {
@@ -190,6 +229,10 @@ type ClusterV2ClusterAgentDeploymentCustomizationObservation struct {
 	// Override resource requirements overrides the default value for requests and/or limits.
 	// User defined resource requirements to set on the agent
 	OverrideResourceRequirements []ClusterAgentDeploymentCustomizationOverrideResourceRequirementsObservation `json:"overrideResourceRequirements,omitempty" tf:"override_resource_requirements,omitempty"`
+
+	// Supported in Rancher 2.11.0 and above. Defines the configuration of a Priority Class and or Pod Disruption Budget. Currently only supported in the cluster_agent_deployment_customization field, and requires the cattle_cluster_agent_scheduling_customization feature to be enabled.
+	// User defined scheduling customization for the cattle cluster agent
+	SchedulingCustomization []ClusterAgentDeploymentCustomizationSchedulingCustomizationObservation `json:"schedulingCustomization,omitempty" tf:"scheduling_customization,omitempty"`
 }
 
 type ClusterV2ClusterAgentDeploymentCustomizationParameters struct {
@@ -208,6 +251,11 @@ type ClusterV2ClusterAgentDeploymentCustomizationParameters struct {
 	// User defined resource requirements to set on the agent
 	// +kubebuilder:validation:Optional
 	OverrideResourceRequirements []ClusterAgentDeploymentCustomizationOverrideResourceRequirementsParameters `json:"overrideResourceRequirements,omitempty" tf:"override_resource_requirements,omitempty"`
+
+	// Supported in Rancher 2.11.0 and above. Defines the configuration of a Priority Class and or Pod Disruption Budget. Currently only supported in the cluster_agent_deployment_customization field, and requires the cattle_cluster_agent_scheduling_customization feature to be enabled.
+	// User defined scheduling customization for the cattle cluster agent
+	// +kubebuilder:validation:Optional
+	SchedulingCustomization []ClusterAgentDeploymentCustomizationSchedulingCustomizationParameters `json:"schedulingCustomization,omitempty" tf:"scheduling_customization,omitempty"`
 }
 
 type ClusterV2ClusterRegistrationTokenInitParameters struct {
@@ -1502,7 +1550,7 @@ type MachinePoolDefaultsParameters struct {
 type MachinePoolsInitParameters struct {
 
 	// Annotations for the Cluster.
-	// Annotations of the resource
+	// Annotations for the MachineDeployment object
 	// +mapType=granular
 	Annotations map[string]*string `json:"annotations,omitempty" tf:"annotations,omitempty"`
 
@@ -1526,7 +1574,7 @@ type MachinePoolsInitParameters struct {
 	HostnameLengthLimit *float64 `json:"hostnameLengthLimit,omitempty" tf:"hostname_length_limit,omitempty"`
 
 	// Labels for the Cluster.
-	// Labels of the resource
+	// Labels for the MachineDeployment object
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
@@ -1535,9 +1583,13 @@ type MachinePoolsInitParameters struct {
 	MachineConfig []MachineConfigInitParameters `json:"machineConfig,omitempty" tf:"machine_config,omitempty"`
 
 	// Labels for Machine pool nodes.
-	// Labels of the machine
+	// Labels for the machine pool nodes
 	// +mapType=granular
 	MachineLabels map[string]*string `json:"machineLabels,omitempty" tf:"machine_labels,omitempty"`
+
+	// OS Type in machine pool. Default linux(string)
+	// OS Type in machine pool
+	MachineOs *string `json:"machineOs,omitempty" tf:"machine_os,omitempty"`
 
 	// Max unhealthy nodes for automated replacement to be allowed.
 	// max unhealthy nodes for automated replacement to be allowed
@@ -1587,7 +1639,7 @@ type MachinePoolsInitParameters struct {
 type MachinePoolsObservation struct {
 
 	// Annotations for the Cluster.
-	// Annotations of the resource
+	// Annotations for the MachineDeployment object
 	// +mapType=granular
 	Annotations map[string]*string `json:"annotations,omitempty" tf:"annotations,omitempty"`
 
@@ -1611,7 +1663,7 @@ type MachinePoolsObservation struct {
 	HostnameLengthLimit *float64 `json:"hostnameLengthLimit,omitempty" tf:"hostname_length_limit,omitempty"`
 
 	// Labels for the Cluster.
-	// Labels of the resource
+	// Labels for the MachineDeployment object
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
@@ -1620,9 +1672,13 @@ type MachinePoolsObservation struct {
 	MachineConfig []MachineConfigObservation `json:"machineConfig,omitempty" tf:"machine_config,omitempty"`
 
 	// Labels for Machine pool nodes.
-	// Labels of the machine
+	// Labels for the machine pool nodes
 	// +mapType=granular
 	MachineLabels map[string]*string `json:"machineLabels,omitempty" tf:"machine_labels,omitempty"`
+
+	// OS Type in machine pool. Default linux(string)
+	// OS Type in machine pool
+	MachineOs *string `json:"machineOs,omitempty" tf:"machine_os,omitempty"`
 
 	// Max unhealthy nodes for automated replacement to be allowed.
 	// max unhealthy nodes for automated replacement to be allowed
@@ -1672,7 +1728,7 @@ type MachinePoolsObservation struct {
 type MachinePoolsParameters struct {
 
 	// Annotations for the Cluster.
-	// Annotations of the resource
+	// Annotations for the MachineDeployment object
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
 	Annotations map[string]*string `json:"annotations,omitempty" tf:"annotations,omitempty"`
@@ -1702,7 +1758,7 @@ type MachinePoolsParameters struct {
 	HostnameLengthLimit *float64 `json:"hostnameLengthLimit,omitempty" tf:"hostname_length_limit,omitempty"`
 
 	// Labels for the Cluster.
-	// Labels of the resource
+	// Labels for the MachineDeployment object
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
@@ -1713,10 +1769,15 @@ type MachinePoolsParameters struct {
 	MachineConfig []MachineConfigParameters `json:"machineConfig" tf:"machine_config,omitempty"`
 
 	// Labels for Machine pool nodes.
-	// Labels of the machine
+	// Labels for the machine pool nodes
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
 	MachineLabels map[string]*string `json:"machineLabels,omitempty" tf:"machine_labels,omitempty"`
+
+	// OS Type in machine pool. Default linux(string)
+	// OS Type in machine pool
+	// +kubebuilder:validation:Optional
+	MachineOs *string `json:"machineOs,omitempty" tf:"machine_os,omitempty"`
 
 	// Max unhealthy nodes for automated replacement to be allowed.
 	// max unhealthy nodes for automated replacement to be allowed
@@ -1780,7 +1841,7 @@ type MachinePoolsRollingUpdateInitParameters struct {
 	// Rolling update max surge
 	MaxSurge *string `json:"maxSurge,omitempty" tf:"max_surge,omitempty"`
 
-	// Rolling update max unavailable.
+	// The maximum number of agent replicas that can be unavailable at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as min_available.
 	// Rolling update max unavailable
 	MaxUnavailable *string `json:"maxUnavailable,omitempty" tf:"max_unavailable,omitempty"`
 }
@@ -1791,7 +1852,7 @@ type MachinePoolsRollingUpdateObservation struct {
 	// Rolling update max surge
 	MaxSurge *string `json:"maxSurge,omitempty" tf:"max_surge,omitempty"`
 
-	// Rolling update max unavailable.
+	// The maximum number of agent replicas that can be unavailable at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as min_available.
 	// Rolling update max unavailable
 	MaxUnavailable *string `json:"maxUnavailable,omitempty" tf:"max_unavailable,omitempty"`
 }
@@ -1803,7 +1864,7 @@ type MachinePoolsRollingUpdateParameters struct {
 	// +kubebuilder:validation:Optional
 	MaxSurge *string `json:"maxSurge,omitempty" tf:"max_surge,omitempty"`
 
-	// Rolling update max unavailable.
+	// The maximum number of agent replicas that can be unavailable at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as min_available.
 	// Rolling update max unavailable
 	// +kubebuilder:validation:Optional
 	MaxUnavailable *string `json:"maxUnavailable,omitempty" tf:"max_unavailable,omitempty"`
@@ -2323,6 +2384,76 @@ type S3ConfigParameters struct {
 	// Disable ETCD skip ssl verify
 	// +kubebuilder:validation:Optional
 	SkipSSLVerify *bool `json:"skipSslVerify,omitempty" tf:"skip_ssl_verify,omitempty"`
+}
+
+type SchedulingCustomizationPodDisruptionBudgetInitParameters struct {
+
+	// The maximum number of agent replicas that can be unavailable at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as min_available.
+	// The maximum number of cattle cluster agent replicas that can be down at a given time.
+	MaxUnavailable *string `json:"maxUnavailable,omitempty" tf:"max_unavailable,omitempty"`
+
+	// The minimum number of agent replicas that must be running at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as max_unavailable.
+	// The minimum number of cattle cluster agent replicas that must be running at a given time.
+	MinAvailable *string `json:"minAvailable,omitempty" tf:"min_available,omitempty"`
+}
+
+type SchedulingCustomizationPodDisruptionBudgetObservation struct {
+
+	// The maximum number of agent replicas that can be unavailable at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as min_available.
+	// The maximum number of cattle cluster agent replicas that can be down at a given time.
+	MaxUnavailable *string `json:"maxUnavailable,omitempty" tf:"max_unavailable,omitempty"`
+
+	// The minimum number of agent replicas that must be running at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as max_unavailable.
+	// The minimum number of cattle cluster agent replicas that must be running at a given time.
+	MinAvailable *string `json:"minAvailable,omitempty" tf:"min_available,omitempty"`
+}
+
+type SchedulingCustomizationPodDisruptionBudgetParameters struct {
+
+	// The maximum number of agent replicas that can be unavailable at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as min_available.
+	// The maximum number of cattle cluster agent replicas that can be down at a given time.
+	// +kubebuilder:validation:Optional
+	MaxUnavailable *string `json:"maxUnavailable,omitempty" tf:"max_unavailable,omitempty"`
+
+	// The minimum number of agent replicas that must be running at a given time. This can be a non-negative whole number or a whole number percentage (e.g. "1", "50%"). This field cannot be used at the same time as max_unavailable.
+	// The minimum number of cattle cluster agent replicas that must be running at a given time.
+	// +kubebuilder:validation:Optional
+	MinAvailable *string `json:"minAvailable,omitempty" tf:"min_available,omitempty"`
+}
+
+type SchedulingCustomizationPriorityClassInitParameters struct {
+
+	// The preemption policy set for the Priority Class. Must be set to either 'Never', 'PreemptLowerPriority', or omitted.
+	// The preemption behavior for the cattle cluster agent. Must be either 'PreemptLowerPriority' or 'Never'
+	PreemptionPolicy *string `json:"preemptionPolicy,omitempty" tf:"preemption_policy,omitempty"`
+
+	// Rancher agent env var value.
+	// The priority value for the cattle cluster agent. Must be between negative 1 billion and 1 billion.
+	Value *float64 `json:"value,omitempty" tf:"value,omitempty"`
+}
+
+type SchedulingCustomizationPriorityClassObservation struct {
+
+	// The preemption policy set for the Priority Class. Must be set to either 'Never', 'PreemptLowerPriority', or omitted.
+	// The preemption behavior for the cattle cluster agent. Must be either 'PreemptLowerPriority' or 'Never'
+	PreemptionPolicy *string `json:"preemptionPolicy,omitempty" tf:"preemption_policy,omitempty"`
+
+	// Rancher agent env var value.
+	// The priority value for the cattle cluster agent. Must be between negative 1 billion and 1 billion.
+	Value *float64 `json:"value,omitempty" tf:"value,omitempty"`
+}
+
+type SchedulingCustomizationPriorityClassParameters struct {
+
+	// The preemption policy set for the Priority Class. Must be set to either 'Never', 'PreemptLowerPriority', or omitted.
+	// The preemption behavior for the cattle cluster agent. Must be either 'PreemptLowerPriority' or 'Never'
+	// +kubebuilder:validation:Optional
+	PreemptionPolicy *string `json:"preemptionPolicy,omitempty" tf:"preemption_policy,omitempty"`
+
+	// Rancher agent env var value.
+	// The priority value for the cattle cluster agent. Must be between negative 1 billion and 1 billion.
+	// +kubebuilder:validation:Optional
+	Value *float64 `json:"value" tf:"value,omitempty"`
 }
 
 type SecretInitParameters struct {

@@ -58,3 +58,54 @@ make build
 
 For filing bugs, suggesting improvements, or requesting new features, please
 open an [issue](https://github.com/disaster37/provider-rancher/issues).
+
+
+
+## Init project
+
+- Fix provider version if needed
+    Edit Makefile and change version on 2 fields
+
+- Init submodule
+`make submodules`
+
+- Clean local
+`make clean`
+
+- Generate the codes
+`make generate`
+
+- Clean rancher doc if failed about doc
+    - Add description on ./work/rancher/rancher2/docs/resources/*.md
+    - Quote field begin with ` <` and `[<`
+    - Remove macro on number field
+    - Copie can be found on ./fix
+    - make generate
+
+- Build
+`make build`
+
+- Create version
+```bash
+VERSION=v0.1.24 make package
+VERSION=v0.1.24 make build
+```
+
+```
+# Init project
+#Fix the provider version if needed
+make submodules
+
+
+
+# Install up
+curl -sL "https://cli.upbound.io" | sh
+sudo mv up /usr/local/bin/
+
+
+up login
+
+
+# send package
+up xpkg push disaster37/provider-rancher:v0.1.25 -f ./_output/xpkg/linux_amd64/provider-rancher-v0.1.25.xpkg
+```

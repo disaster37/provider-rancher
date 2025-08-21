@@ -1,4 +1,4 @@
-apiVersion: auth.contrib.crossplane.io/v1alpha1
+apiVersion: auth.rancher.contrib.crossplane.io/v1alpha1
 kind: AuthConfigAzuread
 metadata:
   annotations:

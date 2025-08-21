@@ -1039,6 +1039,297 @@ type DigitaloceanConfigParameters struct {
 	Userdata *string `json:"userdata,omitempty" tf:"userdata,omitempty"`
 }
 
+type GoogleConfigInitParameters struct {
+
+	// GCE Instance External IP (string)
+	// GCE Instance External IP
+	Address *string `json:"address,omitempty" tf:"address,omitempty"`
+
+	// GCE service account auth json file path. Use rancher2_cloud_credential from Rancher v2.2.x. (string)
+	// GCE service account auth json file path
+	AuthEncodedJSONSecretRef *v1.SecretKeySelector `json:"authEncodedJsonSecretRef,omitempty" tf:"-"`
+
+	// Disk size if using managed disk. For Rancher v2.3.x and above. Default 30 (string)
+	// GCE Instance Disk Size (in GB)
+	DiskSize *string `json:"diskSize,omitempty" tf:"disk_size,omitempty"`
+
+	// GCE Instance Disk Type (string)
+	// GCE Instance Disk Type
+	DiskType *string `json:"diskType,omitempty" tf:"disk_type,omitempty"`
+
+	// A prefix to be added to firewall rules created when exposing ports publicly. Required if exposing ports publicly via the open_port field. (string)
+	// A prefix to be added to firewall rules created when exposing ports publicly. Required if exposing ports publicly.
+	ExternalFirewallRulePrefix *string `json:"externalFirewallRulePrefix,omitempty" tf:"external_firewall_rule_prefix,omitempty"`
+
+	// A prefix to be added to an internal firewall rule created to ensure virtual machines can communicate with one another. Omitting this field will result in an internal firewall rule not being created. (string)
+	// A prefix to be added to an internal firewall rule created to ensure virtual machines can communicate with one another.
+	InternalFirewallRulePrefix *string `json:"internalFirewallRulePrefix,omitempty" tf:"internal_firewall_rule_prefix,omitempty"`
+
+	// GCE instance image absolute URL (string)
+	// GCE instance image absolute URL
+	MachineImage *string `json:"machineImage,omitempty" tf:"machine_image,omitempty"`
+
+	// GCE instance type (string)
+	// GCE instance type
+	MachineType *string `json:"machineType,omitempty" tf:"machine_type,omitempty"`
+
+	// vSphere network where the docker VM will be attached (list)
+	// The network to provision virtual machines within
+	Network *string `json:"network,omitempty" tf:"network,omitempty"`
+
+	// Make the specified port number accessible from the Internet. (list)
+	// A list of ports to be opened publicly. 'external_firewall_rule_prefix' must also be set
+	OpenPort []*string `json:"openPort,omitempty" tf:"open_port,omitempty"`
+
+	// Indicates if the virtual machine can be preempted (bool)
+	// Indicates if the virtual machine can be preempted
+	Preemptable *bool `json:"preemptable,omitempty" tf:"preemptable,omitempty"`
+
+	// The GCP project to create virtual machines within (string)
+	// The GCP project to create virtual machines within
+	Project *string `json:"project,omitempty" tf:"project,omitempty"`
+
+	// Access scopes to be set on the virtual machine (string)
+	// Access scopes to be set on the virtual machine
+	Scopes *string `json:"scopes,omitempty" tf:"scopes,omitempty"`
+
+	// The subnetwork to provision virtual machines within (string)
+	// The subnetwork to provision virtual machines within
+	SubNetwork *string `json:"subNetwork,omitempty" tf:"sub_network,omitempty"`
+
+	// AWS Tags (e.g. key1,value1,key2,value2) (string)
+	// A set of network tags to be added to each VM, in the format of 'tag1,tag2'
+	Tags *string `json:"tags,omitempty" tf:"tags,omitempty"`
+
+	// Indicates if an existing VM should be used. This is not currently support in Rancher Node Drivers. (bool)
+	// Indicates if an existing VM should be used. This is not currently support in Rancher.
+	UseExisting *bool `json:"useExisting,omitempty" tf:"use_existing,omitempty"`
+
+	// Indicates if the virtual machines should use an internal IP (bool)
+	// Indicates if the virtual machines should use an internal IP
+	UseInternalIP *bool `json:"useInternalIp,omitempty" tf:"use_internal_ip,omitempty"`
+
+	// Indicates if the virtual machines should use an internal IP only and not be assigned a public IP (bool)
+	// Indicates if the virtual machines should use an internal IP only and not be assigned a public IP
+	UseInternalIPOnly *bool `json:"useInternalIpOnly,omitempty" tf:"use_internal_ip_only,omitempty"`
+
+	// UserData content of cloud-init, base64 is supported. If the image does not contain the qemu-guest-agent package, you must install and start qemu-guest-agent using userdata (string)
+	// GCE user-data file path
+	UserData *string `json:"userData,omitempty" tf:"user_data,omitempty"`
+
+	// OpenStack username (string)
+	// The username to be set when logging into the virtual machines
+	Username *string `json:"username,omitempty" tf:"username,omitempty"`
+
+	// A set of labels to be added to each VM, in the format of 'key1,value1,key2,value2' (string)
+	// A set of labels to be added to each VM, in the format of 'key1,value1,key2,value2'
+	VMLabels *string `json:"vmLabels,omitempty" tf:"vm_labels,omitempty"`
+
+	// AWS zone for instance (i.e. a,b,c,d,e) (string)
+	// The region and zone to create virtual machines within (e.g. us-east1-b)
+	Zone *string `json:"zone,omitempty" tf:"zone,omitempty"`
+}
+
+type GoogleConfigObservation struct {
+
+	// GCE Instance External IP (string)
+	// GCE Instance External IP
+	Address *string `json:"address,omitempty" tf:"address,omitempty"`
+
+	// Disk size if using managed disk. For Rancher v2.3.x and above. Default 30 (string)
+	// GCE Instance Disk Size (in GB)
+	DiskSize *string `json:"diskSize,omitempty" tf:"disk_size,omitempty"`
+
+	// GCE Instance Disk Type (string)
+	// GCE Instance Disk Type
+	DiskType *string `json:"diskType,omitempty" tf:"disk_type,omitempty"`
+
+	// A prefix to be added to firewall rules created when exposing ports publicly. Required if exposing ports publicly via the open_port field. (string)
+	// A prefix to be added to firewall rules created when exposing ports publicly. Required if exposing ports publicly.
+	ExternalFirewallRulePrefix *string `json:"externalFirewallRulePrefix,omitempty" tf:"external_firewall_rule_prefix,omitempty"`
+
+	// A prefix to be added to an internal firewall rule created to ensure virtual machines can communicate with one another. Omitting this field will result in an internal firewall rule not being created. (string)
+	// A prefix to be added to an internal firewall rule created to ensure virtual machines can communicate with one another.
+	InternalFirewallRulePrefix *string `json:"internalFirewallRulePrefix,omitempty" tf:"internal_firewall_rule_prefix,omitempty"`
+
+	// GCE instance image absolute URL (string)
+	// GCE instance image absolute URL
+	MachineImage *string `json:"machineImage,omitempty" tf:"machine_image,omitempty"`
+
+	// GCE instance type (string)
+	// GCE instance type
+	MachineType *string `json:"machineType,omitempty" tf:"machine_type,omitempty"`
+
+	// vSphere network where the docker VM will be attached (list)
+	// The network to provision virtual machines within
+	Network *string `json:"network,omitempty" tf:"network,omitempty"`
+
+	// Make the specified port number accessible from the Internet. (list)
+	// A list of ports to be opened publicly. 'external_firewall_rule_prefix' must also be set
+	OpenPort []*string `json:"openPort,omitempty" tf:"open_port,omitempty"`
+
+	// Indicates if the virtual machine can be preempted (bool)
+	// Indicates if the virtual machine can be preempted
+	Preemptable *bool `json:"preemptable,omitempty" tf:"preemptable,omitempty"`
+
+	// The GCP project to create virtual machines within (string)
+	// The GCP project to create virtual machines within
+	Project *string `json:"project,omitempty" tf:"project,omitempty"`
+
+	// Access scopes to be set on the virtual machine (string)
+	// Access scopes to be set on the virtual machine
+	Scopes *string `json:"scopes,omitempty" tf:"scopes,omitempty"`
+
+	// The subnetwork to provision virtual machines within (string)
+	// The subnetwork to provision virtual machines within
+	SubNetwork *string `json:"subNetwork,omitempty" tf:"sub_network,omitempty"`
+
+	// AWS Tags (e.g. key1,value1,key2,value2) (string)
+	// A set of network tags to be added to each VM, in the format of 'tag1,tag2'
+	Tags *string `json:"tags,omitempty" tf:"tags,omitempty"`
+
+	// Indicates if an existing VM should be used. This is not currently support in Rancher Node Drivers. (bool)
+	// Indicates if an existing VM should be used. This is not currently support in Rancher.
+	UseExisting *bool `json:"useExisting,omitempty" tf:"use_existing,omitempty"`
+
+	// Indicates if the virtual machines should use an internal IP (bool)
+	// Indicates if the virtual machines should use an internal IP
+	UseInternalIP *bool `json:"useInternalIp,omitempty" tf:"use_internal_ip,omitempty"`
+
+	// Indicates if the virtual machines should use an internal IP only and not be assigned a public IP (bool)
+	// Indicates if the virtual machines should use an internal IP only and not be assigned a public IP
+	UseInternalIPOnly *bool `json:"useInternalIpOnly,omitempty" tf:"use_internal_ip_only,omitempty"`
+
+	// UserData content of cloud-init, base64 is supported. If the image does not contain the qemu-guest-agent package, you must install and start qemu-guest-agent using userdata (string)
+	// GCE user-data file path
+	UserData *string `json:"userData,omitempty" tf:"user_data,omitempty"`
+
+	// OpenStack username (string)
+	// The username to be set when logging into the virtual machines
+	Username *string `json:"username,omitempty" tf:"username,omitempty"`
+
+	// A set of labels to be added to each VM, in the format of 'key1,value1,key2,value2' (string)
+	// A set of labels to be added to each VM, in the format of 'key1,value1,key2,value2'
+	VMLabels *string `json:"vmLabels,omitempty" tf:"vm_labels,omitempty"`
+
+	// AWS zone for instance (i.e. a,b,c,d,e) (string)
+	// The region and zone to create virtual machines within (e.g. us-east1-b)
+	Zone *string `json:"zone,omitempty" tf:"zone,omitempty"`
+}
+
+type GoogleConfigParameters struct {
+
+	// GCE Instance External IP (string)
+	// GCE Instance External IP
+	// +kubebuilder:validation:Optional
+	Address *string `json:"address,omitempty" tf:"address,omitempty"`
+
+	// GCE service account auth json file path. Use rancher2_cloud_credential from Rancher v2.2.x. (string)
+	// GCE service account auth json file path
+	// +kubebuilder:validation:Optional
+	AuthEncodedJSONSecretRef *v1.SecretKeySelector `json:"authEncodedJsonSecretRef,omitempty" tf:"-"`
+
+	// Disk size if using managed disk. For Rancher v2.3.x and above. Default 30 (string)
+	// GCE Instance Disk Size (in GB)
+	// +kubebuilder:validation:Optional
+	DiskSize *string `json:"diskSize" tf:"disk_size,omitempty"`
+
+	// GCE Instance Disk Type (string)
+	// GCE Instance Disk Type
+	// +kubebuilder:validation:Optional
+	DiskType *string `json:"diskType" tf:"disk_type,omitempty"`
+
+	// A prefix to be added to firewall rules created when exposing ports publicly. Required if exposing ports publicly via the open_port field. (string)
+	// A prefix to be added to firewall rules created when exposing ports publicly. Required if exposing ports publicly.
+	// +kubebuilder:validation:Optional
+	ExternalFirewallRulePrefix *string `json:"externalFirewallRulePrefix,omitempty" tf:"external_firewall_rule_prefix,omitempty"`
+
+	// A prefix to be added to an internal firewall rule created to ensure virtual machines can communicate with one another. Omitting this field will result in an internal firewall rule not being created. (string)
+	// A prefix to be added to an internal firewall rule created to ensure virtual machines can communicate with one another.
+	// +kubebuilder:validation:Optional
+	InternalFirewallRulePrefix *string `json:"internalFirewallRulePrefix,omitempty" tf:"internal_firewall_rule_prefix,omitempty"`
+
+	// GCE instance image absolute URL (string)
+	// GCE instance image absolute URL
+	// +kubebuilder:validation:Optional
+	MachineImage *string `json:"machineImage" tf:"machine_image,omitempty"`
+
+	// GCE instance type (string)
+	// GCE instance type
+	// +kubebuilder:validation:Optional
+	MachineType *string `json:"machineType" tf:"machine_type,omitempty"`
+
+	// vSphere network where the docker VM will be attached (list)
+	// The network to provision virtual machines within
+	// +kubebuilder:validation:Optional
+	Network *string `json:"network" tf:"network,omitempty"`
+
+	// Make the specified port number accessible from the Internet. (list)
+	// A list of ports to be opened publicly. 'external_firewall_rule_prefix' must also be set
+	// +kubebuilder:validation:Optional
+	OpenPort []*string `json:"openPort,omitempty" tf:"open_port,omitempty"`
+
+	// Indicates if the virtual machine can be preempted (bool)
+	// Indicates if the virtual machine can be preempted
+	// +kubebuilder:validation:Optional
+	Preemptable *bool `json:"preemptable,omitempty" tf:"preemptable,omitempty"`
+
+	// The GCP project to create virtual machines within (string)
+	// The GCP project to create virtual machines within
+	// +kubebuilder:validation:Optional
+	Project *string `json:"project" tf:"project,omitempty"`
+
+	// Access scopes to be set on the virtual machine (string)
+	// Access scopes to be set on the virtual machine
+	// +kubebuilder:validation:Optional
+	Scopes *string `json:"scopes,omitempty" tf:"scopes,omitempty"`
+
+	// The subnetwork to provision virtual machines within (string)
+	// The subnetwork to provision virtual machines within
+	// +kubebuilder:validation:Optional
+	SubNetwork *string `json:"subNetwork,omitempty" tf:"sub_network,omitempty"`
+
+	// AWS Tags (e.g. key1,value1,key2,value2) (string)
+	// A set of network tags to be added to each VM, in the format of 'tag1,tag2'
+	// +kubebuilder:validation:Optional
+	Tags *string `json:"tags,omitempty" tf:"tags,omitempty"`
+
+	// Indicates if an existing VM should be used. This is not currently support in Rancher Node Drivers. (bool)
+	// Indicates if an existing VM should be used. This is not currently support in Rancher.
+	// +kubebuilder:validation:Optional
+	UseExisting *bool `json:"useExisting,omitempty" tf:"use_existing,omitempty"`
+
+	// Indicates if the virtual machines should use an internal IP (bool)
+	// Indicates if the virtual machines should use an internal IP
+	// +kubebuilder:validation:Optional
+	UseInternalIP *bool `json:"useInternalIp,omitempty" tf:"use_internal_ip,omitempty"`
+
+	// Indicates if the virtual machines should use an internal IP only and not be assigned a public IP (bool)
+	// Indicates if the virtual machines should use an internal IP only and not be assigned a public IP
+	// +kubebuilder:validation:Optional
+	UseInternalIPOnly *bool `json:"useInternalIpOnly,omitempty" tf:"use_internal_ip_only,omitempty"`
+
+	// UserData content of cloud-init, base64 is supported. If the image does not contain the qemu-guest-agent package, you must install and start qemu-guest-agent using userdata (string)
+	// GCE user-data file path
+	// +kubebuilder:validation:Optional
+	UserData *string `json:"userData,omitempty" tf:"user_data,omitempty"`
+
+	// OpenStack username (string)
+	// The username to be set when logging into the virtual machines
+	// +kubebuilder:validation:Optional
+	Username *string `json:"username,omitempty" tf:"username,omitempty"`
+
+	// A set of labels to be added to each VM, in the format of 'key1,value1,key2,value2' (string)
+	// A set of labels to be added to each VM, in the format of 'key1,value1,key2,value2'
+	// +kubebuilder:validation:Optional
+	VMLabels *string `json:"vmLabels,omitempty" tf:"vm_labels,omitempty"`
+
+	// AWS zone for instance (i.e. a,b,c,d,e) (string)
+	// The region and zone to create virtual machines within (e.g. us-east1-b)
+	// +kubebuilder:validation:Optional
+	Zone *string `json:"zone" tf:"zone,omitempty"`
+}
+
 type HarvesterConfigInitParameters struct {
 
 	// CPU count, Default 2 (string)
@@ -1450,7 +1741,7 @@ type LinodeConfigParameters struct {
 
 type MachineConfigV2InitParameters struct {
 
-	// AWS config for the Machine Config V2. Conflicts with azure_config, digitalocean_config, harvester_config, linode_config, openstack_config and vsphere_config (list maxitems:1)
+	// AWS config for the Machine Config V2. Conflicts with azure_config, digitalocean_config, harvester_config, linode_config, openstack_config, google_config and vsphere_config (list maxitems:1)
 	Amazonec2Config []Amazonec2ConfigInitParameters `json:"amazonec2Config,omitempty" tf:"amazonec2_config,omitempty"`
 
 	// Annotations for Machine Config V2 object (map)
@@ -1458,10 +1749,10 @@ type MachineConfigV2InitParameters struct {
 	// +mapType=granular
 	Annotations map[string]*string `json:"annotations,omitempty" tf:"annotations,omitempty"`
 
-	// Azure config for the Machine Config V2. Conflicts with amazonec2_config, digitalocean_config, harvester_config, linode_config, openstack_config and vsphere_config (list maxitems:1)
+	// Azure config for the Machine Config V2. Conflicts with amazonec2_config, digitalocean_config, harvester_config, linode_config, openstack_config, google_config and vsphere_config (list maxitems:1)
 	AzureConfig []AzureConfigInitParameters `json:"azureConfig,omitempty" tf:"azure_config,omitempty"`
 
-	// Digitalocean config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, harvester_config, linode_config, openstack_config and vsphere_config (list maxitems:1)
+	// Digitalocean config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, harvester_config, linode_config, openstack_config, google_config and vsphere_config (list maxitems:1)
 	DigitaloceanConfig []DigitaloceanConfigInitParameters `json:"digitaloceanConfig,omitempty" tf:"digitalocean_config,omitempty"`
 
 	// Cluster V2 fleet namespace
@@ -1471,7 +1762,10 @@ type MachineConfigV2InitParameters struct {
 	// Cluster V2 generate name. The pattern to generate machine config name. e.g  generate_name="prod-pool1" will generate "nc-prod-pool1-?????" names
 	GenerateName *string `json:"generateName,omitempty" tf:"generate_name,omitempty"`
 
-	// Harvester config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, linode_config, openstack_config and vsphere_config (list maxitems:1)
+	// Google config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, linode_config, openstack_config and vsphere_config (list maxitems:1)
+	GoogleConfig []GoogleConfigInitParameters `json:"googleConfig,omitempty" tf:"google_config,omitempty"`
+
+	// Harvester config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, linode_config, openstack_config, google_config and vsphere_config (list maxitems:1)
 	HarvesterConfig []HarvesterConfigInitParameters `json:"harvesterConfig,omitempty" tf:"harvester_config,omitempty"`
 
 	// Labels for Machine Config V2 object (map)
@@ -1479,19 +1773,19 @@ type MachineConfigV2InitParameters struct {
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
-	// Linode config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, openstack_config and vsphere_config (list maxitems:1)
+	// Linode config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, openstack_config, google_config and vsphere_config (list maxitems:1)
 	LinodeConfig []LinodeConfigInitParameters `json:"linodeConfig,omitempty" tf:"linode_config,omitempty"`
 
-	// Openstack config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, linode_config and vsphere_config (list maxitems:1)
+	// Openstack config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, linode_config, google_config and vsphere_config (list maxitems:1)
 	OpenstackConfig []OpenstackConfigInitParameters `json:"openstackConfig,omitempty" tf:"openstack_config,omitempty"`
 
-	// vSphere config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, linode_config and openstack_config (list maxitems:1)
+	// vSphere config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, linode_config, google_config and openstack_config (list maxitems:1)
 	VsphereConfig []VsphereConfigInitParameters `json:"vsphereConfig,omitempty" tf:"vsphere_config,omitempty"`
 }
 
 type MachineConfigV2Observation struct {
 
-	// AWS config for the Machine Config V2. Conflicts with azure_config, digitalocean_config, harvester_config, linode_config, openstack_config and vsphere_config (list maxitems:1)
+	// AWS config for the Machine Config V2. Conflicts with azure_config, digitalocean_config, harvester_config, linode_config, openstack_config, google_config and vsphere_config (list maxitems:1)
 	Amazonec2Config []Amazonec2ConfigObservation `json:"amazonec2Config,omitempty" tf:"amazonec2_config,omitempty"`
 
 	// Annotations for Machine Config V2 object (map)
@@ -1499,10 +1793,10 @@ type MachineConfigV2Observation struct {
 	// +mapType=granular
 	Annotations map[string]*string `json:"annotations,omitempty" tf:"annotations,omitempty"`
 
-	// Azure config for the Machine Config V2. Conflicts with amazonec2_config, digitalocean_config, harvester_config, linode_config, openstack_config and vsphere_config (list maxitems:1)
+	// Azure config for the Machine Config V2. Conflicts with amazonec2_config, digitalocean_config, harvester_config, linode_config, openstack_config, google_config and vsphere_config (list maxitems:1)
 	AzureConfig []AzureConfigObservation `json:"azureConfig,omitempty" tf:"azure_config,omitempty"`
 
-	// Digitalocean config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, harvester_config, linode_config, openstack_config and vsphere_config (list maxitems:1)
+	// Digitalocean config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, harvester_config, linode_config, openstack_config, google_config and vsphere_config (list maxitems:1)
 	DigitaloceanConfig []DigitaloceanConfigObservation `json:"digitaloceanConfig,omitempty" tf:"digitalocean_config,omitempty"`
 
 	// Cluster V2 fleet namespace
@@ -1512,7 +1806,10 @@ type MachineConfigV2Observation struct {
 	// Cluster V2 generate name. The pattern to generate machine config name. e.g  generate_name="prod-pool1" will generate "nc-prod-pool1-?????" names
 	GenerateName *string `json:"generateName,omitempty" tf:"generate_name,omitempty"`
 
-	// Harvester config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, linode_config, openstack_config and vsphere_config (list maxitems:1)
+	// Google config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, linode_config, openstack_config and vsphere_config (list maxitems:1)
+	GoogleConfig []GoogleConfigObservation `json:"googleConfig,omitempty" tf:"google_config,omitempty"`
+
+	// Harvester config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, linode_config, openstack_config, google_config and vsphere_config (list maxitems:1)
 	HarvesterConfig []HarvesterConfigObservation `json:"harvesterConfig,omitempty" tf:"harvester_config,omitempty"`
 
 	// (Computed) The ID of the resource (string)
@@ -1526,25 +1823,25 @@ type MachineConfigV2Observation struct {
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
-	// Linode config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, openstack_config and vsphere_config (list maxitems:1)
+	// Linode config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, openstack_config, google_config and vsphere_config (list maxitems:1)
 	LinodeConfig []LinodeConfigObservation `json:"linodeConfig,omitempty" tf:"linode_config,omitempty"`
 
 	// (Computed) The machine config name (string)
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// Openstack config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, linode_config and vsphere_config (list maxitems:1)
+	// Openstack config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, linode_config, google_config and vsphere_config (list maxitems:1)
 	OpenstackConfig []OpenstackConfigObservation `json:"openstackConfig,omitempty" tf:"openstack_config,omitempty"`
 
 	// (Computed) The machine config k8s resource version (string)
 	ResourceVersion *string `json:"resourceVersion,omitempty" tf:"resource_version,omitempty"`
 
-	// vSphere config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, linode_config and openstack_config (list maxitems:1)
+	// vSphere config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, linode_config, google_config and openstack_config (list maxitems:1)
 	VsphereConfig []VsphereConfigObservation `json:"vsphereConfig,omitempty" tf:"vsphere_config,omitempty"`
 }
 
 type MachineConfigV2Parameters struct {
 
-	// AWS config for the Machine Config V2. Conflicts with azure_config, digitalocean_config, harvester_config, linode_config, openstack_config and vsphere_config (list maxitems:1)
+	// AWS config for the Machine Config V2. Conflicts with azure_config, digitalocean_config, harvester_config, linode_config, openstack_config, google_config and vsphere_config (list maxitems:1)
 	// +kubebuilder:validation:Optional
 	Amazonec2Config []Amazonec2ConfigParameters `json:"amazonec2Config,omitempty" tf:"amazonec2_config,omitempty"`
 
@@ -1554,11 +1851,11 @@ type MachineConfigV2Parameters struct {
 	// +mapType=granular
 	Annotations map[string]*string `json:"annotations,omitempty" tf:"annotations,omitempty"`
 
-	// Azure config for the Machine Config V2. Conflicts with amazonec2_config, digitalocean_config, harvester_config, linode_config, openstack_config and vsphere_config (list maxitems:1)
+	// Azure config for the Machine Config V2. Conflicts with amazonec2_config, digitalocean_config, harvester_config, linode_config, openstack_config, google_config and vsphere_config (list maxitems:1)
 	// +kubebuilder:validation:Optional
 	AzureConfig []AzureConfigParameters `json:"azureConfig,omitempty" tf:"azure_config,omitempty"`
 
-	// Digitalocean config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, harvester_config, linode_config, openstack_config and vsphere_config (list maxitems:1)
+	// Digitalocean config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, harvester_config, linode_config, openstack_config, google_config and vsphere_config (list maxitems:1)
 	// +kubebuilder:validation:Optional
 	DigitaloceanConfig []DigitaloceanConfigParameters `json:"digitaloceanConfig,omitempty" tf:"digitalocean_config,omitempty"`
 
@@ -1571,7 +1868,11 @@ type MachineConfigV2Parameters struct {
 	// +kubebuilder:validation:Optional
 	GenerateName *string `json:"generateName,omitempty" tf:"generate_name,omitempty"`
 
-	// Harvester config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, linode_config, openstack_config and vsphere_config (list maxitems:1)
+	// Google config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, linode_config, openstack_config and vsphere_config (list maxitems:1)
+	// +kubebuilder:validation:Optional
+	GoogleConfig []GoogleConfigParameters `json:"googleConfig,omitempty" tf:"google_config,omitempty"`
+
+	// Harvester config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, linode_config, openstack_config, google_config and vsphere_config (list maxitems:1)
 	// +kubebuilder:validation:Optional
 	HarvesterConfig []HarvesterConfigParameters `json:"harvesterConfig,omitempty" tf:"harvester_config,omitempty"`
 
@@ -1581,15 +1882,15 @@ type MachineConfigV2Parameters struct {
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
-	// Linode config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, openstack_config and vsphere_config (list maxitems:1)
+	// Linode config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, openstack_config, google_config and vsphere_config (list maxitems:1)
 	// +kubebuilder:validation:Optional
 	LinodeConfig []LinodeConfigParameters `json:"linodeConfig,omitempty" tf:"linode_config,omitempty"`
 
-	// Openstack config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, linode_config and vsphere_config (list maxitems:1)
+	// Openstack config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, linode_config, google_config and vsphere_config (list maxitems:1)
 	// +kubebuilder:validation:Optional
 	OpenstackConfig []OpenstackConfigParameters `json:"openstackConfig,omitempty" tf:"openstack_config,omitempty"`
 
-	// vSphere config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, linode_config and openstack_config (list maxitems:1)
+	// vSphere config for the Machine Config V2. Conflicts with amazonec2_config, azure_config, digitalocean_config, harvester_config, linode_config, google_config and openstack_config (list maxitems:1)
 	// +kubebuilder:validation:Optional
 	VsphereConfig []VsphereConfigParameters `json:"vsphereConfig,omitempty" tf:"vsphere_config,omitempty"`
 }
@@ -2088,6 +2389,10 @@ type VsphereConfigInitParameters struct {
 	// vSphere network where the virtual machine will be attached
 	Network []*string `json:"network,omitempty" tf:"network,omitempty"`
 
+	// Type of virtual machine OS in vSphere. Default linux(string)
+	// Type of virtual machine OS in vSphere
+	Os *string `json:"os,omitempty" tf:"os,omitempty"`
+
 	// OpenStack password. Mandatory on Rancher v2.0.x and v2.1.x. Use rancher2_cloud_credential from Rancher v2.2.x (string)
 	// vSphere password
 	PasswordSecretRef *v1.SecretKeySelector `json:"passwordSecretRef,omitempty" tf:"-"`
@@ -2218,6 +2523,10 @@ type VsphereConfigObservation struct {
 	// vSphere network where the docker VM will be attached (list)
 	// vSphere network where the virtual machine will be attached
 	Network []*string `json:"network,omitempty" tf:"network,omitempty"`
+
+	// Type of virtual machine OS in vSphere. Default linux(string)
+	// Type of virtual machine OS in vSphere
+	Os *string `json:"os,omitempty" tf:"os,omitempty"`
 
 	// vSphere resource pool for docker VM (string)
 	// vSphere resource pool for docker VM
@@ -2359,6 +2668,11 @@ type VsphereConfigParameters struct {
 	// vSphere network where the virtual machine will be attached
 	// +kubebuilder:validation:Optional
 	Network []*string `json:"network,omitempty" tf:"network,omitempty"`
+
+	// Type of virtual machine OS in vSphere. Default linux(string)
+	// Type of virtual machine OS in vSphere
+	// +kubebuilder:validation:Optional
+	Os *string `json:"os,omitempty" tf:"os,omitempty"`
 
 	// OpenStack password. Mandatory on Rancher v2.0.x and v2.1.x. Use rancher2_cloud_credential from Rancher v2.2.x (string)
 	// vSphere password

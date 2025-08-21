@@ -53,14 +53,14 @@ type ConfigMapV2InitParameters struct {
 
 	// The namespaces of the configMap v2. Default: default (string)
 	// ConfigMap V2 namespace
-	// +crossplane:generate:reference:type=github.com/disaster37/provider-rancher/apis/k8s/v1alpha1.Namespace
+	// +crossplane:generate:reference:type=github.com/disaster37/provider-rancher/apis/k8s/v1alpha1.RancherNamespace
 	Namespace *string `json:"namespace,omitempty" tf:"namespace,omitempty"`
 
-	// Reference to a Namespace in k8s to populate namespace.
+	// Reference to a RancherNamespace in k8s to populate namespace.
 	// +kubebuilder:validation:Optional
 	NamespaceRef *v1.Reference `json:"namespaceRef,omitempty" tf:"-"`
 
-	// Selector for a Namespace in k8s to populate namespace.
+	// Selector for a RancherNamespace in k8s to populate namespace.
 	// +kubebuilder:validation:Optional
 	NamespaceSelector *v1.Selector `json:"namespaceSelector,omitempty" tf:"-"`
 }
@@ -151,15 +151,15 @@ type ConfigMapV2Parameters struct {
 
 	// The namespaces of the configMap v2. Default: default (string)
 	// ConfigMap V2 namespace
-	// +crossplane:generate:reference:type=github.com/disaster37/provider-rancher/apis/k8s/v1alpha1.Namespace
+	// +crossplane:generate:reference:type=github.com/disaster37/provider-rancher/apis/k8s/v1alpha1.RancherNamespace
 	// +kubebuilder:validation:Optional
 	Namespace *string `json:"namespace,omitempty" tf:"namespace,omitempty"`
 
-	// Reference to a Namespace in k8s to populate namespace.
+	// Reference to a RancherNamespace in k8s to populate namespace.
 	// +kubebuilder:validation:Optional
 	NamespaceRef *v1.Reference `json:"namespaceRef,omitempty" tf:"-"`
 
-	// Selector for a Namespace in k8s to populate namespace.
+	// Selector for a RancherNamespace in k8s to populate namespace.
 	// +kubebuilder:validation:Optional
 	NamespaceSelector *v1.Selector `json:"namespaceSelector,omitempty" tf:"-"`
 }

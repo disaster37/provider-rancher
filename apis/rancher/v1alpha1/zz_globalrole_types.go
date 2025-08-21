@@ -84,6 +84,10 @@ type GlobalRoleObservation struct {
 	// Global role policy rules (list)
 	// Global role policy rules
 	Rules []RulesObservation `json:"rules,omitempty" tf:"rules,omitempty"`
+
+	// (Computed) The ID of the resource (string)
+	// Global role uuid
+	UUID *string `json:"uuid,omitempty" tf:"uuid,omitempty"`
 }
 
 type GlobalRoleParameters struct {

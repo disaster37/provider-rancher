@@ -29,7 +29,7 @@ var providerMetadata string
 // GetProvider returns provider configuration
 func GetProvider() *ujconfig.Provider {
 	pc := ujconfig.NewProvider([]byte(providerSchema), resourcePrefix, modulePath, []byte(providerMetadata),
-		ujconfig.WithRootGroup("contrib.crossplane.io"),
+		ujconfig.WithRootGroup("rancher.contrib.crossplane.io"),
 		ujconfig.WithIncludeList(ExternalNameConfigured()),
 		ujconfig.WithFeaturesPackage("internal/features"),
 		ujconfig.WithDefaultResourceOptions(
@@ -463,10 +463,10 @@ func GetProvider() *ujconfig.Provider {
 		func(p *ujconfig.Provider) {
 			p.AddResourceConfigurator("rancher2_namespace", func(r *config.Resource) {
 				r.ShortGroup = "k8s"
+				r.Kind = "RancherNamespace"
 
 				r.MarkAsRequired(
 					"name",
-					"project_id",
 				)
 
 				r.References["project_id"] = config.Reference{

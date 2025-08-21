@@ -1,4 +1,4 @@
-apiVersion: k8s.contrib.crossplane.io/v1alpha1
+apiVersion: k8s.rancher.contrib.crossplane.io/v1alpha1
 kind: StorageClassV2
 metadata:
   annotations:

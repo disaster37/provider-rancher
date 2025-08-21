@@ -8,15 +8,6 @@ package v1alpha1
 
 import resource "github.com/crossplane/crossplane-runtime/pkg/resource"
 
-// GetItems of this AppList.
-func (l *AppList) GetItems() []resource.Managed {
-	items := make([]resource.Managed, len(l.Items))
-	for i := range l.Items {
-		items[i] = &l.Items[i]
-	}
-	return items
-}
-
 // GetItems of this AppV2List.
 func (l *AppV2List) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
@@ -26,26 +17,8 @@ func (l *AppV2List) GetItems() []resource.Managed {
 	return items
 }
 
-// GetItems of this CatalogList.
-func (l *CatalogList) GetItems() []resource.Managed {
-	items := make([]resource.Managed, len(l.Items))
-	for i := range l.Items {
-		items[i] = &l.Items[i]
-	}
-	return items
-}
-
 // GetItems of this CatalogV2List.
 func (l *CatalogV2List) GetItems() []resource.Managed {
-	items := make([]resource.Managed, len(l.Items))
-	for i := range l.Items {
-		items[i] = &l.Items[i]
-	}
-	return items
-}
-
-// GetItems of this MultiClusterAppList.
-func (l *MultiClusterAppList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]

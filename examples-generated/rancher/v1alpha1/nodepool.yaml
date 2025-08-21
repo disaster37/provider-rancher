@@ -1,4 +1,4 @@
-apiVersion: rancher.contrib.crossplane.io/v1alpha1
+apiVersion: rancher.rancher.contrib.crossplane.io/v1alpha1
 kind: NodePool
 metadata:
   annotations:
@@ -23,7 +23,7 @@ spec:
 
 ---
 
-apiVersion: rancher.contrib.crossplane.io/v1alpha1
+apiVersion: rancher.rancher.contrib.crossplane.io/v1alpha1
 kind: CloudCredential
 metadata:
   annotations:
@@ -47,7 +47,7 @@ spec:
 
 ---
 
-apiVersion: rancher.contrib.crossplane.io/v1alpha1
+apiVersion: rancher.rancher.contrib.crossplane.io/v1alpha1
 kind: Cluster
 metadata:
   annotations:
@@ -66,7 +66,7 @@ spec:
 
 ---
 
-apiVersion: rancher.contrib.crossplane.io/v1alpha1
+apiVersion: rancher.rancher.contrib.crossplane.io/v1alpha1
 kind: NodeTemplate
 metadata:
   annotations:

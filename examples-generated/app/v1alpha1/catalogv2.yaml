@@ -1,4 +1,4 @@
-apiVersion: app.contrib.crossplane.io/v1alpha1
+apiVersion: app.rancher.contrib.crossplane.io/v1alpha1
 kind: CatalogV2
 metadata:
   annotations:

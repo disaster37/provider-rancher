@@ -7,16 +7,7 @@
 package v1alpha1
 
 // Hub marks this type as a conversion hub.
-func (tr *App) Hub() {}
-
-// Hub marks this type as a conversion hub.
 func (tr *AppV2) Hub() {}
 
 // Hub marks this type as a conversion hub.
-func (tr *Catalog) Hub() {}
-
-// Hub marks this type as a conversion hub.
 func (tr *CatalogV2) Hub() {}
-
-// Hub marks this type as a conversion hub.
-func (tr *MultiClusterApp) Hub() {}
