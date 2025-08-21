@@ -1,0 +1,1 @@
+{"terraform":[{"required_providers":[{"provider":{"source":"rancher/rancher2","version":"6.0.0"}}],"required_version":"1.5.7"}]}
