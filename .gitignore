@@ -1,7 +1,0 @@
-
-
-# ignore IDE folders
-.vscode/
-.idea/
-
-secret/
