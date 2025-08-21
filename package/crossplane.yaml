@@ -2,3 +2,8 @@ apiVersion: meta.pkg.crossplane.io/v1
 kind: Provider
 metadata:
   name: provider-rancher
+  annotations:
+    meta.crossplane.io/maintainer: disaster37 <linuxworkgroup@hotmail.com>
+    meta.crossplane.io/source: https://github.com/disaster37/provider-rancher
+    meta.crossplane.io/description: |
+      Rancher provider generated with upjet
