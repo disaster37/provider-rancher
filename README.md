@@ -87,7 +87,6 @@ open an [issue](https://github.com/disaster37/provider-rancher/issues).
 
 - Create version
 ```bash
-VERSION=v0.1.24 make package
 VERSION=v0.1.24 make build
 ```
 

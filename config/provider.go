@@ -43,9 +43,8 @@ func GetProvider() *ujconfig.Provider {
 			p.AddResourceConfigurator("rancher2_app", func(r *config.Resource) {
 				r.ShortGroup = "app"
 				r.MarkAsRequired(
-					"catalog_nam",
+					"catalog_name",
 					"name",
-					"project_id",
 					"target_namespace",
 					"template_name",
 				)
@@ -66,7 +65,6 @@ func GetProvider() *ujconfig.Provider {
 				r.ShortGroup = "app"
 				r.Kind = "AppV2"
 				r.MarkAsRequired(
-					"cluster_id",
 					"name",
 					"namespace",
 					"repo_name",
@@ -246,7 +244,6 @@ func GetProvider() *ujconfig.Provider {
 				r.Kind = "CatalogV2"
 
 				r.MarkAsRequired(
-					"cluster_id",
 					"name",
 				)
 
@@ -262,7 +259,6 @@ func GetProvider() *ujconfig.Provider {
 				r.MarkAsRequired(
 					"certs",
 					"key",
-					"project_id",
 				)
 
 				r.References["namespace_id"] = config.Reference{
@@ -312,8 +308,6 @@ func GetProvider() *ujconfig.Provider {
 				r.ShortGroup = "rancher"
 
 				r.MarkAsRequired(
-					"cluster_id",
-					"role_template_id",
 					"name",
 				)
 
@@ -328,10 +322,6 @@ func GetProvider() *ujconfig.Provider {
 		func(p *ujconfig.Provider) {
 			p.AddResourceConfigurator("rancher2_cluster_sync", func(r *config.Resource) {
 				r.ShortGroup = "rancher"
-
-				r.MarkAsRequired(
-					"cluster_id",
-				)
 
 				r.References["cluster_id"] = config.Reference{
 					TerraformName: "rancher2_cluster_v2",
@@ -366,7 +356,6 @@ func GetProvider() *ujconfig.Provider {
 				r.Kind = "ConfigMapV2"
 
 				r.MarkAsRequired(
-					"cluster_id",
 					"name",
 					"data",
 				)
@@ -399,7 +388,6 @@ func GetProvider() *ujconfig.Provider {
 				r.ShortGroup = "rancher"
 
 				r.MarkAsRequired(
-					"cluster_id",
 					"name",
 				)
 
@@ -425,8 +413,6 @@ func GetProvider() *ujconfig.Provider {
 		func(p *ujconfig.Provider) {
 			p.AddResourceConfigurator("rancher2_global_role_binding", func(r *config.Resource) {
 				r.ShortGroup = "rancher"
-
-				r.MarkAsRequired("global_role_id")
 
 				r.References["global_role_id"] = config.Reference{
 					TerraformName: "rancher2_global_role",
@@ -491,10 +477,8 @@ func GetProvider() *ujconfig.Provider {
 				r.ShortGroup = "rancher"
 
 				r.MarkAsRequired(
-					"cluster_id",
 					"name",
 					"hostname_prefix",
-					"node_template_id",
 				)
 
 				r.References["cluster_id"] = config.Reference{
@@ -530,7 +514,6 @@ func GetProvider() *ujconfig.Provider {
 				r.ShortGroup = "k8s"
 
 				r.MarkAsRequired(
-					"cluster_id",
 					"name",
 				)
 
@@ -544,9 +527,7 @@ func GetProvider() *ujconfig.Provider {
 				r.ShortGroup = "rbac"
 
 				r.MarkAsRequired(
-					"project_id",
 					"name",
-					"role_template_id",
 				)
 
 				r.References["project_id"] = config.Reference{
@@ -564,7 +545,6 @@ func GetProvider() *ujconfig.Provider {
 
 				r.MarkAsRequired(
 					"name",
-					"project_id",
 					"registries",
 				)
 
@@ -590,7 +570,6 @@ func GetProvider() *ujconfig.Provider {
 
 				r.MarkAsRequired(
 					"data",
-					"project_id",
 				)
 
 				r.References["project_id"] = config.Reference{
@@ -607,7 +586,6 @@ func GetProvider() *ujconfig.Provider {
 				r.Kind = "SecretV2"
 
 				r.MarkAsRequired(
-					"cluster_id",
 					"name",
 					"data",
 				)
@@ -637,7 +615,6 @@ func GetProvider() *ujconfig.Provider {
 				r.Kind = "StorageClassV2"
 
 				r.MarkAsRequired(
-					"cluster_id",
 					"name",
 					"k8s_provisioner",
 				)
