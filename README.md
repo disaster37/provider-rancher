@@ -73,6 +73,8 @@ open an [issue](https://github.com/disaster37/provider-rancher/issues).
 `make clean`
 
 - Generate the codes
+export PATH=$PATH:/projects/bin/
+`go install golang.org/x/tools/cmd/goimports@latest`
 `make generate`
 
 - Clean rancher doc if failed about doc
@@ -84,6 +86,8 @@ open an [issue](https://github.com/disaster37/provider-rancher/issues).
 
 - Build
 `make build`
+
+> If you change something on shecma like required field, you need to run make generate before build...
 
 - Create version
 ```bash

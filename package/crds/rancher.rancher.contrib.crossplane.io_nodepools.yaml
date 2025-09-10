@@ -691,10 +691,6 @@ spec:
             - forProvider
             type: object
             x-kubernetes-validations:
-            - message: spec.forProvider.clusterId is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.clusterId)
-                || (has(self.initProvider) && has(self.initProvider.clusterId))'
             - message: spec.forProvider.hostnamePrefix is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.hostnamePrefix)
@@ -703,10 +699,6 @@ spec:
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
                 || (has(self.initProvider) && has(self.initProvider.name))'
-            - message: spec.forProvider.nodeTemplateId is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.nodeTemplateId)
-                || (has(self.initProvider) && has(self.initProvider.nodeTemplateId))'
           status:
             description: NodePoolStatus defines the observed state of NodePool.
             properties:

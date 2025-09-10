@@ -288,10 +288,8 @@ type NodePoolStatus struct {
 type NodePool struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.clusterId) || (has(self.initProvider) && has(self.initProvider.clusterId))",message="spec.forProvider.clusterId is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.hostnamePrefix) || (has(self.initProvider) && has(self.initProvider.hostnamePrefix))",message="spec.forProvider.hostnamePrefix is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.nodeTemplateId) || (has(self.initProvider) && has(self.initProvider.nodeTemplateId))",message="spec.forProvider.nodeTemplateId is a required parameter"
 	Spec   NodePoolSpec   `json:"spec"`
 	Status NodePoolStatus `json:"status,omitempty"`
 }

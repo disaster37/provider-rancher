@@ -608,11 +608,6 @@ spec:
             required:
             - forProvider
             type: object
-            x-kubernetes-validations:
-            - message: spec.forProvider.clusterId is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.clusterId)
-                || (has(self.initProvider) && has(self.initProvider.clusterId))'
           status:
             description: ClusterSyncStatus defines the observed state of ClusterSync.
             properties:

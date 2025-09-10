@@ -649,14 +649,6 @@ spec:
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
                 || (has(self.initProvider) && has(self.initProvider.name))'
-            - message: spec.forProvider.projectId is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.projectId)
-                || (has(self.initProvider) && has(self.initProvider.projectId))'
-            - message: spec.forProvider.roleTemplateId is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.roleTemplateId)
-                || (has(self.initProvider) && has(self.initProvider.roleTemplateId))'
           status:
             description: ProjectRoleTemplateBindingStatus defines the observed state
               of ProjectRoleTemplateBinding.
