@@ -108,7 +108,7 @@ spec:
                       in format cluster_id:project_id, e.g. c-abc12:p-def34 (string)
                     type: string
                   projectIdRef:
-                    description: Reference to a ClusterV2 in rancher to populate projectId.
+                    description: Reference to a Project in k8s to populate projectId.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -142,7 +142,7 @@ spec:
                     - name
                     type: object
                   projectIdSelector:
-                    description: Selector for a ClusterV2 in rancher to populate projectId.
+                    description: Selector for a Project in k8s to populate projectId.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -315,7 +315,7 @@ spec:
                       in format cluster_id:project_id, e.g. c-abc12:p-def34 (string)
                     type: string
                   projectIdRef:
-                    description: Reference to a ClusterV2 in rancher to populate projectId.
+                    description: Reference to a Project in k8s to populate projectId.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -349,7 +349,7 @@ spec:
                     - name
                     type: object
                   projectIdSelector:
-                    description: Selector for a ClusterV2 in rancher to populate projectId.
+                    description: Selector for a Project in k8s to populate projectId.
                     properties:
                       matchControllerRef:
                         description: |-

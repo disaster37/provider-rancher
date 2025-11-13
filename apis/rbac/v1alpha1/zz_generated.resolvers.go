@@ -9,7 +9,8 @@ package v1alpha1
 import (
 	"context"
 	reference "github.com/crossplane/crossplane-runtime/pkg/reference"
-	v1alpha1 "github.com/disaster37/provider-rancher/apis/rancher/v1alpha1"
+	v1alpha1 "github.com/disaster37/provider-rancher/apis/k8s/v1alpha1"
+	v1alpha11 "github.com/disaster37/provider-rancher/apis/rancher/v1alpha1"
 	errors "github.com/pkg/errors"
 	client "sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -27,8 +28,8 @@ func (mg *ProjectRoleTemplateBinding) ResolveReferences(ctx context.Context, c c
 		Reference:    mg.Spec.ForProvider.ProjectIDRef,
 		Selector:     mg.Spec.ForProvider.ProjectIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.ClusterV2List{},
-			Managed: &v1alpha1.ClusterV2{},
+			List:    &v1alpha1.ProjectList{},
+			Managed: &v1alpha1.Project{},
 		},
 	})
 	if err != nil {
@@ -43,8 +44,8 @@ func (mg *ProjectRoleTemplateBinding) ResolveReferences(ctx context.Context, c c
 		Reference:    mg.Spec.ForProvider.RoleTemplateIDRef,
 		Selector:     mg.Spec.ForProvider.RoleTemplateIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RoleTemplateList{},
-			Managed: &v1alpha1.RoleTemplate{},
+			List:    &v1alpha11.RoleTemplateList{},
+			Managed: &v1alpha11.RoleTemplate{},
 		},
 	})
 	if err != nil {
@@ -59,8 +60,8 @@ func (mg *ProjectRoleTemplateBinding) ResolveReferences(ctx context.Context, c c
 		Reference:    mg.Spec.InitProvider.ProjectIDRef,
 		Selector:     mg.Spec.InitProvider.ProjectIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.ClusterV2List{},
-			Managed: &v1alpha1.ClusterV2{},
+			List:    &v1alpha1.ProjectList{},
+			Managed: &v1alpha1.Project{},
 		},
 	})
 	if err != nil {
@@ -75,8 +76,8 @@ func (mg *ProjectRoleTemplateBinding) ResolveReferences(ctx context.Context, c c
 		Reference:    mg.Spec.InitProvider.RoleTemplateIDRef,
 		Selector:     mg.Spec.InitProvider.RoleTemplateIDSelector,
 		To: reference.To{
-			List:    &v1alpha1.RoleTemplateList{},
-			Managed: &v1alpha1.RoleTemplate{},
+			List:    &v1alpha11.RoleTemplateList{},
+			Managed: &v1alpha11.RoleTemplate{},
 		},
 	})
 	if err != nil {
