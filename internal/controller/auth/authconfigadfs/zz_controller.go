@@ -15,9 +15,9 @@ import (
 	"github.com/crossplane/crossplane-runtime/pkg/reconciler/managed"
 	xpresource "github.com/crossplane/crossplane-runtime/pkg/resource"
 	"github.com/crossplane/crossplane-runtime/pkg/statemetrics"
-	tjcontroller "github.com/crossplane/upjet/pkg/controller"
-	"github.com/crossplane/upjet/pkg/controller/handler"
-	"github.com/crossplane/upjet/pkg/terraform"
+	tjcontroller "github.com/crossplane/upjet/v2/pkg/controller"
+	"github.com/crossplane/upjet/v2/pkg/controller/handler"
+	"github.com/crossplane/upjet/v2/pkg/terraform"
 	"github.com/pkg/errors"
 	ctrl "sigs.k8s.io/controller-runtime"
 

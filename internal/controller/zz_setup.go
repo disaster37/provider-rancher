@@ -7,7 +7,7 @@ package controller
 import (
 	ctrl "sigs.k8s.io/controller-runtime"
 
-	"github.com/crossplane/upjet/pkg/controller"
+	"github.com/crossplane/upjet/v2/pkg/controller"
 
 	appv2 "github.com/disaster37/provider-rancher/internal/controller/app/appv2"
 	catalogv2 "github.com/disaster37/provider-rancher/internal/controller/app/catalogv2"
