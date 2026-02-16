@@ -1,7 +1,3 @@
-/*
-Copyright 2021 Upbound Inc.
-*/
-
 package main
 
 import (
@@ -9,9 +5,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/crossplane/upjet/pkg/pipeline"
+	"github.com/crossplane/upjet/v2/pkg/pipeline"
 
-	"github.com/disaster37/provider-rancher/config"
+	"github.com/crossplane/upjet-provider-template/config"
 )
 
 func main() {
@@ -23,5 +19,5 @@ func main() {
 	if err != nil {
 		panic(fmt.Sprintf("cannot calculate the absolute path with %s", rootDir))
 	}
-	pipeline.Run(config.GetProvider(), absRootDir)
+	pipeline.Run(config.GetProvider(), config.GetProviderNamespaced(), absRootDir)
 }

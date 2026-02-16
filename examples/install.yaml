@@ -1,6 +1,6 @@
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
-  name: provider-rancher
+  name: upjet-provider-template
 spec:
-  package: disaster37/provider-rancher:v0.1.0
+  package: xpkg.crossplane.io/crossplane/upjet-provider-template:v0.1.0

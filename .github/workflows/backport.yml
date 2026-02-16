@@ -8,8 +8,16 @@ on:
   # https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
   pull_request_target:
     types: [closed]
-  # See also commands.yml for the /backport triggered variant of this workflow.
 
 jobs:
-  backport:
-    uses: upbound/official-providers-ci/.github/workflows/provider-backport.yml@standard-runners
+  open-pr:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged
+    steps:
+      - name: Checkout
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Open Backport PR
+        uses: korthout/backport-action@c656f5d5851037b2b38fb5db2691a03fa229e3b2 # v4.0.1
