@@ -1,3 +1,5 @@
+> Please use https://github.com/disaster37/provider-rancher2 instead. I will use namespaces resource instead cluster resource.
+
 # Provider Rancher
 
 `provider-rancher` is a [Crossplane](https://crossplane.io/) provider that
